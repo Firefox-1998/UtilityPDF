@@ -40,12 +40,14 @@
             this.lblOCR = new System.Windows.Forms.Label();
             this.oFD_PDF = new System.Windows.Forms.OpenFileDialog();
             this.fBD_TXT = new System.Windows.Forms.FolderBrowserDialog();
+            this.PbConvert = new System.Windows.Forms.ProgressBar();
             this.PnlOCR.SuspendLayout();
             this.SuspendLayout();
             // 
             // PnlOCR
             // 
             this.PnlOCR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PnlOCR.Controls.Add(this.PbConvert);
             this.PnlOCR.Controls.Add(this.lblLang);
             this.PnlOCR.Controls.Add(this.cmbLangConv);
             this.PnlOCR.Controls.Add(this.Btn_Reset);
@@ -58,7 +60,7 @@
             this.PnlOCR.Location = new System.Drawing.Point(14, 14);
             this.PnlOCR.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.PnlOCR.Name = "PnlOCR";
-            this.PnlOCR.Size = new System.Drawing.Size(396, 275);
+            this.PnlOCR.Size = new System.Drawing.Size(396, 297);
             this.PnlOCR.TabIndex = 0;
             // 
             // lblLang
@@ -83,7 +85,6 @@
             // 
             // Btn_Reset
             // 
-            this.Btn_Reset.Enabled = false;
             this.Btn_Reset.Location = new System.Drawing.Point(115, 243);
             this.Btn_Reset.Name = "Btn_Reset";
             this.Btn_Reset.Size = new System.Drawing.Size(100, 22);
@@ -155,6 +156,14 @@
             this.oFD_PDF.FileName = "*.pdf";
             this.oFD_PDF.Filter = "PDF Files|*.pdf";
             // 
+            // PbConvert
+            // 
+            this.PbConvert.Location = new System.Drawing.Point(7, 270);
+            this.PbConvert.Name = "PbConvert";
+            this.PbConvert.Size = new System.Drawing.Size(380, 20);
+            this.PbConvert.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.PbConvert.TabIndex = 10;
+            // 
             // FrmUtiPDF_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -189,5 +198,6 @@
         private System.Windows.Forms.Button Btn_Reset;
         private System.Windows.Forms.ComboBox cmbLangConv;
         private System.Windows.Forms.Label lblLang;
+        private System.Windows.Forms.ProgressBar PbConvert;
     }
 }

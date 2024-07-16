@@ -74,11 +74,14 @@ namespace UtilityPDF
                 using (Stream pdfStream = File.OpenRead(pdfPath))
                 {
                     List<byte[]> pages = Pdf2Png.ConvertAllPages(pdfStream, 600);
+                    PbConvert.Maximum = pages.Count * 100;
 
                     using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
                     {
                         for (int i = 0; i < pages.Count; i++)
                         {
+                            PbConvert.Value = (i + 1) * 100;
+                            Application.DoEvents();
                             using (var ms = new MemoryStream(pages[i]))
                             {
                                 Image img = Image.FromStream(ms);
@@ -105,6 +108,8 @@ namespace UtilityPDF
             }
 
             MessageBox.Show("Conversion completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            PbConvert.Value = 0;
+            PbConvert.Maximum = 100;
             lbl_PDF.Text = "PDF input file.";
             lbl_TXT.Text = "TXT output file.";
             Btn_SelectTXT.Enabled = false;
