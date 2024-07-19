@@ -1,10 +1,19 @@
 ﻿using Freeware;
+using iText.Kernel.Pdf;
+using iText.PdfCleanup;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Tesseract;
+using PdfDoc = iText.Kernel.Pdf.PdfDocument;
+using PdfDocument = PdfSharp.Pdf.PdfDocument;
+using PdfReader = iText.Kernel.Pdf.PdfReader;
+using PdfReaderSharp = PdfSharp.Pdf.IO.PdfReader;
+using PdfWriter = iText.Kernel.Pdf.PdfWriter;
 
 namespace UtilityPDF
 {
@@ -53,6 +62,7 @@ namespace UtilityPDF
         private void Btn_Start_Click(object sender, EventArgs e)
         {
             bConvert = true;
+            PnlMerge.Enabled = false;
             Btn_Start.Enabled = false;
             Btn_Reset.Enabled = false;
             cmbLangConv.Enabled = false;
@@ -69,18 +79,35 @@ namespace UtilityPDF
                 File.WriteAllText(txtPath, String.Empty);
             }
 
+
             try
             {
                 using (Stream pdfStream = File.OpenRead(pdfPath))
                 {
                     List<byte[]> pages = Pdf2Png.ConvertAllPages(pdfStream, 600);
-                    PbConvert.Maximum = pages.Count * 100;
+
+                    if (pages.Count <= 100)
+                    {
+                        PbConvert.Maximum = 100;
+                    }
+                    else
+                    {
+                        PbConvert.Maximum = 1000;
+                    }
 
                     using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
                     {
                         for (int i = 0; i < pages.Count; i++)
                         {
-                            PbConvert.Value = (i + 1) * 100;
+                            if (pages.Count <= 100)
+                            {
+                                PbConvert.Value = 100 / (i + 1);
+                            }
+                            else
+                            {
+                                PbConvert.Value = 1000 / (i + 1);
+                            }
+
                             Application.DoEvents();
                             using (var ms = new MemoryStream(pages[i]))
                             {
@@ -104,12 +131,14 @@ namespace UtilityPDF
             catch (Exception ex)
             {
                 // Display the exception message
-                MessageBox.Show("Si è verificato un errore: " + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            PbConvert.Value = PbConvert.Maximum;
             MessageBox.Show("Conversion completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             PbConvert.Value = 0;
             PbConvert.Maximum = 100;
+            PnlMerge.Enabled = true;
             lbl_PDF.Text = "PDF input file.";
             lbl_TXT.Text = "TXT output file.";
             Btn_SelectTXT.Enabled = false;
@@ -156,6 +185,145 @@ namespace UtilityPDF
             // Popola la combobox con i valori estratti
             cmbLangConv.DataSource = languages;
             cmbLangConv.SelectedIndex = 0;
+        }
+
+        private void Btn_SelectPDFToMerge_Click(object sender, EventArgs e)
+        {
+            if (oFD_PDF.ShowDialog() == DialogResult.OK)
+            {
+                Lstb_FileMerge.Items.Add(oFD_PDF.FileName);
+                if (Lstb_FileMerge.Items.Count == 2)
+                {
+                    Btn_SelectDIROutputMergedPDF.Enabled = true;
+                }
+            }
+        }
+
+        private void Btn_ResetMerge_Click(object sender, EventArgs e)
+        {
+            Lstb_FileMerge.Items.Clear();
+            lbl_DIROutputMergePDF.Text = "Directory Output Merged PDF";
+            Btn_SelectDIROutputMergedPDF.Enabled = false;
+            Btn_Merge.Enabled = false;
+            Btn_SelectPDFToMerge.Enabled = true;
+        }
+
+        private void Btn_Merge_Click(object sender, EventArgs e)
+        {
+            bConvert = true;
+            PnlMerge.Enabled = false;
+            PnlOCR.Enabled = false;
+            Application.DoEvents();
+            string pdfPath = lbl_DIROutputMergePDF.Text;
+            
+            try
+            {
+                using (PdfDocument outputDocument = new PdfDocument())
+                {
+                    outputDocument.Options.FlateEncodeMode = PdfFlateEncodeMode.BestCompression;
+                    outputDocument.Options.NoCompression = false;
+                    outputDocument.Options.CompressContentStreams = true;
+                    outputDocument.Options.EnableCcittCompressionForBilevelImages = true;
+
+                    foreach (string path in Lstb_FileMerge.Items)
+                    {
+                        PdfDocument inputDocument = PdfReaderSharp.Open(path, PdfDocumentOpenMode.Import);
+                        for (int i = 0; i < inputDocument.PageCount; i++)
+                        {
+                            outputDocument.AddPage(inputDocument.Pages[i]);
+                        }
+                    }
+
+                    outputDocument.Save(pdfPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Display the exception message
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            MessageBox.Show("Merge completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            bConvert = false;
+            PnlMerge.Enabled = true;
+            PnlOCR.Enabled = true;
+            Lstb_FileMerge.Items.Clear();
+            lbl_DIROutputMergePDF.Text = "Directory Output Merged PDF";
+            Btn_SelectDIROutputMergedPDF.Enabled = false;
+            Btn_Merge.Enabled = false;
+            Btn_SelectPDFToMerge.Enabled = true;
+        }
+
+
+        private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(
+    "If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME + MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!",
+    "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.OK)
+            {
+                if (fBD_TXT.ShowDialog() == DialogResult.OK)
+                {
+                    lbl_DIROutputMergePDF.Text = fBD_TXT.SelectedPath + @"\" + Path.GetFileNameWithoutExtension(Lstb_FileMerge.Items[0].ToString()) + "_Merged.pdf";
+                    Btn_SelectDIROutputMergedPDF.Enabled = false;
+                    Btn_Merge.Enabled = true;
+                    Btn_SelectPDFToMerge.Enabled = false;
+                }
+            }
+        }
+
+        private void Btn_Compress_Click(object sender, EventArgs e)
+        {
+            bConvert = true;
+            PnlMerge.Enabled = false;
+            PnlOCR.Enabled = false;
+            PnlCompress.Enabled = false;
+            Application.DoEvents();
+
+            string pdfPath = lbl_PDFToCompress.Text;
+            string outputPath = Path.GetDirectoryName(pdfPath) + @"\" + Path.GetFileNameWithoutExtension(pdfPath) + "_Compress.pdf"; ;
+
+            try
+            {
+                using (PdfDoc pdfDoc = new PdfDoc(new PdfReader(pdfPath), new PdfWriter(outputPath).SetCompressionLevel(CompressionConstants.BEST_COMPRESSION)))
+                {
+                    PdfCleanUpTool cleaner = new PdfCleanUpTool(pdfDoc);
+                    cleaner.CleanUp();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Display the exception message
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            MessageBox.Show("Compress completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            bConvert = false;
+            PnlMerge.Enabled = true;
+            PnlOCR.Enabled = true;
+            PnlCompress.Enabled = true;
+            lbl_PDFToCompress.Text = "PDF file to COMPRESS.";            
+            Btn_Compress.Enabled = false;
+            tb_Compress.Value = 0;
+            tb_Compress.Enabled = false;
+        }
+
+        private void Btn_PDFToCompress_Click(object sender, EventArgs e)
+        {
+            if (oFD_PDF.ShowDialog() == DialogResult.OK)
+            {
+                lbl_PDFToCompress.Text = oFD_PDF.FileName;
+                tb_Compress.Enabled = true;
+                Btn_Compress.Enabled = true;                
+            }
+        }
+
+        private void Btn_ResetCompres_Click(object sender, EventArgs e)
+        {
+            lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
+            tb_Compress.Value = 0;
+            tb_Compress.Enabled = false;
+            Btn_Compress.Enabled = false;            
         }
     }
 }
