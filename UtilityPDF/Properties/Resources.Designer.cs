@@ -59,5 +59,15 @@ namespace UtilityPDF.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PDFUti {
+            get {
+                object obj = ResourceManager.GetObject("PDFUti", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

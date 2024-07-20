@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUtiPDF_Main));
             this.PnlOCR = new System.Windows.Forms.Panel();
             this.PbConvert = new System.Windows.Forms.ProgressBar();
             this.lblLang = new System.Windows.Forms.Label();
@@ -50,17 +51,22 @@
             this.Btn_SelectPDFToMerge = new System.Windows.Forms.Button();
             this.lblMerge = new System.Windows.Forms.Label();
             this.PnlCompress = new System.Windows.Forms.Panel();
-            this.lblCompr = new System.Windows.Forms.Label();
-            this.Btn_Compress = new System.Windows.Forms.Button();
-            this.Btn_ResetCompres = new System.Windows.Forms.Button();
-            this.lbl_PDFToCompress = new System.Windows.Forms.Label();
-            this.Btn_PDFToCompress = new System.Windows.Forms.Button();
-            this.tb_Compress = new System.Windows.Forms.TrackBar();
+            this.lbl_ViewLvlCompres = new System.Windows.Forms.Label();
             this.lbl_LvlCompr = new System.Windows.Forms.Label();
+            this.Tb_Compress = new System.Windows.Forms.TrackBar();
+            this.lbl_PDFToCompress = new System.Windows.Forms.Label();
+            this.Btn_SelectPDFToCompress = new System.Windows.Forms.Button();
+            this.Btn_ResetCompres = new System.Windows.Forms.Button();
+            this.Btn_Compress = new System.Windows.Forms.Button();
+            this.lblCompr = new System.Windows.Forms.Label();
+            this.lbl_DIROutputCompressPDF = new System.Windows.Forms.Label();
+            this.Btn_SelectDIROutputCompressPDF = new System.Windows.Forms.Button();
+            this.pB_ICO = new System.Windows.Forms.PictureBox();
             this.PnlOCR.SuspendLayout();
             this.PnlMerge.SuspendLayout();
             this.PnlCompress.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_Compress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tb_Compress)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pB_ICO)).BeginInit();
             this.SuspendLayout();
             // 
             // PnlOCR
@@ -272,17 +278,88 @@
             // PnlCompress
             // 
             this.PnlCompress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PnlCompress.Controls.Add(this.lbl_DIROutputCompressPDF);
+            this.PnlCompress.Controls.Add(this.Btn_SelectDIROutputCompressPDF);
+            this.PnlCompress.Controls.Add(this.lbl_ViewLvlCompres);
             this.PnlCompress.Controls.Add(this.lbl_LvlCompr);
-            this.PnlCompress.Controls.Add(this.tb_Compress);
+            this.PnlCompress.Controls.Add(this.Tb_Compress);
             this.PnlCompress.Controls.Add(this.lbl_PDFToCompress);
-            this.PnlCompress.Controls.Add(this.Btn_PDFToCompress);
+            this.PnlCompress.Controls.Add(this.Btn_SelectPDFToCompress);
             this.PnlCompress.Controls.Add(this.Btn_ResetCompres);
             this.PnlCompress.Controls.Add(this.Btn_Compress);
             this.PnlCompress.Controls.Add(this.lblCompr);
             this.PnlCompress.Location = new System.Drawing.Point(229, 330);
             this.PnlCompress.Name = "PnlCompress";
-            this.PnlCompress.Size = new System.Drawing.Size(420, 199);
+            this.PnlCompress.Size = new System.Drawing.Size(420, 251);
             this.PnlCompress.TabIndex = 12;
+            // 
+            // lbl_ViewLvlCompres
+            // 
+            this.lbl_ViewLvlCompres.Location = new System.Drawing.Point(117, 193);
+            this.lbl_ViewLvlCompres.Name = "lbl_ViewLvlCompres";
+            this.lbl_ViewLvlCompres.Size = new System.Drawing.Size(288, 19);
+            this.lbl_ViewLvlCompres.TabIndex = 13;
+            this.lbl_ViewLvlCompres.Text = "VERY LOW COMPRESS = MAX QUALITY";
+            this.lbl_ViewLvlCompres.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbl_LvlCompr
+            // 
+            this.lbl_LvlCompr.Location = new System.Drawing.Point(9, 173);
+            this.lbl_LvlCompr.Name = "lbl_LvlCompr";
+            this.lbl_LvlCompr.Size = new System.Drawing.Size(116, 21);
+            this.lbl_LvlCompr.TabIndex = 12;
+            this.lbl_LvlCompr.Text = "Compression LEVEL";
+            // 
+            // Tb_Compress
+            // 
+            this.Tb_Compress.Enabled = false;
+            this.Tb_Compress.LargeChange = 1;
+            this.Tb_Compress.Location = new System.Drawing.Point(120, 163);
+            this.Tb_Compress.Maximum = 3;
+            this.Tb_Compress.Name = "Tb_Compress";
+            this.Tb_Compress.Size = new System.Drawing.Size(285, 45);
+            this.Tb_Compress.TabIndex = 11;
+            this.Tb_Compress.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.Tb_Compress.ValueChanged += new System.EventHandler(this.Tb_Compress_ValueChanged);
+            // 
+            // lbl_PDFToCompress
+            // 
+            this.lbl_PDFToCompress.Location = new System.Drawing.Point(114, 27);
+            this.lbl_PDFToCompress.Name = "lbl_PDFToCompress";
+            this.lbl_PDFToCompress.Size = new System.Drawing.Size(288, 65);
+            this.lbl_PDFToCompress.TabIndex = 10;
+            this.lbl_PDFToCompress.Text = "PDF file to COMPRESS";
+            // 
+            // Btn_SelectPDFToCompress
+            // 
+            this.Btn_SelectPDFToCompress.Location = new System.Drawing.Point(9, 27);
+            this.Btn_SelectPDFToCompress.Name = "Btn_SelectPDFToCompress";
+            this.Btn_SelectPDFToCompress.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectPDFToCompress.TabIndex = 9;
+            this.Btn_SelectPDFToCompress.Text = "Select PDF";
+            this.Btn_SelectPDFToCompress.UseVisualStyleBackColor = true;
+            this.Btn_SelectPDFToCompress.Click += new System.EventHandler(this.Btn_SelectPDFToCompress_Click);
+            // 
+            // Btn_ResetCompres
+            // 
+            this.Btn_ResetCompres.Location = new System.Drawing.Point(96, 224);
+            this.Btn_ResetCompres.Name = "Btn_ResetCompres";
+            this.Btn_ResetCompres.Size = new System.Drawing.Size(100, 22);
+            this.Btn_ResetCompres.TabIndex = 8;
+            this.Btn_ResetCompres.Text = "Reset";
+            this.Btn_ResetCompres.UseVisualStyleBackColor = true;
+            this.Btn_ResetCompres.Click += new System.EventHandler(this.Btn_ResetCompres_Click);
+            // 
+            // Btn_Compress
+            // 
+            this.Btn_Compress.Enabled = false;
+            this.Btn_Compress.Location = new System.Drawing.Point(9, 224);
+            this.Btn_Compress.Name = "Btn_Compress";
+            this.Btn_Compress.Size = new System.Drawing.Size(75, 22);
+            this.Btn_Compress.TabIndex = 3;
+            this.Btn_Compress.Text = "Compress";
+            this.Btn_Compress.UseVisualStyleBackColor = true;
+            this.Btn_Compress.Click += new System.EventHandler(this.Btn_Compress_Click);
             // 
             // lblCompr
             // 
@@ -294,74 +371,49 @@
             this.lblCompr.TabIndex = 2;
             this.lblCompr.Text = "Compress PDF";
             // 
-            // Btn_Compress
+            // lbl_DIROutputCompressPDF
             // 
-            this.Btn_Compress.Enabled = false;
-            this.Btn_Compress.Location = new System.Drawing.Point(9, 168);
-            this.Btn_Compress.Name = "Btn_Compress";
-            this.Btn_Compress.Size = new System.Drawing.Size(75, 22);
-            this.Btn_Compress.TabIndex = 3;
-            this.Btn_Compress.Text = "Compress";
-            this.Btn_Compress.UseVisualStyleBackColor = true;
-            this.Btn_Compress.Click += new System.EventHandler(this.Btn_Compress_Click);
+            this.lbl_DIROutputCompressPDF.Location = new System.Drawing.Point(112, 103);
+            this.lbl_DIROutputCompressPDF.Name = "lbl_DIROutputCompressPDF";
+            this.lbl_DIROutputCompressPDF.Size = new System.Drawing.Size(290, 53);
+            this.lbl_DIROutputCompressPDF.TabIndex = 15;
+            this.lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";
             // 
-            // Btn_ResetCompres
+            // Btn_SelectDIROutputCompressPDF
             // 
-            this.Btn_ResetCompres.Location = new System.Drawing.Point(96, 168);
-            this.Btn_ResetCompres.Name = "Btn_ResetCompres";
-            this.Btn_ResetCompres.Size = new System.Drawing.Size(100, 22);
-            this.Btn_ResetCompres.TabIndex = 8;
-            this.Btn_ResetCompres.Text = "Reset";
-            this.Btn_ResetCompres.UseVisualStyleBackColor = true;
-            this.Btn_ResetCompres.Click += new System.EventHandler(this.Btn_ResetCompres_Click);
+            this.Btn_SelectDIROutputCompressPDF.Enabled = false;
+            this.Btn_SelectDIROutputCompressPDF.Location = new System.Drawing.Point(9, 103);
+            this.Btn_SelectDIROutputCompressPDF.Name = "Btn_SelectDIROutputCompressPDF";
+            this.Btn_SelectDIROutputCompressPDF.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputCompressPDF.TabIndex = 14;
+            this.Btn_SelectDIROutputCompressPDF.Text = "Select DIR PDF";
+            this.Btn_SelectDIROutputCompressPDF.UseVisualStyleBackColor = true;
+            this.Btn_SelectDIROutputCompressPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputCompressPDF_Click);
             // 
-            // lbl_PDFToCompress
+            // pB_ICO
             // 
-            this.lbl_PDFToCompress.Location = new System.Drawing.Point(114, 27);
-            this.lbl_PDFToCompress.Name = "lbl_PDFToCompress";
-            this.lbl_PDFToCompress.Size = new System.Drawing.Size(275, 75);
-            this.lbl_PDFToCompress.TabIndex = 10;
-            this.lbl_PDFToCompress.Text = "PDF file to COMPRESS";
-            // 
-            // Btn_PDFToCompress
-            // 
-            this.Btn_PDFToCompress.Location = new System.Drawing.Point(9, 27);
-            this.Btn_PDFToCompress.Name = "Btn_PDFToCompress";
-            this.Btn_PDFToCompress.Size = new System.Drawing.Size(100, 22);
-            this.Btn_PDFToCompress.TabIndex = 9;
-            this.Btn_PDFToCompress.Text = "Select PDF";
-            this.Btn_PDFToCompress.UseVisualStyleBackColor = true;
-            this.Btn_PDFToCompress.Click += new System.EventHandler(this.Btn_PDFToCompress_Click);
-            // 
-            // tb_Compress
-            // 
-            this.tb_Compress.Enabled = false;
-            this.tb_Compress.LargeChange = 1;
-            this.tb_Compress.Location = new System.Drawing.Point(117, 118);
-            this.tb_Compress.Maximum = 9;
-            this.tb_Compress.Name = "tb_Compress";
-            this.tb_Compress.Size = new System.Drawing.Size(294, 45);
-            this.tb_Compress.TabIndex = 11;
-            this.tb_Compress.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            // 
-            // lbl_LvlCompr
-            // 
-            this.lbl_LvlCompr.Location = new System.Drawing.Point(6, 128);
-            this.lbl_LvlCompr.Name = "lbl_LvlCompr";
-            this.lbl_LvlCompr.Size = new System.Drawing.Size(116, 21);
-            this.lbl_LvlCompr.TabIndex = 12;
-            this.lbl_LvlCompr.Text = "Compression LEVEL";
+            this.pB_ICO.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pB_ICO.Image = global::UtilityPDF.Properties.Resources.PDFUti;
+            this.pB_ICO.InitialImage = null;
+            this.pB_ICO.Location = new System.Drawing.Point(749, 461);
+            this.pB_ICO.Name = "pB_ICO";
+            this.pB_ICO.Size = new System.Drawing.Size(120, 120);
+            this.pB_ICO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pB_ICO.TabIndex = 13;
+            this.pB_ICO.TabStop = false;
             // 
             // FrmUtiPDF_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(881, 541);
+            this.ClientSize = new System.Drawing.Size(881, 593);
+            this.Controls.Add(this.pB_ICO);
             this.Controls.Add(this.PnlCompress);
             this.Controls.Add(this.PnlMerge);
             this.Controls.Add(this.PnlOCR);
             this.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "FrmUtiPDF_Main";
@@ -374,7 +426,8 @@
             this.PnlMerge.PerformLayout();
             this.PnlCompress.ResumeLayout(false);
             this.PnlCompress.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_Compress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Tb_Compress)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pB_ICO)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -406,9 +459,13 @@
         private System.Windows.Forms.Button Btn_Compress;
         private System.Windows.Forms.Label lblCompr;
         private System.Windows.Forms.Label lbl_PDFToCompress;
-        private System.Windows.Forms.Button Btn_PDFToCompress;
+        private System.Windows.Forms.Button Btn_SelectPDFToCompress;
         private System.Windows.Forms.Button Btn_ResetCompres;
-        private System.Windows.Forms.TrackBar tb_Compress;
+        private System.Windows.Forms.TrackBar Tb_Compress;
         private System.Windows.Forms.Label lbl_LvlCompr;
+        private System.Windows.Forms.Label lbl_ViewLvlCompres;
+        private System.Windows.Forms.Label lbl_DIROutputCompressPDF;
+        private System.Windows.Forms.Button Btn_SelectDIROutputCompressPDF;
+        private System.Windows.Forms.PictureBox pB_ICO;
     }
 }

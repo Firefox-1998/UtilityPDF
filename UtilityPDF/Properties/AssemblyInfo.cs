@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // Le informazioni generali relative a un assembly sono controllate dal seguente 
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
-[assembly: AssemblyTitle("UtilityPDF")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Utility PDF")]
+[assembly: AssemblyDescription("Various tools with PDF (Extract text, Merge, Compress)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Joe Soft Inc.")]
 [assembly: AssemblyProduct("UtilityPDF")]
-[assembly: AssemblyCopyright("Copyright ©  2024")]
+[assembly: AssemblyCopyright("FF_1998 aka GL Copyright © 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

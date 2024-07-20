@@ -1,25 +1,25 @@
 ﻿using Freeware;
-using iText.Kernel.Pdf;
-using iText.PdfCleanup;
+using Ghostscript.NET;
+using Ghostscript.NET.Processor;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using Tesseract;
-using PdfDoc = iText.Kernel.Pdf.PdfDocument;
-using PdfDocument = PdfSharp.Pdf.PdfDocument;
-using PdfReader = iText.Kernel.Pdf.PdfReader;
-using PdfReaderSharp = PdfSharp.Pdf.IO.PdfReader;
-using PdfWriter = iText.Kernel.Pdf.PdfWriter;
 
 namespace UtilityPDF
 {
     public partial class FrmUtiPDF_Main : Form
     {
         private bool bConvert = false;
+        private string LevelCompress = "/prepress";
+        private static readonly string binPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static readonly string gsDllPath = Path.Combine(binPath, Environment.Is64BitProcess ? "gsdll64.dll" : "gsdll32.dll");
+        private readonly GhostscriptVersionInfo gvi = new GhostscriptVersionInfo(gsDllPath);
 
         public FrmUtiPDF_Main()
         {
@@ -215,7 +215,7 @@ namespace UtilityPDF
             PnlOCR.Enabled = false;
             Application.DoEvents();
             string pdfPath = lbl_DIROutputMergePDF.Text;
-            
+
             try
             {
                 using (PdfDocument outputDocument = new PdfDocument())
@@ -227,7 +227,7 @@ namespace UtilityPDF
 
                     foreach (string path in Lstb_FileMerge.Items)
                     {
-                        PdfDocument inputDocument = PdfReaderSharp.Open(path, PdfDocumentOpenMode.Import);
+                        PdfDocument inputDocument = PdfReader.Open(path, PdfDocumentOpenMode.Import);
                         for (int i = 0; i < inputDocument.PageCount; i++)
                         {
                             outputDocument.AddPage(inputDocument.Pages[i]);
@@ -281,14 +281,24 @@ namespace UtilityPDF
             Application.DoEvents();
 
             string pdfPath = lbl_PDFToCompress.Text;
-            string outputPath = Path.GetDirectoryName(pdfPath) + @"\" + Path.GetFileNameWithoutExtension(pdfPath) + "_Compress.pdf"; ;
+            string outputPath = lbl_DIROutputCompressPDF.Text;
 
             try
             {
-                using (PdfDoc pdfDoc = new PdfDoc(new PdfReader(pdfPath), new PdfWriter(outputPath).SetCompressionLevel(CompressionConstants.BEST_COMPRESSION)))
+                using (GhostscriptProcessor processor = new GhostscriptProcessor(gvi))
                 {
-                    PdfCleanUpTool cleaner = new PdfCleanUpTool(pdfDoc);
-                    cleaner.CleanUp();
+                    List<string> switches = new List<string>
+                    {
+                        $"gs",
+                        $"-sDEVICE=pdfwrite",
+                        $"-dPDFSETTINGS={LevelCompress}",
+                        $"-dNOPAUSE",
+                        $"-dQUIET",
+                        $"-sOutputFile={outputPath}",
+                        $"{pdfPath}"
+                    };
+
+                    processor.StartProcessing(switches.ToArray(), null);
                 }
             }
             catch (Exception ex)
@@ -302,10 +312,13 @@ namespace UtilityPDF
             PnlMerge.Enabled = true;
             PnlOCR.Enabled = true;
             PnlCompress.Enabled = true;
-            lbl_PDFToCompress.Text = "PDF file to COMPRESS.";            
+            lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
+            lbl_DIROutputCompressPDF .Text = "Directory Output Compressed PDF";
+            Btn_SelectDIROutputCompressPDF.Enabled = false;
+            Btn_SelectPDFToCompress.Enabled = true;
             Btn_Compress.Enabled = false;
-            tb_Compress.Value = 0;
-            tb_Compress.Enabled = false;
+            Tb_Compress.Value = 0;
+            Tb_Compress.Enabled = false;
         }
 
         private void Btn_PDFToCompress_Click(object sender, EventArgs e)
@@ -313,17 +326,74 @@ namespace UtilityPDF
             if (oFD_PDF.ShowDialog() == DialogResult.OK)
             {
                 lbl_PDFToCompress.Text = oFD_PDF.FileName;
-                tb_Compress.Enabled = true;
-                Btn_Compress.Enabled = true;                
+                Tb_Compress.Enabled = true;
+                Btn_Compress.Enabled = true;
             }
         }
 
         private void Btn_ResetCompres_Click(object sender, EventArgs e)
         {
             lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
-            tb_Compress.Value = 0;
-            tb_Compress.Enabled = false;
-            Btn_Compress.Enabled = false;            
+            lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";            
+            Tb_Compress.Value = 0;
+            Tb_Compress.Enabled = false;
+            Btn_Compress.Enabled = false;
+            Btn_SelectPDFToCompress.Enabled = true;
+            Btn_SelectDIROutputCompressPDF.Enabled = false;
+        }
+
+        private void Btn_SelectDIROutputCompressPDF_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(
+    "If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!",
+    "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.OK)
+            {
+                if (fBD_TXT.ShowDialog() == DialogResult.OK)
+                {
+                    lbl_DIROutputCompressPDF.Text = fBD_TXT.SelectedPath + @"\" + Path.GetFileNameWithoutExtension(lbl_PDFToCompress.Text) + "_Compressed.pdf";
+                    Btn_SelectDIROutputCompressPDF.Enabled = false;
+                    Tb_Compress.Enabled = true;
+                    Btn_Compress.Enabled = true;
+                    Btn_SelectPDFToCompress.Enabled = false;
+                }
+            }
+        }
+
+        private void Btn_SelectPDFToCompress_Click(object sender, EventArgs e)
+        {
+            if (oFD_PDF.ShowDialog() == DialogResult.OK)
+            {
+                lbl_PDFToCompress.Text = oFD_PDF.FileName;
+                Btn_SelectDIROutputCompressPDF.Enabled = true;
+                Btn_SelectPDFToCompress.Enabled = false;
+            }
+        }
+
+        private void Tb_Compress_ValueChanged(object sender, EventArgs e)
+        {
+            switch (Tb_Compress.Value)
+            {
+                case 0:
+                    LevelCompress = "/prepress";
+                    lbl_ViewLvlCompres.Text = "VERY LOW COMPRESS --> MAX QUALITY";
+                    break;
+
+                case 1:
+                    LevelCompress = "/printer";
+                    lbl_ViewLvlCompres.Text = "LOW COMPRESS --> HIGH QUALITY";
+                    break;
+
+                case 2:
+                    LevelCompress = "/ebook";
+                    lbl_ViewLvlCompres.Text = "MEDIUM COMPRESS --> MEDIUM QUALITY";
+                    break;
+
+                case 3:
+                    LevelCompress = "/screen";
+                    lbl_ViewLvlCompres.Text = "HIGH COMPRESS --> LOW QUALITY";
+                    break;
+            }
         }
     }
 }
