@@ -127,6 +127,7 @@ namespace UtilityPDF
                         }
                     }
                 }
+                MessageBox.Show("Conversion completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -134,8 +135,7 @@ namespace UtilityPDF
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            PbConvert.Value = PbConvert.Maximum;
-            MessageBox.Show("Conversion completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            PbConvert.Value = PbConvert.Maximum;            
             PbConvert.Value = 0;
             PbConvert.Maximum = 100;
             PnlMerge.Enabled = true;
@@ -236,13 +236,13 @@ namespace UtilityPDF
 
                     outputDocument.Save(pdfPath);
                 }
+                MessageBox.Show("Merge completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 // Display the exception message
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            MessageBox.Show("Merge completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }            
 
             bConvert = false;
             PnlMerge.Enabled = true;
@@ -300,14 +300,14 @@ namespace UtilityPDF
 
                     processor.StartProcessing(switches.ToArray(), null);
                 }
+                MessageBox.Show("Compress completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 // Display the exception message
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            MessageBox.Show("Compress completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        
             bConvert = false;
             PnlMerge.Enabled = true;
             PnlOCR.Enabled = true;
