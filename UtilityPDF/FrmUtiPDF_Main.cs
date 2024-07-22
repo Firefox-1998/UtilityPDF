@@ -63,6 +63,7 @@ namespace UtilityPDF
         {
             bConvert = true;
             PnlMerge.Enabled = false;
+            PnlCompress.Enabled = false;
             Btn_Start.Enabled = false;
             Btn_Reset.Enabled = false;
             cmbLangConv.Enabled = false;
@@ -79,55 +80,22 @@ namespace UtilityPDF
                 File.WriteAllText(txtPath, String.Empty);
             }
 
-
             try
             {
-                using (Stream pdfStream = File.OpenRead(pdfPath))
+                int numPages = GetPageCount(pdfPath);
+                using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
                 {
-                    List<byte[]> pages = Pdf2Png.ConvertAllPages(pdfStream, 600);
-
-                    if (pages.Count <= 100)
+                    using (Stream pdfStream = File.OpenRead(pdfPath))
                     {
-                        PbConvert.Maximum = 100;
-                    }
-                    else
-                    {
-                        PbConvert.Maximum = 1000;
-                    }
-
-                    using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
-                    {
-                        for (int i = 0; i < pages.Count; i++)
-                        {
-                            if (pages.Count <= 100)
-                            {
-                                PbConvert.Value = 100 / (i + 1);
-                            }
-                            else
-                            {
-                                PbConvert.Value = 1000 / (i + 1);
-                            }
-
-                            Application.DoEvents();
-                            using (var ms = new MemoryStream(pages[i]))
-                            {
-                                Image img = Image.FromStream(ms);
-
-                                using (var imgPix = PixConverter.ToPix((Bitmap)img))
-                                {
-                                    using (var page = engine.Process(imgPix))
-                                    {
-                                        string text = page.GetText();
-
-                                        // Append the text to the output file
-                                        File.AppendAllText(txtPath, text);
-                                    }
-                                }
-                            }
-                        }
+                        ProcessPages(pdfStream, numPages, engine, txtPath);
                     }
                 }
                 MessageBox.Show("Conversion completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (IOException ex)
+            {
+                // Display a more specific error message for IO exceptions
+                MessageBox.Show("An IO error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -139,6 +107,7 @@ namespace UtilityPDF
             PbConvert.Value = 0;
             PbConvert.Maximum = 100;
             PnlMerge.Enabled = true;
+            PnlCompress.Enabled = true;
             lbl_PDF.Text = "PDF input file.";
             lbl_TXT.Text = "TXT output file.";
             Btn_SelectTXT.Enabled = false;
@@ -212,6 +181,7 @@ namespace UtilityPDF
         {
             bConvert = true;
             PnlMerge.Enabled = false;
+            PnlCompress.Enabled = false;
             PnlOCR.Enabled = false;
             Application.DoEvents();
             string pdfPath = lbl_DIROutputMergePDF.Text;
@@ -246,6 +216,7 @@ namespace UtilityPDF
 
             bConvert = false;
             PnlMerge.Enabled = true;
+            PnlCompress.Enabled = true;
             PnlOCR.Enabled = true;
             Lstb_FileMerge.Items.Clear();
             lbl_DIROutputMergePDF.Text = "Directory Output Merged PDF";
@@ -276,8 +247,8 @@ namespace UtilityPDF
         {
             bConvert = true;
             PnlMerge.Enabled = false;
-            PnlOCR.Enabled = false;
             PnlCompress.Enabled = false;
+            PnlOCR.Enabled = false;
             Application.DoEvents();
 
             string pdfPath = lbl_PDFToCompress.Text;
@@ -310,8 +281,8 @@ namespace UtilityPDF
                         
             bConvert = false;
             PnlMerge.Enabled = true;
-            PnlOCR.Enabled = true;
             PnlCompress.Enabled = true;
+            PnlOCR.Enabled = true;
             lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
             lbl_DIROutputCompressPDF .Text = "Directory Output Compressed PDF";
             Btn_SelectDIROutputCompressPDF.Enabled = false;
@@ -393,6 +364,41 @@ namespace UtilityPDF
                     LevelCompress = "/screen";
                     lbl_ViewLvlCompres.Text = "HIGH COMPRESS --> LOW QUALITY";
                     break;
+            }
+        }
+
+        private int GetPageCount(string pdfPath)
+        {
+            using (PdfDocument inputDocument = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import))
+            {
+                return inputDocument.PageCount;
+            }
+        }
+
+        private void ProcessPages(Stream pdfStream, int numPages, TesseractEngine engine, string txtPath)
+        {
+            for (int i = 0; i < numPages; i++)
+            {
+                ProcessPage(pdfStream, i, engine, txtPath);
+                PbConvert.Value = (i + 1) * 100 / numPages;
+                Application.DoEvents();
+            }
+        }
+
+        private void ProcessPage(Stream pdfStream, int i, TesseractEngine engine, string txtPath)
+        {
+            byte[] page = Pdf2Png.Convert(pdfStream, i + 1, 600);
+            using (var ms = new MemoryStream(page))
+            {
+                Image img = Image.FromStream(ms);
+                using (var imgPix = PixConverter.ToPix((Bitmap)img))
+                {
+                    using (var imgPage = engine.Process(imgPix))
+                    {
+                        string text = imgPage.GetText();
+                        File.AppendAllText(txtPath, text);
+                    }
+                }
             }
         }
     }
