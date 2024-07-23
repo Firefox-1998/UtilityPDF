@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUtiPDF_Main));
             this.PnlOCR = new System.Windows.Forms.Panel();
-            this.PbConvert = new System.Windows.Forms.ProgressBar();
+            this.pBProgressExtract = new System.Windows.Forms.PictureBox();
             this.lblLang = new System.Windows.Forms.Label();
             this.cmbLangConv = new System.Windows.Forms.ComboBox();
             this.Btn_Reset = new System.Windows.Forms.Button();
@@ -51,6 +51,8 @@
             this.Btn_SelectPDFToMerge = new System.Windows.Forms.Button();
             this.lblMerge = new System.Windows.Forms.Label();
             this.PnlCompress = new System.Windows.Forms.Panel();
+            this.lbl_DIROutputCompressPDF = new System.Windows.Forms.Label();
+            this.Btn_SelectDIROutputCompressPDF = new System.Windows.Forms.Button();
             this.lbl_ViewLvlCompres = new System.Windows.Forms.Label();
             this.lbl_LvlCompr = new System.Windows.Forms.Label();
             this.Tb_Compress = new System.Windows.Forms.TrackBar();
@@ -59,10 +61,9 @@
             this.Btn_ResetCompres = new System.Windows.Forms.Button();
             this.Btn_Compress = new System.Windows.Forms.Button();
             this.lblCompr = new System.Windows.Forms.Label();
-            this.lbl_DIROutputCompressPDF = new System.Windows.Forms.Label();
-            this.Btn_SelectDIROutputCompressPDF = new System.Windows.Forms.Button();
             this.pB_ICO = new System.Windows.Forms.PictureBox();
             this.PnlOCR.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pBProgressExtract)).BeginInit();
             this.PnlMerge.SuspendLayout();
             this.PnlCompress.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Tb_Compress)).BeginInit();
@@ -72,7 +73,7 @@
             // PnlOCR
             // 
             this.PnlOCR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PnlOCR.Controls.Add(this.PbConvert);
+            this.PnlOCR.Controls.Add(this.pBProgressExtract);
             this.PnlOCR.Controls.Add(this.lblLang);
             this.PnlOCR.Controls.Add(this.cmbLangConv);
             this.PnlOCR.Controls.Add(this.Btn_Reset);
@@ -88,13 +89,14 @@
             this.PnlOCR.Size = new System.Drawing.Size(396, 297);
             this.PnlOCR.TabIndex = 0;
             // 
-            // PbConvert
+            // pBProgressExtract
             // 
-            this.PbConvert.Location = new System.Drawing.Point(7, 270);
-            this.PbConvert.Name = "PbConvert";
-            this.PbConvert.Size = new System.Drawing.Size(380, 20);
-            this.PbConvert.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.PbConvert.TabIndex = 10;
+            this.pBProgressExtract.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pBProgressExtract.Location = new System.Drawing.Point(7, 267);
+            this.pBProgressExtract.Name = "pBProgressExtract";
+            this.pBProgressExtract.Size = new System.Drawing.Size(380, 21);
+            this.pBProgressExtract.TabIndex = 10;
+            this.pBProgressExtract.TabStop = false;
             // 
             // lblLang
             // 
@@ -109,6 +111,7 @@
             // 
             // cmbLangConv
             // 
+            this.cmbLangConv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLangConv.FormattingEnabled = true;
             this.cmbLangConv.Location = new System.Drawing.Point(241, 211);
             this.cmbLangConv.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -143,7 +146,6 @@
             this.lbl_TXT.Name = "lbl_TXT";
             this.lbl_TXT.Size = new System.Drawing.Size(275, 75);
             this.lbl_TXT.TabIndex = 5;
-            this.lbl_TXT.Text = "Directory Output TXT Selected";
             // 
             // Btn_SelectTXT
             // 
@@ -162,7 +164,6 @@
             this.lbl_PDF.Name = "lbl_PDF";
             this.lbl_PDF.Size = new System.Drawing.Size(275, 75);
             this.lbl_PDF.TabIndex = 3;
-            this.lbl_PDF.Text = "PDF Selected";
             // 
             // Btn_SelectPDF
             // 
@@ -211,7 +212,6 @@
             this.lbl_DIROutputMergePDF.Name = "lbl_DIROutputMergePDF";
             this.lbl_DIROutputMergePDF.Size = new System.Drawing.Size(275, 53);
             this.lbl_DIROutputMergePDF.TabIndex = 10;
-            this.lbl_DIROutputMergePDF.Text = "Directory Output Merged PDF";
             // 
             // Btn_SelectDIROutputMergedPDF
             // 
@@ -293,13 +293,30 @@
             this.PnlCompress.Size = new System.Drawing.Size(420, 251);
             this.PnlCompress.TabIndex = 12;
             // 
+            // lbl_DIROutputCompressPDF
+            // 
+            this.lbl_DIROutputCompressPDF.Location = new System.Drawing.Point(112, 103);
+            this.lbl_DIROutputCompressPDF.Name = "lbl_DIROutputCompressPDF";
+            this.lbl_DIROutputCompressPDF.Size = new System.Drawing.Size(290, 53);
+            this.lbl_DIROutputCompressPDF.TabIndex = 15;
+            // 
+            // Btn_SelectDIROutputCompressPDF
+            // 
+            this.Btn_SelectDIROutputCompressPDF.Enabled = false;
+            this.Btn_SelectDIROutputCompressPDF.Location = new System.Drawing.Point(9, 103);
+            this.Btn_SelectDIROutputCompressPDF.Name = "Btn_SelectDIROutputCompressPDF";
+            this.Btn_SelectDIROutputCompressPDF.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputCompressPDF.TabIndex = 14;
+            this.Btn_SelectDIROutputCompressPDF.Text = "Select DIR PDF";
+            this.Btn_SelectDIROutputCompressPDF.UseVisualStyleBackColor = true;
+            this.Btn_SelectDIROutputCompressPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputCompressPDF_Click);
+            // 
             // lbl_ViewLvlCompres
             // 
             this.lbl_ViewLvlCompres.Location = new System.Drawing.Point(117, 193);
             this.lbl_ViewLvlCompres.Name = "lbl_ViewLvlCompres";
             this.lbl_ViewLvlCompres.Size = new System.Drawing.Size(288, 19);
             this.lbl_ViewLvlCompres.TabIndex = 13;
-            this.lbl_ViewLvlCompres.Text = "VERY LOW COMPRESS = MAX QUALITY";
             this.lbl_ViewLvlCompres.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbl_LvlCompr
@@ -328,7 +345,6 @@
             this.lbl_PDFToCompress.Name = "lbl_PDFToCompress";
             this.lbl_PDFToCompress.Size = new System.Drawing.Size(288, 65);
             this.lbl_PDFToCompress.TabIndex = 10;
-            this.lbl_PDFToCompress.Text = "PDF file to COMPRESS";
             // 
             // Btn_SelectPDFToCompress
             // 
@@ -371,25 +387,6 @@
             this.lblCompr.TabIndex = 2;
             this.lblCompr.Text = "Compress PDF";
             // 
-            // lbl_DIROutputCompressPDF
-            // 
-            this.lbl_DIROutputCompressPDF.Location = new System.Drawing.Point(112, 103);
-            this.lbl_DIROutputCompressPDF.Name = "lbl_DIROutputCompressPDF";
-            this.lbl_DIROutputCompressPDF.Size = new System.Drawing.Size(290, 53);
-            this.lbl_DIROutputCompressPDF.TabIndex = 15;
-            this.lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";
-            // 
-            // Btn_SelectDIROutputCompressPDF
-            // 
-            this.Btn_SelectDIROutputCompressPDF.Enabled = false;
-            this.Btn_SelectDIROutputCompressPDF.Location = new System.Drawing.Point(9, 103);
-            this.Btn_SelectDIROutputCompressPDF.Name = "Btn_SelectDIROutputCompressPDF";
-            this.Btn_SelectDIROutputCompressPDF.Size = new System.Drawing.Size(100, 22);
-            this.Btn_SelectDIROutputCompressPDF.TabIndex = 14;
-            this.Btn_SelectDIROutputCompressPDF.Text = "Select DIR PDF";
-            this.Btn_SelectDIROutputCompressPDF.UseVisualStyleBackColor = true;
-            this.Btn_SelectDIROutputCompressPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputCompressPDF_Click);
-            // 
             // pB_ICO
             // 
             this.pB_ICO.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -417,11 +414,14 @@
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "FrmUtiPDF_Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PDF Utility";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmUtiPDF_Main_FormClosing);
             this.Load += new System.EventHandler(this.FrmUtiPDF_Main_Load);
+            this.Shown += new System.EventHandler(this.FrmUtiPDF_Main_Shown);
             this.PnlOCR.ResumeLayout(false);
             this.PnlOCR.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pBProgressExtract)).EndInit();
             this.PnlMerge.ResumeLayout(false);
             this.PnlMerge.PerformLayout();
             this.PnlCompress.ResumeLayout(false);
@@ -446,7 +446,6 @@
         private System.Windows.Forms.Button Btn_Reset;
         private System.Windows.Forms.ComboBox cmbLangConv;
         private System.Windows.Forms.Label lblLang;
-        private System.Windows.Forms.ProgressBar PbConvert;
         private System.Windows.Forms.Panel PnlMerge;
         private System.Windows.Forms.Label lbl_DIROutputMergePDF;
         private System.Windows.Forms.Button Btn_SelectDIROutputMergedPDF;
@@ -467,5 +466,6 @@
         private System.Windows.Forms.Label lbl_DIROutputCompressPDF;
         private System.Windows.Forms.Button Btn_SelectDIROutputCompressPDF;
         private System.Windows.Forms.PictureBox pB_ICO;
+        private System.Windows.Forms.PictureBox pBProgressExtract;
     }
 }

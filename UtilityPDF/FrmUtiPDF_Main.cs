@@ -23,7 +23,7 @@ namespace UtilityPDF
 
         public FrmUtiPDF_Main()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void Btn_SelectPDF_Click(object sender, EventArgs e)
@@ -67,7 +67,6 @@ namespace UtilityPDF
             Btn_Start.Enabled = false;
             Btn_Reset.Enabled = false;
             cmbLangConv.Enabled = false;
-            Application.DoEvents();
 
             string pdfPath = lbl_PDF.Text;
             string txtPath = lbl_TXT.Text;
@@ -103,28 +102,22 @@ namespace UtilityPDF
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            PbConvert.Value = PbConvert.Maximum;            
-            PbConvert.Value = 0;
-            PbConvert.Maximum = 100;
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
-            lbl_PDF.Text = "PDF input file.";
-            lbl_TXT.Text = "TXT output file.";
-            Btn_SelectTXT.Enabled = false;
-            Btn_SelectPDF.Enabled = true;
-            Btn_Reset.Enabled = true;
+            Btn_Reset_Click(sender, e);
             cmbLangConv.Enabled = true;
             bConvert = false;
         }
 
         private void Btn_Reset_Click(object sender, EventArgs e)
         {
-            lbl_PDF.Text = "PDF input file.";
-            lbl_TXT.Text = "TXT output file.";
+            lbl_PDF.Text = "PDF file from EXTRACT TEXT";
+            lbl_TXT.Text = "Directory Output TXT File";
             Btn_SelectTXT.Enabled = false;
             Btn_SelectPDF.Enabled = true;
             Btn_Start.Enabled = false;
             cmbLangConv.SelectedIndex = 0;
+            DrawPercentage(0);
         }
 
         private void FrmUtiPDF_Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -152,8 +145,7 @@ namespace UtilityPDF
             }
 
             // Popola la combobox con i valori estratti
-            cmbLangConv.DataSource = languages;
-            cmbLangConv.SelectedIndex = 0;
+            cmbLangConv.DataSource = languages;                        
         }
 
         private void Btn_SelectPDFToMerge_Click(object sender, EventArgs e)
@@ -182,8 +174,7 @@ namespace UtilityPDF
             bConvert = true;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
-            PnlOCR.Enabled = false;
-            Application.DoEvents();
+            PnlOCR.Enabled = false;            
             string pdfPath = lbl_DIROutputMergePDF.Text;
 
             try
@@ -218,11 +209,7 @@ namespace UtilityPDF
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
             PnlOCR.Enabled = true;
-            Lstb_FileMerge.Items.Clear();
-            lbl_DIROutputMergePDF.Text = "Directory Output Merged PDF";
-            Btn_SelectDIROutputMergedPDF.Enabled = false;
-            Btn_Merge.Enabled = false;
-            Btn_SelectPDFToMerge.Enabled = true;
+            Btn_ResetMerge_Click(sender, e);
         }
 
 
@@ -248,8 +235,7 @@ namespace UtilityPDF
             bConvert = true;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
-            PnlOCR.Enabled = false;
-            Application.DoEvents();
+            PnlOCR.Enabled = false;            
 
             string pdfPath = lbl_PDFToCompress.Text;
             string outputPath = lbl_DIROutputCompressPDF.Text;
@@ -283,13 +269,7 @@ namespace UtilityPDF
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
             PnlOCR.Enabled = true;
-            lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
-            lbl_DIROutputCompressPDF .Text = "Directory Output Compressed PDF";
-            Btn_SelectDIROutputCompressPDF.Enabled = false;
-            Btn_SelectPDFToCompress.Enabled = true;
-            Btn_Compress.Enabled = false;
-            Tb_Compress.Value = 0;
-            Tb_Compress.Enabled = false;
+            Btn_ResetCompres_Click(sender, e);  
         }
 
         private void Btn_PDFToCompress_Click(object sender, EventArgs e)
@@ -305,7 +285,8 @@ namespace UtilityPDF
         private void Btn_ResetCompres_Click(object sender, EventArgs e)
         {
             lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
-            lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";            
+            lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";
+            lbl_ViewLvlCompres.Text = "VERY LOW COMPRESS --> MAX QUALITY";
             Tb_Compress.Value = 0;
             Tb_Compress.Enabled = false;
             Btn_Compress.Enabled = false;
@@ -379,27 +360,66 @@ namespace UtilityPDF
         {
             for (int i = 0; i < numPages; i++)
             {
-                ProcessPage(pdfStream, i, engine, txtPath);
-                PbConvert.Value = (i + 1) * 100 / numPages;
                 Application.DoEvents();
+                ProcessPage(pdfStream, i, engine, txtPath);
+                Application.DoEvents();
+                DrawPercentage((i + 1) * 100 / numPages);
             }
+        }
+        private void DrawPercentage(int percentage)
+        {
+            // Ottieni un oggetto Graphics per il PictureBox
+            Graphics g = pBProgressExtract.CreateGraphics();
+
+            // Pulisci il PictureBox
+            g.Clear(pBProgressExtract.BackColor);
+
+            // Calcola la larghezza della barra di avanzamento
+            int progressWidth = (int)(percentage / 100.0 * pBProgressExtract.Width);
+
+            // Disegna la barra di avanzamento
+            g.FillRectangle(Brushes.Green, 0, 0, progressWidth, pBProgressExtract.Height);
+
+            // Disegna il testo della percentuale
+            string text = percentage + "%";
+            SizeF textSize = g.MeasureString(text, pBProgressExtract.Font);
+            PointF location = new PointF((pBProgressExtract.Width - textSize.Width) / 2, (pBProgressExtract.Height - textSize.Height) / 2);
+            g.DrawString(text, pBProgressExtract.Font, Brushes.Black, location);            
+
+            // Pulisci
+            g.Dispose();
+            Application.DoEvents();
         }
 
         private void ProcessPage(Stream pdfStream, int i, TesseractEngine engine, string txtPath)
         {
-            byte[] page = Pdf2Png.Convert(pdfStream, i + 1, 600);
+            byte[] page = Pdf2Png.Convert(pdfStream, i + 1, 300);
+            Application.DoEvents();
             using (var ms = new MemoryStream(page))
             {
+                Application.DoEvents();
                 Image img = Image.FromStream(ms);
+                Application.DoEvents();
                 using (var imgPix = PixConverter.ToPix((Bitmap)img))
                 {
+                    Application.DoEvents();
                     using (var imgPage = engine.Process(imgPix))
                     {
+                        Application.DoEvents();
                         string text = imgPage.GetText();
+                        Application.DoEvents();
                         File.AppendAllText(txtPath, text);
+                        Application.DoEvents();
                     }
                 }
             }
+        }
+
+        private void FrmUtiPDF_Main_Shown(object sender, EventArgs e)
+        {
+            Btn_ResetMerge_Click(sender, e);
+            Btn_ResetCompres_Click(sender, e);
+            Btn_Reset_Click(sender, e);            
         }
     }
 }
