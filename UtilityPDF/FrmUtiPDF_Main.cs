@@ -6,10 +6,12 @@ using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Tesseract;
+using static System.Windows.Forms.AxHost;
 
 namespace UtilityPDF
 {
@@ -23,7 +25,7 @@ namespace UtilityPDF
 
         public FrmUtiPDF_Main()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void Btn_SelectPDF_Click(object sender, EventArgs e)
@@ -84,6 +86,9 @@ namespace UtilityPDF
                 int numPages = GetPageCount(pdfPath);
                 using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
                 {
+                    // Page Segmentation Mode = 'Auto'
+                    engine.DefaultPageSegMode = PageSegMode.Auto;
+
                     using (Stream pdfStream = File.OpenRead(pdfPath))
                     {
                         ProcessPages(pdfStream, numPages, engine, txtPath);
@@ -145,7 +150,7 @@ namespace UtilityPDF
             }
 
             // Popola la combobox con i valori estratti
-            cmbLangConv.DataSource = languages;                        
+            cmbLangConv.DataSource = languages;
         }
 
         private void Btn_SelectPDFToMerge_Click(object sender, EventArgs e)
@@ -174,7 +179,7 @@ namespace UtilityPDF
             bConvert = true;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
-            PnlOCR.Enabled = false;            
+            PnlOCR.Enabled = false;
             string pdfPath = lbl_DIROutputMergePDF.Text;
 
             try
@@ -203,7 +208,7 @@ namespace UtilityPDF
             {
                 // Display the exception message
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
 
             bConvert = false;
             PnlMerge.Enabled = true;
@@ -235,7 +240,7 @@ namespace UtilityPDF
             bConvert = true;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
-            PnlOCR.Enabled = false;            
+            PnlOCR.Enabled = false;
 
             string pdfPath = lbl_PDFToCompress.Text;
             string outputPath = lbl_DIROutputCompressPDF.Text;
@@ -264,12 +269,12 @@ namespace UtilityPDF
                 // Display the exception message
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-                        
+
             bConvert = false;
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
             PnlOCR.Enabled = true;
-            Btn_ResetCompres_Click(sender, e);  
+            Btn_ResetCompres_Click(sender, e);
         }
 
         private void Btn_PDFToCompress_Click(object sender, EventArgs e)
@@ -366,6 +371,7 @@ namespace UtilityPDF
                 DrawPercentage((i + 1) * 100 / numPages);
             }
         }
+
         private void DrawPercentage(int percentage)
         {
             // Ottieni un oggetto Graphics per il PictureBox
@@ -384,7 +390,7 @@ namespace UtilityPDF
             string text = percentage + "%";
             SizeF textSize = g.MeasureString(text, pBProgressExtract.Font);
             PointF location = new PointF((pBProgressExtract.Width - textSize.Width) / 2, (pBProgressExtract.Height - textSize.Height) / 2);
-            g.DrawString(text, pBProgressExtract.Font, Brushes.Black, location);            
+            g.DrawString(text, pBProgressExtract.Font, Brushes.Black, location);
 
             // Pulisci
             g.Dispose();
@@ -398,18 +404,27 @@ namespace UtilityPDF
             using (var ms = new MemoryStream(page))
             {
                 Application.DoEvents();
-                Image img = Image.FromStream(ms);
-                Application.DoEvents();
-                using (var imgPix = PixConverter.ToPix((Bitmap)img))
+                using (var outputStream = new MemoryStream())
                 {
+                    // Chiama ProcessImageStream per pre-elaborare l'immagine
+                    ProcessImageStream(ms, outputStream, 0.8f);
+
+                    // Ricarica l'immagine elaborata dal flusso di dati di output
+                    outputStream.Position = 0;
+                    Image img = Image.FromStream(outputStream);
                     Application.DoEvents();
-                    using (var imgPage = engine.Process(imgPix))
+                    using (var imgPix = PixConverter.ToPix((Bitmap)img))
                     {
                         Application.DoEvents();
-                        string text = imgPage.GetText();
-                        Application.DoEvents();
-                        File.AppendAllText(txtPath, text);
-                        Application.DoEvents();
+                        using (var imgPage = engine.Process(imgPix))
+                        {
+
+                            Application.DoEvents();
+                            string text = imgPage.GetText();
+                            Application.DoEvents();
+                            File.AppendAllText(txtPath, text);
+                            Application.DoEvents();
+                        }
                     }
                 }
             }
@@ -419,7 +434,46 @@ namespace UtilityPDF
         {
             Btn_ResetMerge_Click(sender, e);
             Btn_ResetCompres_Click(sender, e);
-            Btn_Reset_Click(sender, e);            
+            Btn_Reset_Click(sender, e);
+        }
+
+        //using System.IO;
+        //using Emgu.CV;
+        //using Emgu.CV.CvEnum;
+        //using Emgu.CV.Structure;
+
+        private void ProcessImageStream(Stream inputStream, Stream outputStream, float scale)
+        {
+            Bitmap originalBitmap = new Bitmap(inputStream);
+
+            // Calcola le nuove dimensioni
+            int newWidth = (int)(originalBitmap.Width * scale);
+            int newHeight = (int)(originalBitmap.Height * scale);
+
+            // Crea un nuovo bitmap con le dimensioni ridotte
+            Bitmap resizedBitmap = new Bitmap(newWidth, newHeight);
+
+            // Crea una nuova matrice di colori e imposta i suoi valori per la conversione in scala di grigi
+            ColorMatrix colorMatrix = new ColorMatrix(
+                new float[][]
+                {
+                    new float[] {.3f, .3f, .3f, 0, 0},
+                    new float[] {.59f, .59f, .59f, 0, 0},
+                    new float[] {.11f, .11f, .11f, 0, 0},
+                    new float[] {0, 0, 0, 1, 0},
+                    new float[] {0, 0, 0, 0, 1}
+                });
+
+            ImageAttributes attributes = new ImageAttributes();
+            attributes.SetColorMatrix(colorMatrix);
+
+            using (Graphics g = Graphics.FromImage(resizedBitmap))
+            {
+                Rectangle rect = new Rectangle(0, 0, newWidth, newHeight);
+                g.DrawImage(originalBitmap, rect, 0, 0, originalBitmap.Width, originalBitmap.Height, GraphicsUnit.Pixel, attributes);
+            }
+
+            resizedBitmap.Save(outputStream, originalBitmap.RawFormat);
         }
     }
 }
