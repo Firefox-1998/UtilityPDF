@@ -22,6 +22,7 @@ namespace UtilityPDF
         private static readonly string binPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private static readonly string gsDllPath = Path.Combine(binPath, Environment.Is64BitProcess ? "gsdll64.dll" : "gsdll32.dll");
         private readonly GhostscriptVersionInfo gvi = new GhostscriptVersionInfo(gsDllPath);
+        private bool abortFlag = false;
 
         public FrmUtiPDF_Main()
         {
@@ -64,6 +65,8 @@ namespace UtilityPDF
         private void Btn_Start_Click(object sender, EventArgs e)
         {
             bConvert = true;
+            Btn_Abort.Enabled = true;
+            Btn_Exit.Enabled = false;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
             Btn_Start.Enabled = false;
@@ -86,15 +89,20 @@ namespace UtilityPDF
                 int numPages = GetPageCount(pdfPath);
                 using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
                 {
-                    // Page Segmentation Mode = 'Auto'
-                    engine.DefaultPageSegMode = PageSegMode.Auto;
-
                     using (Stream pdfStream = File.OpenRead(pdfPath))
                     {
                         ProcessPages(pdfStream, numPages, engine, txtPath);
                     }
                 }
-                MessageBox.Show("Conversion completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (abortFlag)
+                {
+                    MessageBox.Show("Conversion >>> ABORTED <<< !!!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    abortFlag = false;
+                }
+                else
+                {
+                    MessageBox.Show("Conversion completed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (IOException ex)
             {
@@ -107,6 +115,8 @@ namespace UtilityPDF
                 MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            Btn_Abort.Enabled = false;
+            Btn_Exit.Enabled = true;
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
             Btn_Reset_Click(sender, e);
@@ -177,6 +187,7 @@ namespace UtilityPDF
         private void Btn_Merge_Click(object sender, EventArgs e)
         {
             bConvert = true;
+            Btn_Exit.Enabled = false;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
             PnlOCR.Enabled = false;
@@ -202,7 +213,7 @@ namespace UtilityPDF
 
                     outputDocument.Save(pdfPath);
                 }
-                MessageBox.Show("Merge completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Merge completed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -211,12 +222,12 @@ namespace UtilityPDF
             }
 
             bConvert = false;
+            Btn_Exit.Enabled = true;
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
             PnlOCR.Enabled = true;
             Btn_ResetMerge_Click(sender, e);
         }
-
 
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
@@ -238,6 +249,7 @@ namespace UtilityPDF
         private void Btn_Compress_Click(object sender, EventArgs e)
         {
             bConvert = true;
+            Btn_Exit.Enabled = false;
             PnlMerge.Enabled = false;
             PnlCompress.Enabled = false;
             PnlOCR.Enabled = false;
@@ -262,7 +274,7 @@ namespace UtilityPDF
 
                     processor.StartProcessing(switches.ToArray(), null);
                 }
-                MessageBox.Show("Compress completed!!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Compress completed.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -271,6 +283,7 @@ namespace UtilityPDF
             }
 
             bConvert = false;
+            Btn_Exit.Enabled = true;
             PnlMerge.Enabled = true;
             PnlCompress.Enabled = true;
             PnlOCR.Enabled = true;
@@ -369,6 +382,13 @@ namespace UtilityPDF
                 ProcessPage(pdfStream, i, engine, txtPath);
                 Application.DoEvents();
                 DrawPercentage((i + 1) * 100 / numPages);
+                
+                // Verify abortFlag 
+                if (abortFlag)
+                {
+                    // If abortFlag is "true" cancel extraction.
+                    break;
+                }
             }
         }
 
@@ -384,15 +404,16 @@ namespace UtilityPDF
             int progressWidth = (int)(percentage / 100.0 * pBProgressExtract.Width);
 
             // Disegna la barra di avanzamento
-            g.FillRectangle(Brushes.Green, 0, 0, progressWidth, pBProgressExtract.Height);
+            g.FillRectangle(Brushes.LightGreen, 0, 0, progressWidth, pBProgressExtract.Height);
 
             // Disegna il testo della percentuale
             string text = percentage + "%";
-            SizeF textSize = g.MeasureString(text, pBProgressExtract.Font);
+            Font boldFont = new Font(pBProgressExtract.Font.FontFamily, pBProgressExtract.Font.Size, FontStyle.Bold);
+            SizeF textSize = g.MeasureString(text, boldFont);
             PointF location = new PointF((pBProgressExtract.Width - textSize.Width) / 2, (pBProgressExtract.Height - textSize.Height) / 2);
-            g.DrawString(text, pBProgressExtract.Font, Brushes.Black, location);
+            g.DrawString(text, boldFont, Brushes.Black, location);
 
-            // Pulisci
+            // Clean
             g.Dispose();
             Application.DoEvents();
         }
@@ -404,27 +425,21 @@ namespace UtilityPDF
             using (var ms = new MemoryStream(page))
             {
                 Application.DoEvents();
-                using (var outputStream = new MemoryStream())
-                {
-                    // Chiama ProcessImageStream per pre-elaborare l'immagine
-                    ProcessImageStream(ms, outputStream, 0.8f);
+                Image img = Image.FromStream(ms);               
 
-                    // Ricarica l'immagine elaborata dal flusso di dati di output
-                    outputStream.Position = 0;
-                    Image img = Image.FromStream(outputStream);
+                Application.DoEvents();
+                using (var imgPix = PixConverter.ToPix((Bitmap)img))
+                {
+                    var grayImage = imgPix.ConvertRGBToGray();
+
                     Application.DoEvents();
-                    using (var imgPix = PixConverter.ToPix((Bitmap)img))
+                    using (var imgPage = engine.Process(grayImage))
                     {
                         Application.DoEvents();
-                        using (var imgPage = engine.Process(imgPix))
-                        {
-
-                            Application.DoEvents();
-                            string text = imgPage.GetText();
-                            Application.DoEvents();
-                            File.AppendAllText(txtPath, text);
-                            Application.DoEvents();
-                        }
+                        string text = imgPage.GetText();
+                        Application.DoEvents();
+                        File.AppendAllText(txtPath, text);
+                        Application.DoEvents();
                     }
                 }
             }
@@ -437,43 +452,16 @@ namespace UtilityPDF
             Btn_Reset_Click(sender, e);
         }
 
-        //using System.IO;
-        //using Emgu.CV;
-        //using Emgu.CV.CvEnum;
-        //using Emgu.CV.Structure;
+        private void Btn_Exit_Click(object sender, EventArgs e)
+        {            
+            Close();
+        }
 
-        private void ProcessImageStream(Stream inputStream, Stream outputStream, float scale)
+        private void Btn_Abort_Click(object sender, EventArgs e)
         {
-            Bitmap originalBitmap = new Bitmap(inputStream);
-
-            // Calcola le nuove dimensioni
-            int newWidth = (int)(originalBitmap.Width * scale);
-            int newHeight = (int)(originalBitmap.Height * scale);
-
-            // Crea un nuovo bitmap con le dimensioni ridotte
-            Bitmap resizedBitmap = new Bitmap(newWidth, newHeight);
-
-            // Crea una nuova matrice di colori e imposta i suoi valori per la conversione in scala di grigi
-            ColorMatrix colorMatrix = new ColorMatrix(
-                new float[][]
-                {
-                    new float[] {.3f, .3f, .3f, 0, 0},
-                    new float[] {.59f, .59f, .59f, 0, 0},
-                    new float[] {.11f, .11f, .11f, 0, 0},
-                    new float[] {0, 0, 0, 1, 0},
-                    new float[] {0, 0, 0, 0, 1}
-                });
-
-            ImageAttributes attributes = new ImageAttributes();
-            attributes.SetColorMatrix(colorMatrix);
-
-            using (Graphics g = Graphics.FromImage(resizedBitmap))
-            {
-                Rectangle rect = new Rectangle(0, 0, newWidth, newHeight);
-                g.DrawImage(originalBitmap, rect, 0, 0, originalBitmap.Width, originalBitmap.Height, GraphicsUnit.Pixel, attributes);
-            }
-
-            resizedBitmap.Save(outputStream, originalBitmap.RawFormat);
+            DialogResult dialogResult = MessageBox.Show("Do you confirm extraction ABORT?","Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.OK)
+                abortFlag = true;
         }
     }
 }

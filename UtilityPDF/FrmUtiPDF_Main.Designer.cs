@@ -62,6 +62,8 @@
             this.Btn_Compress = new System.Windows.Forms.Button();
             this.lblCompr = new System.Windows.Forms.Label();
             this.pB_ICO = new System.Windows.Forms.PictureBox();
+            this.Btn_Exit = new System.Windows.Forms.Button();
+            this.Btn_Abort = new System.Windows.Forms.Button();
             this.PnlOCR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBProgressExtract)).BeginInit();
             this.PnlMerge.SuspendLayout();
@@ -73,6 +75,7 @@
             // PnlOCR
             // 
             this.PnlOCR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PnlOCR.Controls.Add(this.Btn_Abort);
             this.PnlOCR.Controls.Add(this.pBProgressExtract);
             this.PnlOCR.Controls.Add(this.lblLang);
             this.PnlOCR.Controls.Add(this.cmbLangConv);
@@ -399,11 +402,34 @@
             this.pB_ICO.TabIndex = 13;
             this.pB_ICO.TabStop = false;
             // 
+            // Btn_Exit
+            // 
+            this.Btn_Exit.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Btn_Exit.Location = new System.Drawing.Point(770, 393);
+            this.Btn_Exit.Name = "Btn_Exit";
+            this.Btn_Exit.Size = new System.Drawing.Size(75, 48);
+            this.Btn_Exit.TabIndex = 14;
+            this.Btn_Exit.Text = "Exit";
+            this.Btn_Exit.UseVisualStyleBackColor = true;
+            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
+            // 
+            // Btn_Abort
+            // 
+            this.Btn_Abort.Enabled = false;
+            this.Btn_Abort.Location = new System.Drawing.Point(223, 239);
+            this.Btn_Abort.Name = "Btn_Abort";
+            this.Btn_Abort.Size = new System.Drawing.Size(100, 22);
+            this.Btn_Abort.TabIndex = 11;
+            this.Btn_Abort.Text = "Abort";
+            this.Btn_Abort.UseVisualStyleBackColor = true;
+            this.Btn_Abort.Click += new System.EventHandler(this.Btn_Abort_Click);
+            // 
             // FrmUtiPDF_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 593);
+            this.Controls.Add(this.Btn_Exit);
             this.Controls.Add(this.pB_ICO);
             this.Controls.Add(this.PnlCompress);
             this.Controls.Add(this.PnlMerge);
@@ -467,5 +493,7 @@
         private System.Windows.Forms.Button Btn_SelectDIROutputCompressPDF;
         private System.Windows.Forms.PictureBox pB_ICO;
         private System.Windows.Forms.PictureBox pBProgressExtract;
+        private System.Windows.Forms.Button Btn_Exit;
+        private System.Windows.Forms.Button Btn_Abort;
     }
 }
