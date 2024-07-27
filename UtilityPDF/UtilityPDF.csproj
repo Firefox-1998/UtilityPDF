@@ -143,12 +143,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compress.cs" />
+    <Compile Include="DisplayError.cs" />
     <Compile Include="FrmUtiPDF_Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmUtiPDF_Main.Designer.cs">
       <DependentUpon>FrmUtiPDF_Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Merge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmUtiPDF_Main.resx">

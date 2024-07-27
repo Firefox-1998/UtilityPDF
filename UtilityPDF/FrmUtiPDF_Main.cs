@@ -1,13 +1,10 @@
 ﻿using Freeware;
-using Ghostscript.NET;
-using Ghostscript.NET.Processor;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 using Tesseract;
 using UtilityPDF.Properties;
@@ -19,21 +16,15 @@ namespace UtilityPDF
     {
         private bool bConvert = false;
         private string LevelCompress = "/prepress";
-        private static readonly string binPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        private static readonly string gsDllPath = Path.Combine(binPath, Environment.Is64BitProcess ? "gsdll64.dll" : "gsdll32.dll");
-        private readonly GhostscriptVersionInfo gvi = new GhostscriptVersionInfo(gsDllPath);
+        
         private bool abortFlag = false;
 
         //Get, to resources, string message.
         private static readonly string WarnSelectOutDirTXT = Resources.WarnSelectOutDirTXT;
         private static readonly string WarnAbortedExtraction = Resources.ConvertAborted;
         private static readonly string InfoCompleteExtraction = Resources.ConvertCompleted;
-        private static readonly string WarnSelectOutDirMERGE = Resources.WarnSelectOutDirMERGE;
-        private static readonly string MergeCompleted = Resources.MergeCompleted;
+        private static readonly string WarnSelectOutDirMERGE = Resources.WarnSelectOutDirMERGE;     
         private static readonly string WarnSelectOutDirCOMP = Resources.WarnSelectOutDirCOMP;
-        private static readonly string CompressCompleted = Resources.CompressCompleted;
-        private static readonly string GenericMessageError = Resources.GenericMessageError;
-        private static readonly string SpecificMessageErrorIO = Resources.SpecificMessageErrorIO;
         private static readonly string WarnConfirmAbort = Resources.WarnConfirmAbort;
         private static readonly string CompressLvl_0 = Resources.CompressLvl_0;
         private static readonly string CompressLvl_1 = Resources.CompressLvl_1;
@@ -121,12 +112,12 @@ namespace UtilityPDF
             catch (IOException ex)
             {
                 // Display a more specific error message for IO exceptions
-                ErrorIO(ex);
+                DisplayError.ErrorIO(ex);
             }
             catch (Exception ex)
             {
                 // Display the exception message
-                ErrorGeneric(ex);
+                DisplayError.ErrorGeneric(ex);
             }
 
             ToggleControlsExtract(true);
@@ -197,38 +188,7 @@ namespace UtilityPDF
             ToggleControlMerge(false);
             string pdfPath = lbl_DIROutputMergePDF.Text;
 
-            try
-            {
-                using (PdfDocument outputDocument = new PdfDocument())
-                {
-                    outputDocument.Options.FlateEncodeMode = PdfFlateEncodeMode.BestCompression;
-                    outputDocument.Options.NoCompression = false;
-                    outputDocument.Options.CompressContentStreams = true;
-                    outputDocument.Options.EnableCcittCompressionForBilevelImages = true;
-
-                    foreach (string path in Lstb_FileMerge.Items)
-                    {
-                        PdfDocument inputDocument = PdfReader.Open(path, PdfDocumentOpenMode.Import);
-                        for (int i = 0; i < inputDocument.PageCount; i++)
-                        {
-                            outputDocument.AddPage(inputDocument.Pages[i]);
-                        }
-                    }
-
-                    outputDocument.Save(pdfPath);
-                }
-                MessageBox.Show(MergeCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (IOException ex)
-            {
-                // Display a more specific error message for IO exceptions
-                ErrorIO(ex);
-            }
-            catch (Exception ex)
-            {
-                // Display the exception message
-                ErrorGeneric(ex);
-            }
+            Merge.Execute(pdfPath, Lstb_FileMerge.Items);
 
             ToggleControlMerge(true);
             Btn_ResetMerge_Click(sender, e);
@@ -236,7 +196,7 @@ namespace UtilityPDF
 
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(WarnSelectOutDirMERGE,"Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            DialogResult dialogResult = MessageBox.Show(WarnSelectOutDirMERGE, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.OK)
             {
                 if (fBD_TXT.ShowDialog() == DialogResult.OK)
@@ -256,35 +216,7 @@ namespace UtilityPDF
             string pdfPath = lbl_PDFToCompress.Text;
             string outputPath = lbl_DIROutputCompressPDF.Text;
 
-            try
-            {
-                using (GhostscriptProcessor processor = new GhostscriptProcessor(gvi))
-                {
-                    List<string> switches = new List<string>
-                    {
-                        $"gs",
-                        $"-sDEVICE=pdfwrite",
-                        $"-dPDFSETTINGS={LevelCompress}",
-                        $"-dNOPAUSE",
-                        $"-dQUIET",
-                        $"-sOutputFile={outputPath}",
-                        $"{pdfPath}"
-                    };
-
-                    processor.StartProcessing(switches.ToArray(), null);
-                }
-                MessageBox.Show(CompressCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (IOException ex)
-            {
-                // Display a more specific error message for IO exceptions
-                ErrorIO(ex);
-            }
-            catch (Exception ex)
-            {
-                // Display the exception message
-                ErrorGeneric(ex);
-            }
+            Compress.Execute(pdfPath, LevelCompress, outputPath);
 
             ToggleControlCompress(true);
             Btn_ResetCompres_Click(sender, e);
@@ -370,7 +302,7 @@ namespace UtilityPDF
                 ProcessPage(pdfStream, i, engine, txtPath);
                 Application.DoEvents();
                 DrawPercentage((i + 1) * 100 / numPages);
-                
+
                 // Verify abortFlag 
                 if (abortFlag)
                 {
@@ -413,7 +345,7 @@ namespace UtilityPDF
             using (var ms = new MemoryStream(page))
             {
                 Application.DoEvents();
-                Image img = Image.FromStream(ms);               
+                Image img = Image.FromStream(ms);
 
                 Application.DoEvents();
                 using (var imgPix = PixConverter.ToPix((Bitmap)img))
@@ -451,7 +383,7 @@ namespace UtilityPDF
         }
 
         private void Btn_Exit_Click(object sender, EventArgs e)
-        {            
+        {
             Close();
         }
 
@@ -492,17 +424,7 @@ namespace UtilityPDF
             PnlOCR.Enabled = isEnabled;
         }
 
-        private static void ErrorGeneric(Exception ex)
-        {
-            // Display the exception message
-            MessageBox.Show(GenericMessageError + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
 
-        private static void ErrorIO(IOException ex)
-        {
-            // Display a more specific error message for IO exceptions
-            MessageBox.Show(SpecificMessageErrorIO + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
 
         private void Btn_SelectDIROutputTXT_Click(object sender, EventArgs e)
         {
