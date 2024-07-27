@@ -117,8 +117,92 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CompressCompleted" xml:space="preserve">
+    <value>Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
+    <comment>Information message to compress is "COMPLETED"</comment>
+  </data>
+  <data name="CompressLvl_0" xml:space="preserve">
+    <value>VERY LOW COMPRESS --&gt; MAX QUALITY</value>
+    <comment>Very Low level compress message</comment>
+  </data>
+  <data name="CompressLvl_1" xml:space="preserve">
+    <value>LOW COMPRESS --&gt; HIGH QUALITY</value>
+    <comment>Low level compress message</comment>
+  </data>
+  <data name="CompressLvl_2" xml:space="preserve">
+    <value>MEDIUM COMPRESS --&gt; MEDIUM QUALITY</value>
+    <comment>Medium level compress message</comment>
+  </data>
+  <data name="CompressLvl_3" xml:space="preserve">
+    <value>HIGH COMPRESS --&gt; LOW QUALITY</value>
+    <comment>High level compress message</comment>
+  </data>
+  <data name="ConvertAborted" xml:space="preserve">
+    <value>Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!</value>
+    <comment>Warning message to convert "ABORTED"</comment>
+  </data>
+  <data name="ConvertCompleted" xml:space="preserve">
+    <value>Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
+    <comment>Information message to convert is "COMPLETED"</comment>
+  </data>
+  <data name="GenericMessageError" xml:space="preserve">
+    <value>An error occurred: </value>
+    <comment>Generic error message</comment>
+  </data>
+  <data name="LblMsgInputPDF_Extr" xml:space="preserve">
+    <value>PDF file from EXTRACT TEXT</value>
+    <comment>Label Input PDF file from extract text</comment>
+  </data>
+  <data name="LblMsgOutputDIR_Extr" xml:space="preserve">
+    <value>Directory Output TXT File</value>
+    <comment>Label Output DIR TXT file extract text</comment>
+  </data>
+  <data name="LblMsgOutputDIR_Merge" xml:space="preserve">
+    <value>Directory Output Merged PDF</value>
+    <comment>Label Output DIR PDF merged</comment>
+  </data>
+  <data name="LblMsgSelLang" xml:space="preserve">
+    <value>Select language OCR recognize to convert</value>
+    <comment>Label for selection language for OCR extraction</comment>
+  </data>
+  <data name="MergeCompleted" xml:space="preserve">
+    <value>Merge &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
+    <comment>Information message to merge is "COMPLETED"</comment>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="PDFUti" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PDFUti.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SpecificMessageErrorIO" xml:space="preserve">
+    <value>An IO error occurred: </value>
+    <comment>Specific IO error message</comment>
+  </data>
+  <data name="TxtOutputDirBtn" xml:space="preserve">
+    <value>Select DIR </value>
+    <comment>Text for button select output DIR</comment>
+  </data>
+  <data name="TxtResetBtn" xml:space="preserve">
+    <value>Reset</value>
+    <comment>Text for button reset</comment>
+  </data>
+  <data name="TxtSelectPDFBtn" xml:space="preserve">
+    <value>Select PDF</value>
+    <comment>Text for button select PDF</comment>
+  </data>
+  <data name="WarnConfirmAbort" xml:space="preserve">
+    <value>Do you confirm extraction &gt;&gt;&gt; ABORT &lt;&lt;&lt; ?</value>
+    <comment>Warning message to confirm ABORT extraction</comment>
+  </data>
+  <data name="WarnSelectOutDirCOMP" xml:space="preserve">
+    <value>If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <comment>Warning message when select output directory for pdf compressed</comment>
+  </data>
+  <data name="WarnSelectOutDirMERGE" xml:space="preserve">
+    <value>If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME + MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <comment>Warning message when select output directory for pdf merged</comment>
+  </data>
+  <data name="WarnSelectOutDirTXT" xml:space="preserve">
+    <value>If a TXT file with the same name already exists (TXT file will have the SAME NAME as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <comment>Warning message when select output directory fot txt contain extracted pdf text</comment>
   </data>
 </root>

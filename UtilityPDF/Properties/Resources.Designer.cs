@@ -61,12 +61,201 @@ namespace UtilityPDF.Properties {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
+        /// </summary>
+        internal static string CompressCompleted {
+            get {
+                return ResourceManager.GetString("CompressCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a VERY LOW COMPRESS --&gt; MAX QUALITY.
+        /// </summary>
+        internal static string CompressLvl_0 {
+            get {
+                return ResourceManager.GetString("CompressLvl_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a LOW COMPRESS --&gt; HIGH QUALITY.
+        /// </summary>
+        internal static string CompressLvl_1 {
+            get {
+                return ResourceManager.GetString("CompressLvl_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a MEDIUM COMPRESS --&gt; MEDIUM QUALITY.
+        /// </summary>
+        internal static string CompressLvl_2 {
+            get {
+                return ResourceManager.GetString("CompressLvl_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a HIGH COMPRESS --&gt; LOW QUALITY.
+        /// </summary>
+        internal static string CompressLvl_3 {
+            get {
+                return ResourceManager.GetString("CompressLvl_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!.
+        /// </summary>
+        internal static string ConvertAborted {
+            get {
+                return ResourceManager.GetString("ConvertAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
+        /// </summary>
+        internal static string ConvertCompleted {
+            get {
+                return ResourceManager.GetString("ConvertCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a An error occurred: .
+        /// </summary>
+        internal static string GenericMessageError {
+            get {
+                return ResourceManager.GetString("GenericMessageError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a PDF file from EXTRACT TEXT.
+        /// </summary>
+        internal static string LblMsgInputPDF_Extr {
+            get {
+                return ResourceManager.GetString("LblMsgInputPDF_Extr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Directory Output TXT File.
+        /// </summary>
+        internal static string LblMsgOutputDIR_Extr {
+            get {
+                return ResourceManager.GetString("LblMsgOutputDIR_Extr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Directory Output Merged PDF.
+        /// </summary>
+        internal static string LblMsgOutputDIR_Merge {
+            get {
+                return ResourceManager.GetString("LblMsgOutputDIR_Merge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Select language OCR recognize to convert.
+        /// </summary>
+        internal static string LblMsgSelLang {
+            get {
+                return ResourceManager.GetString("LblMsgSelLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Merge &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
+        /// </summary>
+        internal static string MergeCompleted {
+            get {
+                return ResourceManager.GetString("MergeCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap PDFUti {
             get {
                 object obj = ResourceManager.GetObject("PDFUti", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a An IO error occurred: .
+        /// </summary>
+        internal static string SpecificMessageErrorIO {
+            get {
+                return ResourceManager.GetString("SpecificMessageErrorIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Select DIR .
+        /// </summary>
+        internal static string TxtOutputDirBtn {
+            get {
+                return ResourceManager.GetString("TxtOutputDirBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Reset.
+        /// </summary>
+        internal static string TxtResetBtn {
+            get {
+                return ResourceManager.GetString("TxtResetBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Select PDF.
+        /// </summary>
+        internal static string TxtSelectPDFBtn {
+            get {
+                return ResourceManager.GetString("TxtSelectPDFBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Do you confirm extraction &gt;&gt;&gt; ABORT &lt;&lt;&lt; ?.
+        /// </summary>
+        internal static string WarnConfirmAbort {
+            get {
+                return ResourceManager.GetString("WarnConfirmAbort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!.
+        /// </summary>
+        internal static string WarnSelectOutDirCOMP {
+            get {
+                return ResourceManager.GetString("WarnSelectOutDirCOMP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME + MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!.
+        /// </summary>
+        internal static string WarnSelectOutDirMERGE {
+            get {
+                return ResourceManager.GetString("WarnSelectOutDirMERGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a If a TXT file with the same name already exists (TXT file will have the SAME NAME as the selected PDF file) in the folder you select, it will be overwritten!!!.
+        /// </summary>
+        internal static string WarnSelectOutDirTXT {
+            get {
+                return ResourceManager.GetString("WarnSelectOutDirTXT", resourceCulture);
             }
         }
     }

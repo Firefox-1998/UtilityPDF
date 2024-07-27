@@ -30,13 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmUtiPDF_Main));
             this.PnlOCR = new System.Windows.Forms.Panel();
+            this.Btn_Abort = new System.Windows.Forms.Button();
             this.pBProgressExtract = new System.Windows.Forms.PictureBox();
             this.lblLang = new System.Windows.Forms.Label();
             this.cmbLangConv = new System.Windows.Forms.ComboBox();
             this.Btn_Reset = new System.Windows.Forms.Button();
             this.Btn_Start = new System.Windows.Forms.Button();
             this.lbl_TXT = new System.Windows.Forms.Label();
-            this.Btn_SelectTXT = new System.Windows.Forms.Button();
+            this.Btn_SelectDIROutputTXT = new System.Windows.Forms.Button();
             this.lbl_PDF = new System.Windows.Forms.Label();
             this.Btn_SelectPDF = new System.Windows.Forms.Button();
             this.lblOCR = new System.Windows.Forms.Label();
@@ -63,7 +64,6 @@
             this.lblCompr = new System.Windows.Forms.Label();
             this.pB_ICO = new System.Windows.Forms.PictureBox();
             this.Btn_Exit = new System.Windows.Forms.Button();
-            this.Btn_Abort = new System.Windows.Forms.Button();
             this.PnlOCR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBProgressExtract)).BeginInit();
             this.PnlMerge.SuspendLayout();
@@ -82,7 +82,7 @@
             this.PnlOCR.Controls.Add(this.Btn_Reset);
             this.PnlOCR.Controls.Add(this.Btn_Start);
             this.PnlOCR.Controls.Add(this.lbl_TXT);
-            this.PnlOCR.Controls.Add(this.Btn_SelectTXT);
+            this.PnlOCR.Controls.Add(this.Btn_SelectDIROutputTXT);
             this.PnlOCR.Controls.Add(this.lbl_PDF);
             this.PnlOCR.Controls.Add(this.Btn_SelectPDF);
             this.PnlOCR.Controls.Add(this.lblOCR);
@@ -91,6 +91,17 @@
             this.PnlOCR.Name = "PnlOCR";
             this.PnlOCR.Size = new System.Drawing.Size(396, 297);
             this.PnlOCR.TabIndex = 0;
+            // 
+            // Btn_Abort
+            // 
+            this.Btn_Abort.Enabled = false;
+            this.Btn_Abort.Location = new System.Drawing.Point(223, 239);
+            this.Btn_Abort.Name = "Btn_Abort";
+            this.Btn_Abort.Size = new System.Drawing.Size(100, 22);
+            this.Btn_Abort.TabIndex = 11;
+            this.Btn_Abort.Text = "Abort";
+            this.Btn_Abort.UseVisualStyleBackColor = true;
+            this.Btn_Abort.Click += new System.EventHandler(this.Btn_Abort_Click);
             // 
             // pBProgressExtract
             // 
@@ -108,9 +119,8 @@
             this.lblLang.Location = new System.Drawing.Point(4, 214);
             this.lblLang.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLang.Name = "lblLang";
-            this.lblLang.Size = new System.Drawing.Size(231, 15);
+            this.lblLang.Size = new System.Drawing.Size(0, 15);
             this.lblLang.TabIndex = 9;
-            this.lblLang.Text = "Select language OCR recognize to convert";
             // 
             // cmbLangConv
             // 
@@ -128,7 +138,6 @@
             this.Btn_Reset.Name = "Btn_Reset";
             this.Btn_Reset.Size = new System.Drawing.Size(100, 22);
             this.Btn_Reset.TabIndex = 7;
-            this.Btn_Reset.Text = "Reset";
             this.Btn_Reset.UseVisualStyleBackColor = true;
             this.Btn_Reset.Click += new System.EventHandler(this.Btn_Reset_Click);
             // 
@@ -150,16 +159,15 @@
             this.lbl_TXT.Size = new System.Drawing.Size(275, 75);
             this.lbl_TXT.TabIndex = 5;
             // 
-            // Btn_SelectTXT
+            // Btn_SelectDIROutputTXT
             // 
-            this.Btn_SelectTXT.Enabled = false;
-            this.Btn_SelectTXT.Location = new System.Drawing.Point(7, 122);
-            this.Btn_SelectTXT.Name = "Btn_SelectTXT";
-            this.Btn_SelectTXT.Size = new System.Drawing.Size(100, 22);
-            this.Btn_SelectTXT.TabIndex = 4;
-            this.Btn_SelectTXT.Text = "Select DIR TXT";
-            this.Btn_SelectTXT.UseVisualStyleBackColor = true;
-            this.Btn_SelectTXT.Click += new System.EventHandler(this.Btn_SelectTXT_Click);
+            this.Btn_SelectDIROutputTXT.Enabled = false;
+            this.Btn_SelectDIROutputTXT.Location = new System.Drawing.Point(7, 122);
+            this.Btn_SelectDIROutputTXT.Name = "Btn_SelectDIROutputTXT";
+            this.Btn_SelectDIROutputTXT.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputTXT.TabIndex = 4;
+            this.Btn_SelectDIROutputTXT.UseVisualStyleBackColor = true;
+            this.Btn_SelectDIROutputTXT.Click += new System.EventHandler(this.Btn_SelectDIROutputTXT_Click);
             // 
             // lbl_PDF
             // 
@@ -174,7 +182,6 @@
             this.Btn_SelectPDF.Name = "Btn_SelectPDF";
             this.Btn_SelectPDF.Size = new System.Drawing.Size(100, 22);
             this.Btn_SelectPDF.TabIndex = 2;
-            this.Btn_SelectPDF.Text = "Select PDF";
             this.Btn_SelectPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectPDF.Click += new System.EventHandler(this.Btn_SelectPDF_Click);
             // 
@@ -223,7 +230,6 @@
             this.Btn_SelectDIROutputMergedPDF.Name = "Btn_SelectDIROutputMergedPDF";
             this.Btn_SelectDIROutputMergedPDF.Size = new System.Drawing.Size(100, 22);
             this.Btn_SelectDIROutputMergedPDF.TabIndex = 9;
-            this.Btn_SelectDIROutputMergedPDF.Text = "Select DIR PDF";
             this.Btn_SelectDIROutputMergedPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputMergedPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputMergedPDF_Click);
             // 
@@ -243,7 +249,6 @@
             this.Btn_ResetMerge.Name = "Btn_ResetMerge";
             this.Btn_ResetMerge.Size = new System.Drawing.Size(100, 22);
             this.Btn_ResetMerge.TabIndex = 7;
-            this.Btn_ResetMerge.Text = "Reset";
             this.Btn_ResetMerge.UseVisualStyleBackColor = true;
             this.Btn_ResetMerge.Click += new System.EventHandler(this.Btn_ResetMerge_Click);
             // 
@@ -264,7 +269,6 @@
             this.Btn_SelectPDFToMerge.Name = "Btn_SelectPDFToMerge";
             this.Btn_SelectPDFToMerge.Size = new System.Drawing.Size(100, 22);
             this.Btn_SelectPDFToMerge.TabIndex = 2;
-            this.Btn_SelectPDFToMerge.Text = "Select PDF";
             this.Btn_SelectPDFToMerge.UseVisualStyleBackColor = true;
             this.Btn_SelectPDFToMerge.Click += new System.EventHandler(this.Btn_SelectPDFToMerge_Click);
             // 
@@ -310,7 +314,6 @@
             this.Btn_SelectDIROutputCompressPDF.Name = "Btn_SelectDIROutputCompressPDF";
             this.Btn_SelectDIROutputCompressPDF.Size = new System.Drawing.Size(100, 22);
             this.Btn_SelectDIROutputCompressPDF.TabIndex = 14;
-            this.Btn_SelectDIROutputCompressPDF.Text = "Select DIR PDF";
             this.Btn_SelectDIROutputCompressPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputCompressPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputCompressPDF_Click);
             // 
@@ -355,7 +358,6 @@
             this.Btn_SelectPDFToCompress.Name = "Btn_SelectPDFToCompress";
             this.Btn_SelectPDFToCompress.Size = new System.Drawing.Size(100, 22);
             this.Btn_SelectPDFToCompress.TabIndex = 9;
-            this.Btn_SelectPDFToCompress.Text = "Select PDF";
             this.Btn_SelectPDFToCompress.UseVisualStyleBackColor = true;
             this.Btn_SelectPDFToCompress.Click += new System.EventHandler(this.Btn_SelectPDFToCompress_Click);
             // 
@@ -365,7 +367,6 @@
             this.Btn_ResetCompres.Name = "Btn_ResetCompres";
             this.Btn_ResetCompres.Size = new System.Drawing.Size(100, 22);
             this.Btn_ResetCompres.TabIndex = 8;
-            this.Btn_ResetCompres.Text = "Reset";
             this.Btn_ResetCompres.UseVisualStyleBackColor = true;
             this.Btn_ResetCompres.Click += new System.EventHandler(this.Btn_ResetCompres_Click);
             // 
@@ -413,17 +414,6 @@
             this.Btn_Exit.UseVisualStyleBackColor = true;
             this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
             // 
-            // Btn_Abort
-            // 
-            this.Btn_Abort.Enabled = false;
-            this.Btn_Abort.Location = new System.Drawing.Point(223, 239);
-            this.Btn_Abort.Name = "Btn_Abort";
-            this.Btn_Abort.Size = new System.Drawing.Size(100, 22);
-            this.Btn_Abort.TabIndex = 11;
-            this.Btn_Abort.Text = "Abort";
-            this.Btn_Abort.UseVisualStyleBackColor = true;
-            this.Btn_Abort.Click += new System.EventHandler(this.Btn_Abort_Click);
-            // 
             // FrmUtiPDF_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -466,7 +456,7 @@
         private System.Windows.Forms.OpenFileDialog oFD_PDF;
         private System.Windows.Forms.Label lbl_PDF;
         private System.Windows.Forms.Label lbl_TXT;
-        private System.Windows.Forms.Button Btn_SelectTXT;
+        private System.Windows.Forms.Button Btn_SelectDIROutputTXT;
         private System.Windows.Forms.FolderBrowserDialog fBD_TXT;
         private System.Windows.Forms.Button Btn_Start;
         private System.Windows.Forms.Button Btn_Reset;
