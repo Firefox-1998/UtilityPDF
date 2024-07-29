@@ -133,6 +133,33 @@ namespace UtilityPDF.Properties {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Compress PDF in progress....
+        /// </summary>
+        internal static string LblCompressInProgress {
+            get {
+                return ResourceManager.GetString("LblCompressInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Compression LEVEL.
+        /// </summary>
+        internal static string LblCompressionLvl {
+            get {
+                return ResourceManager.GetString("LblCompressionLvl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Merge PDF in progress....
+        /// </summary>
+        internal static string LblMergeInProgress {
+            get {
+                return ResourceManager.GetString("LblMergeInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a PDF file from EXTRACT TEXT.
         /// </summary>
         internal static string LblMsgInputPDF_Extr {
@@ -160,11 +187,38 @@ namespace UtilityPDF.Properties {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select language OCR recognize to convert.
+        ///   Cerca una stringa localizzata simile a Select the language that OCR should use for extraction.
         /// </summary>
         internal static string LblMsgSelLang {
             get {
                 return ResourceManager.GetString("LblMsgSelLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Compress PDF.
+        /// </summary>
+        internal static string LblPanelCompress {
+            get {
+                return ResourceManager.GetString("LblPanelCompress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Extract Text From PDF Using OCR.
+        /// </summary>
+        internal static string LblPanelExtract {
+            get {
+                return ResourceManager.GetString("LblPanelExtract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Merge PDF.
+        /// </summary>
+        internal static string LblPanelMerge {
+            get {
+                return ResourceManager.GetString("LblPanelMerge", resourceCulture);
             }
         }
         
@@ -193,6 +247,51 @@ namespace UtilityPDF.Properties {
         internal static string SpecificMessageErrorIO {
             get {
                 return ResourceManager.GetString("SpecificMessageErrorIO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Abort.
+        /// </summary>
+        internal static string TxtAbortBtn {
+            get {
+                return ResourceManager.GetString("TxtAbortBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Compress.
+        /// </summary>
+        internal static string TxtCompressBtn {
+            get {
+                return ResourceManager.GetString("TxtCompressBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Exit.
+        /// </summary>
+        internal static string TxtExitBtn {
+            get {
+                return ResourceManager.GetString("TxtExitBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Extract.
+        /// </summary>
+        internal static string TxtExtractBtn {
+            get {
+                return ResourceManager.GetString("TxtExtractBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Merge.
+        /// </summary>
+        internal static string TxtMergetBtn {
+            get {
+                return ResourceManager.GetString("TxtMergetBtn", resourceCulture);
             }
         }
         

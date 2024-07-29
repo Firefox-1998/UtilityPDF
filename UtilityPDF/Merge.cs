@@ -3,14 +3,11 @@ using PdfSharp.Pdf.IO;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using UtilityPDF.Properties;
 
 namespace UtilityPDF
 {
     internal class Merge
     {
-        private static readonly string MergeCompleted = Resources.MergeCompleted;
-
         public static void Execute (string pdfPath, ListBox.ObjectCollection items)
         {
             StartExec(pdfPath, items);
@@ -38,7 +35,7 @@ namespace UtilityPDF
 
                     outputDocument.Save(pdfPath);
                 }
-                MessageBox.Show(MergeCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ResourceString.MergeCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {

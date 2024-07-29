@@ -149,6 +149,18 @@
     <value>An error occurred: </value>
     <comment>Generic error message</comment>
   </data>
+  <data name="LblCompressInProgress" xml:space="preserve">
+    <value>Compress PDF in progress...</value>
+    <comment>Text for label when start compress</comment>
+  </data>
+  <data name="LblCompressionLvl" xml:space="preserve">
+    <value>Compression LEVEL</value>
+    <comment>Label select compression level</comment>
+  </data>
+  <data name="LblMergeInProgress" xml:space="preserve">
+    <value>Merge PDF in progress...</value>
+    <comment>Text for label when start merge</comment>
+  </data>
   <data name="LblMsgInputPDF_Extr" xml:space="preserve">
     <value>PDF file from EXTRACT TEXT</value>
     <comment>Label Input PDF file from extract text</comment>
@@ -162,8 +174,20 @@
     <comment>Label Output DIR PDF merged</comment>
   </data>
   <data name="LblMsgSelLang" xml:space="preserve">
-    <value>Select language OCR recognize to convert</value>
+    <value>Select the language that OCR should use for extraction</value>
     <comment>Label for selection language for OCR extraction</comment>
+  </data>
+  <data name="LblPanelCompress" xml:space="preserve">
+    <value>Compress PDF</value>
+    <comment>Label for Compress Panel</comment>
+  </data>
+  <data name="LblPanelExtract" xml:space="preserve">
+    <value>Extract Text From PDF Using OCR</value>
+    <comment>Label for Extract Panel</comment>
+  </data>
+  <data name="LblPanelMerge" xml:space="preserve">
+    <value>Merge PDF</value>
+    <comment>Label for Merge Panel</comment>
   </data>
   <data name="MergeCompleted" xml:space="preserve">
     <value>Merge &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
@@ -176,6 +200,26 @@
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>An IO error occurred: </value>
     <comment>Specific IO error message</comment>
+  </data>
+  <data name="TxtAbortBtn" xml:space="preserve">
+    <value>Abort</value>
+    <comment>Text for button abort extract</comment>
+  </data>
+  <data name="TxtCompressBtn" xml:space="preserve">
+    <value>Compress</value>
+    <comment>Text for button start compress</comment>
+  </data>
+  <data name="TxtExitBtn" xml:space="preserve">
+    <value>Exit</value>
+    <comment>Text for button Exit/Close</comment>
+  </data>
+  <data name="TxtExtractBtn" xml:space="preserve">
+    <value>Extract</value>
+    <comment>Text for button start extract</comment>
+  </data>
+  <data name="TxtMergetBtn" xml:space="preserve">
+    <value>Merge</value>
+    <comment>Text for button start merge</comment>
   </data>
   <data name="TxtOutputDirBtn" xml:space="preserve">
     <value>Select DIR </value>

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using UtilityPDF.Properties;
 
 namespace UtilityPDF
 {
@@ -14,7 +13,6 @@ namespace UtilityPDF
         private static readonly string binPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private static readonly string gsDllPath = Path.Combine(binPath, Environment.Is64BitProcess ? "gsdll64.dll" : "gsdll32.dll");
         private static readonly GhostscriptVersionInfo gvi = new GhostscriptVersionInfo(gsDllPath);
-        private static readonly string CompressCompleted = Resources.CompressCompleted;
 
         public static void Execute(string pdfPath, string LevelCompress, string outputPath)
         {
@@ -37,10 +35,9 @@ namespace UtilityPDF
                         $"-sOutputFile={outputPath}",
                         $"{pdfPath}"
                     };
-
                     processor.StartProcessing(switches.ToArray(), null);
                 }
-                MessageBox.Show(CompressCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ResourceString.CompressCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {

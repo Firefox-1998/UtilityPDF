@@ -1,6 +1,6 @@
 ﻿namespace UtilityPDF
 {
-    partial class FrmUtiPDF_Main
+    internal partial class FrmUtiPDF_Main
     {
         /// <summary>
         /// Variabile di progettazione necessaria.
@@ -64,6 +64,8 @@
             this.lblCompr = new System.Windows.Forms.Label();
             this.pB_ICO = new System.Windows.Forms.PictureBox();
             this.Btn_Exit = new System.Windows.Forms.Button();
+            this.lbl_CompressInProgress = new System.Windows.Forms.Label();
+            this.lbl_MergeInProgress = new System.Windows.Forms.Label();
             this.PnlOCR.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBProgressExtract)).BeginInit();
             this.PnlMerge.SuspendLayout();
@@ -99,7 +101,6 @@
             this.Btn_Abort.Name = "Btn_Abort";
             this.Btn_Abort.Size = new System.Drawing.Size(100, 22);
             this.Btn_Abort.TabIndex = 11;
-            this.Btn_Abort.Text = "Abort";
             this.Btn_Abort.UseVisualStyleBackColor = true;
             this.Btn_Abort.Click += new System.EventHandler(this.Btn_Abort_Click);
             // 
@@ -126,14 +127,15 @@
             // 
             this.cmbLangConv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLangConv.FormattingEnabled = true;
-            this.cmbLangConv.Location = new System.Drawing.Point(241, 211);
+            this.cmbLangConv.Location = new System.Drawing.Point(307, 210);
             this.cmbLangConv.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbLangConv.Name = "cmbLangConv";
-            this.cmbLangConv.Size = new System.Drawing.Size(57, 23);
+            this.cmbLangConv.Size = new System.Drawing.Size(51, 23);
             this.cmbLangConv.TabIndex = 8;
             // 
             // Btn_Reset
             // 
+            this.Btn_Reset.Enabled = false;
             this.Btn_Reset.Location = new System.Drawing.Point(115, 239);
             this.Btn_Reset.Name = "Btn_Reset";
             this.Btn_Reset.Size = new System.Drawing.Size(100, 22);
@@ -148,7 +150,6 @@
             this.Btn_Start.Name = "Btn_Start";
             this.Btn_Start.Size = new System.Drawing.Size(100, 22);
             this.Btn_Start.TabIndex = 6;
-            this.Btn_Start.Text = "Extract";
             this.Btn_Start.UseVisualStyleBackColor = true;
             this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
             // 
@@ -191,14 +192,12 @@
             this.lblOCR.Location = new System.Drawing.Point(4, 5);
             this.lblOCR.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblOCR.Name = "lblOCR";
-            this.lblOCR.Size = new System.Drawing.Size(124, 15);
+            this.lblOCR.Size = new System.Drawing.Size(0, 15);
             this.lblOCR.TabIndex = 1;
-            this.lblOCR.Text = "Extract Text From PDF";
             // 
             // oFD_PDF
             // 
-            this.oFD_PDF.FileName = "*.pdf";
-            this.oFD_PDF.Filter = "PDF Files|*.pdf";
+            this.oFD_PDF.Filter = "PDF Files (*.pdf)|*.pdf";
             // 
             // PnlMerge
             // 
@@ -245,6 +244,7 @@
             // 
             // Btn_ResetMerge
             // 
+            this.Btn_ResetMerge.Enabled = false;
             this.Btn_ResetMerge.Location = new System.Drawing.Point(113, 268);
             this.Btn_ResetMerge.Name = "Btn_ResetMerge";
             this.Btn_ResetMerge.Size = new System.Drawing.Size(100, 22);
@@ -259,7 +259,6 @@
             this.Btn_Merge.Name = "Btn_Merge";
             this.Btn_Merge.Size = new System.Drawing.Size(100, 22);
             this.Btn_Merge.TabIndex = 6;
-            this.Btn_Merge.Text = "Merge";
             this.Btn_Merge.UseVisualStyleBackColor = true;
             this.Btn_Merge.Click += new System.EventHandler(this.Btn_Merge_Click);
             // 
@@ -278,9 +277,8 @@
             this.lblMerge.Location = new System.Drawing.Point(4, 5);
             this.lblMerge.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMerge.Name = "lblMerge";
-            this.lblMerge.Size = new System.Drawing.Size(65, 15);
+            this.lblMerge.Size = new System.Drawing.Size(0, 15);
             this.lblMerge.TabIndex = 1;
-            this.lblMerge.Text = "Merge PDF";
             // 
             // PnlCompress
             // 
@@ -331,7 +329,6 @@
             this.lbl_LvlCompr.Name = "lbl_LvlCompr";
             this.lbl_LvlCompr.Size = new System.Drawing.Size(116, 21);
             this.lbl_LvlCompr.TabIndex = 12;
-            this.lbl_LvlCompr.Text = "Compression LEVEL";
             // 
             // Tb_Compress
             // 
@@ -363,6 +360,7 @@
             // 
             // Btn_ResetCompres
             // 
+            this.Btn_ResetCompres.Enabled = false;
             this.Btn_ResetCompres.Location = new System.Drawing.Point(96, 224);
             this.Btn_ResetCompres.Name = "Btn_ResetCompres";
             this.Btn_ResetCompres.Size = new System.Drawing.Size(100, 22);
@@ -377,7 +375,6 @@
             this.Btn_Compress.Name = "Btn_Compress";
             this.Btn_Compress.Size = new System.Drawing.Size(75, 22);
             this.Btn_Compress.TabIndex = 3;
-            this.Btn_Compress.Text = "Compress";
             this.Btn_Compress.UseVisualStyleBackColor = true;
             this.Btn_Compress.Click += new System.EventHandler(this.Btn_Compress_Click);
             // 
@@ -387,14 +384,12 @@
             this.lblCompr.Location = new System.Drawing.Point(4, 6);
             this.lblCompr.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCompr.Name = "lblCompr";
-            this.lblCompr.Size = new System.Drawing.Size(85, 15);
+            this.lblCompr.Size = new System.Drawing.Size(0, 15);
             this.lblCompr.TabIndex = 2;
-            this.lblCompr.Text = "Compress PDF";
             // 
             // pB_ICO
             // 
             this.pB_ICO.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pB_ICO.Image = global::UtilityPDF.Properties.Resources.PDFUti;
             this.pB_ICO.InitialImage = null;
             this.pB_ICO.Location = new System.Drawing.Point(749, 461);
             this.pB_ICO.Name = "pB_ICO";
@@ -410,15 +405,38 @@
             this.Btn_Exit.Name = "Btn_Exit";
             this.Btn_Exit.Size = new System.Drawing.Size(75, 48);
             this.Btn_Exit.TabIndex = 14;
-            this.Btn_Exit.Text = "Exit";
             this.Btn_Exit.UseVisualStyleBackColor = true;
             this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
+            // 
+            // lbl_CompressInProgress
+            // 
+            this.lbl_CompressInProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbl_CompressInProgress.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_CompressInProgress.Location = new System.Drawing.Point(655, 531);
+            this.lbl_CompressInProgress.Name = "lbl_CompressInProgress";
+            this.lbl_CompressInProgress.Size = new System.Drawing.Size(50, 50);
+            this.lbl_CompressInProgress.TabIndex = 15;
+            this.lbl_CompressInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_CompressInProgress.Visible = false;
+            // 
+            // lbl_MergeInProgress
+            // 
+            this.lbl_MergeInProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbl_MergeInProgress.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_MergeInProgress.Location = new System.Drawing.Point(807, 314);
+            this.lbl_MergeInProgress.Name = "lbl_MergeInProgress";
+            this.lbl_MergeInProgress.Size = new System.Drawing.Size(50, 50);
+            this.lbl_MergeInProgress.TabIndex = 16;
+            this.lbl_MergeInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_MergeInProgress.Visible = false;
             // 
             // FrmUtiPDF_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(881, 593);
+            this.Controls.Add(this.lbl_CompressInProgress);
+            this.Controls.Add(this.lbl_MergeInProgress);
             this.Controls.Add(this.Btn_Exit);
             this.Controls.Add(this.pB_ICO);
             this.Controls.Add(this.PnlCompress);
@@ -485,5 +503,7 @@
         private System.Windows.Forms.PictureBox pBProgressExtract;
         private System.Windows.Forms.Button Btn_Exit;
         private System.Windows.Forms.Button Btn_Abort;
+        private System.Windows.Forms.Label lbl_CompressInProgress;
+        private System.Windows.Forms.Label lbl_MergeInProgress;
     }
 }

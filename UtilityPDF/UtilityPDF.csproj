@@ -145,6 +145,7 @@
   <ItemGroup>
     <Compile Include="Compress.cs" />
     <Compile Include="DisplayError.cs" />
+    <Compile Include="ExtractText.cs" />
     <Compile Include="FrmUtiPDF_Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -154,6 +155,7 @@
     <Compile Include="Merge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceString.cs" />
     <EmbeddedResource Include="FrmUtiPDF_Main.resx">
       <DependentUpon>FrmUtiPDF_Main.cs</DependentUpon>
     </EmbeddedResource>
