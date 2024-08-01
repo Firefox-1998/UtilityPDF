@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using UtilityPDF.Properties;
+
 
 namespace UtilityPDF
 {
@@ -37,7 +39,7 @@ namespace UtilityPDF
                     };
                     processor.StartProcessing(switches.ToArray(), null);
                 }
-                MessageBox.Show(ResourceString.CompressCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Settings.Default.CompressCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {

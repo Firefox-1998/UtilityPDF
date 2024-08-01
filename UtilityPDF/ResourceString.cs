@@ -6,8 +6,8 @@ namespace UtilityPDF
     {
         //Get, to resources, string message.
         public static readonly string WarnSelectOutDirTXT = Resources.WarnSelectOutDirTXT;
-        public static readonly string WarnAbortedExtraction = Resources.ConvertAborted;
-        public static readonly string InfoCompleteExtraction = Resources.ConvertCompleted;
+        public static readonly string WarnAbortedExtraction = Resources.WarnAbortedExtraction;
+        public static readonly string InfoCompleteExtraction = Resources.InfoCompleteExtraction;
         public static readonly string WarnSelectOutDirMERGE = Resources.WarnSelectOutDirMERGE;
         public static readonly string WarnSelectOutDirCOMP = Resources.WarnSelectOutDirCOMP;
         public static readonly string WarnConfirmAbort = Resources.WarnConfirmAbort;

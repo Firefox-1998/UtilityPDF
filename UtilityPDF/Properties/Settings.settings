@@ -1,7 +1,108 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="UtilityPDF.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CompressCompleted" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</Value>
+    </Setting>
+    <Setting Name="CompressLvl_0" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">VERY LOW COMPRESS --&gt; MAX QUALITY</Value>
+    </Setting>
+    <Setting Name="CompressLvl_1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">LOW COMPRESS --&gt; HIGH QUALITY</Value>
+    </Setting>
+    <Setting Name="CompressLvl_2" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MEDIUM COMPRESS --&gt; MEDIUM QUALITY</Value>
+    </Setting>
+    <Setting Name="CompressLvl_3" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">HIGH COMPRESS --&gt; LOW QUALITY</Value>
+    </Setting>
+    <Setting Name="ConvertAborted" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!</Value>
+    </Setting>
+    <Setting Name="ConvertCompleted" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</Value>
+    </Setting>
+    <Setting Name="GenericMessageError" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">An error occurred: </Value>
+    </Setting>
+    <Setting Name="LblCompressInProgress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Compress PDF in progress...</Value>
+    </Setting>
+    <Setting Name="LblCompressionLvl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Compression LEVEL</Value>
+    </Setting>
+    <Setting Name="LblMergeInProgress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Merge PDF in progress...</Value>
+    </Setting>
+    <Setting Name="LblMsgInputPDF_Extr" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PDF file from EXTRACT TEXT</Value>
+    </Setting>
+    <Setting Name="LblMsgOutputDIR_Extr" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Directory Output TXT File</Value>
+    </Setting>
+    <Setting Name="LblMsgOutputDIR_Merge" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Directory Output Merged PDF</Value>
+    </Setting>
+    <Setting Name="LblMsgSelLang" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Select the language that OCR should use for extraction</Value>
+    </Setting>
+    <Setting Name="LblPanelCompress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Compress PDF</Value>
+    </Setting>
+    <Setting Name="LblPanelExtract" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Extract Text From PDF Using OCR</Value>
+    </Setting>
+    <Setting Name="LblPanelMerge" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Merge PDF</Value>
+    </Setting>
+    <Setting Name="MergeCompleted" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Merge &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</Value>
+    </Setting>
+    <Setting Name="SpecificMessageErrorIO" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">An IO error occurred: </Value>
+    </Setting>
+    <Setting Name="TxtAbortBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Abort</Value>
+    </Setting>
+    <Setting Name="TxtCompressBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Compress</Value>
+    </Setting>
+    <Setting Name="TxtExitBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Exit</Value>
+    </Setting>
+    <Setting Name="TxtExtractBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Extract</Value>
+    </Setting>
+    <Setting Name="TxtMergetBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Merge</Value>
+    </Setting>
+    <Setting Name="TxtOutputDirBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Select DIR </Value>
+    </Setting>
+    <Setting Name="TxtResetBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Reset</Value>
+    </Setting>
+    <Setting Name="TxtSelectPDFBtn" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Select PDF</Value>
+    </Setting>
+    <Setting Name="WarnConfirmAbort" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Do you confirm extraction &gt;&gt;&gt; ABORT &lt;&lt;&lt; ?</Value>
+    </Setting>
+    <Setting Name="WarnSelectOutDirCOMP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
+    </Setting>
+    <Setting Name="WarnSelectOutDirMERGE" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME + MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!</Value>
+    </Setting>
+    <Setting Name="WarnSelectOutDirTXT" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">If a TXT file with the same name already exists (TXT file will have the SAME NAME as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
+    </Setting>
+    <Setting Name="InfoCompleteExtraction" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</Value>
+    </Setting>
+    <Setting Name="WarnAbortedExtraction" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

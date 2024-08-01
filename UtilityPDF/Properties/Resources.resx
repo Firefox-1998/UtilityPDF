@@ -137,17 +137,13 @@
     <value>HIGH COMPRESS --&gt; LOW QUALITY</value>
     <comment>High level compress message</comment>
   </data>
-  <data name="ConvertAborted" xml:space="preserve">
-    <value>Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!</value>
-    <comment>Warning message to convert "ABORTED"</comment>
-  </data>
-  <data name="ConvertCompleted" xml:space="preserve">
-    <value>Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
-    <comment>Information message to convert is "COMPLETED"</comment>
-  </data>
   <data name="GenericMessageError" xml:space="preserve">
     <value>An error occurred: </value>
     <comment>Generic error message</comment>
+  </data>
+  <data name="InfoCompleteExtraction" xml:space="preserve">
+    <value>Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
+    <comment>Information message to convert is "COMPLETED"</comment>
   </data>
   <data name="LblCompressInProgress" xml:space="preserve">
     <value>Compress PDF in progress...</value>
@@ -232,6 +228,10 @@
   <data name="TxtSelectPDFBtn" xml:space="preserve">
     <value>Select PDF</value>
     <comment>Text for button select PDF</comment>
+  </data>
+  <data name="WarnAbortedExtraction" xml:space="preserve">
+    <value>Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!</value>
+    <comment>Warning message to convert "ABORTED"</comment>
   </data>
   <data name="WarnConfirmAbort" xml:space="preserve">
     <value>Do you confirm extraction &gt;&gt;&gt; ABORT &lt;&lt;&lt; ?</value>

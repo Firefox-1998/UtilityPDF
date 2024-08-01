@@ -3,6 +3,8 @@ using PdfSharp.Pdf.IO;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using UtilityPDF.Properties;
+
 
 namespace UtilityPDF
 {
@@ -35,7 +37,7 @@ namespace UtilityPDF
 
                     outputDocument.Save(pdfPath);
                 }
-                MessageBox.Show(ResourceString.MergeCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Settings.Default.MergeCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {

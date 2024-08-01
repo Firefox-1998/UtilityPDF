@@ -391,9 +391,9 @@
             // 
             this.pB_ICO.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pB_ICO.InitialImage = null;
-            this.pB_ICO.Location = new System.Drawing.Point(749, 461);
+            this.pB_ICO.Location = new System.Drawing.Point(729, 447);
             this.pB_ICO.Name = "pB_ICO";
-            this.pB_ICO.Size = new System.Drawing.Size(120, 120);
+            this.pB_ICO.Size = new System.Drawing.Size(140, 140);
             this.pB_ICO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pB_ICO.TabIndex = 13;
             this.pB_ICO.TabStop = false;
@@ -401,7 +401,7 @@
             // Btn_Exit
             // 
             this.Btn_Exit.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Btn_Exit.Location = new System.Drawing.Point(770, 393);
+            this.Btn_Exit.Location = new System.Drawing.Point(770, 375);
             this.Btn_Exit.Name = "Btn_Exit";
             this.Btn_Exit.Size = new System.Drawing.Size(75, 48);
             this.Btn_Exit.TabIndex = 14;

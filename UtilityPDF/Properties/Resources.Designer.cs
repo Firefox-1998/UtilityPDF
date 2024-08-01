@@ -106,29 +106,20 @@ namespace UtilityPDF.Properties {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!.
+        ///   Cerca una stringa localizzata simile a An error occurred: .
         /// </summary>
-        internal static string ConvertAborted {
+        internal static string GenericMessageError {
             get {
-                return ResourceManager.GetString("ConvertAborted", resourceCulture);
+                return ResourceManager.GetString("GenericMessageError", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Cerca una stringa localizzata simile a Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
         /// </summary>
-        internal static string ConvertCompleted {
+        internal static string InfoCompleteExtraction {
             get {
-                return ResourceManager.GetString("ConvertCompleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una stringa localizzata simile a An error occurred: .
-        /// </summary>
-        internal static string GenericMessageError {
-            get {
-                return ResourceManager.GetString("GenericMessageError", resourceCulture);
+                return ResourceManager.GetString("InfoCompleteExtraction", resourceCulture);
             }
         }
         
@@ -319,6 +310,15 @@ namespace UtilityPDF.Properties {
         internal static string TxtSelectPDFBtn {
             get {
                 return ResourceManager.GetString("TxtSelectPDFBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Convert &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!.
+        /// </summary>
+        internal static string WarnAbortedExtraction {
+            get {
+                return ResourceManager.GetString("WarnAbortedExtraction", resourceCulture);
             }
         }
         
