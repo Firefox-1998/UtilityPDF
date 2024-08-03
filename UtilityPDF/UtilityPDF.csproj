@@ -180,6 +180,7 @@
     </Compile>
     <Compile Include="ResourceString.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="SettingsString.cs" />
     <EmbeddedResource Include="FrmUtiPDF_Main.resx">
       <DependentUpon>FrmUtiPDF_Main.cs</DependentUpon>
     </EmbeddedResource>

@@ -42,8 +42,8 @@ namespace UtilityPDF
         }
         private void Btn_Reset_Click(object sender, EventArgs e)
         {
-            lbl_PDF.Text = Settings.Default.LblMsgInputPDF_Extr;
-            lbl_TXT.Text = Settings.Default.LblMsgOutputDIR_Extr;
+            lbl_PDF.Text = SettingsString.LblMsgInputPDF_Extr;
+            lbl_TXT.Text = SettingsString.LblMsgOutputDIR_Extr;
             Btn_SelectDIROutputTXT.Enabled = false;
             Btn_SelectPDF.Enabled = true;
             Btn_Start.Enabled = false;
@@ -74,27 +74,27 @@ namespace UtilityPDF
 
                 Lstb_FileMerge.Items.Add(oFD_PDF.FileName);
 
-                if (Lstb_FileMerge.Items.Count == 2)                
+                if (Lstb_FileMerge.Items.Count == 2)
                     Btn_SelectDIROutputMergedPDF.Enabled = true;
             }
         }
         private void Btn_ResetMerge_Click(object sender, EventArgs e)
         {
             Lstb_FileMerge.Items.Clear();
-            lbl_DIROutputMergePDF.Text = Settings.Default.LblMsgOutputDIR_Merge;
+            lbl_DIROutputMergePDF.Text = SettingsString.LblMsgOutputDIR_Merge;
             Btn_SelectDIROutputMergedPDF.Enabled = false;
             Btn_Merge.Enabled = false;
             Btn_ResetMerge.Enabled = false;
             Btn_SelectPDFToMerge.Enabled = true;
         }
-        private void Btn_Merge_Click(object sender, EventArgs e)
+        private async void Btn_Merge_Click(object sender, EventArgs e)
         {
             ToggleControlMerge(false);
             lbl_MergeInProgress.BringToFront();
             Application.DoEvents();
             string pdfPath = lbl_DIROutputMergePDF.Text;
 
-            Merge.Execute(pdfPath, Lstb_FileMerge.Items);
+            await Merge.Execute(pdfPath, Lstb_FileMerge.Items, lbl_MergeInProgress);
 
             ToggleControlMerge(true);
             lbl_MergeInProgress.SendToBack();
@@ -103,7 +103,7 @@ namespace UtilityPDF
         }
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(Settings.Default.WarnSelectOutDirMERGE,
+            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirMERGE,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
@@ -121,7 +121,7 @@ namespace UtilityPDF
                 }
             }
         }
-        private void Btn_Compress_Click(object sender, EventArgs e)
+        private async void Btn_Compress_Click(object sender, EventArgs e)
         {
             ToggleControlCompress(false);
             lbl_CompressInProgress.BringToFront();
@@ -129,7 +129,7 @@ namespace UtilityPDF
             string pdfPath = lbl_PDFToCompress.Text;
             string outputPath = lbl_DIROutputCompressPDF.Text;
 
-            Compress.Execute(pdfPath, LevelCompress, outputPath);
+            await Compress.Execute(pdfPath, LevelCompress, outputPath, lbl_CompressInProgress);
 
             ToggleControlCompress(true);
             lbl_CompressInProgress.SendToBack();
@@ -140,7 +140,7 @@ namespace UtilityPDF
         {
             lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
             lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";
-            lbl_ViewLvlCompres.Text = Settings.Default.CompressLvl_0;
+            lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_0;
             Tb_Compress.Value = 0;
             Tb_Compress.Enabled = false;
             Btn_Compress.Enabled = false;
@@ -150,7 +150,7 @@ namespace UtilityPDF
         }
         private void Btn_SelectDIROutputCompressPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(Settings.Default.WarnSelectOutDirCOMP,
+            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirCOMP,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
@@ -185,22 +185,22 @@ namespace UtilityPDF
             {
                 case 0:
                     LevelCompress = "/prepress";
-                    lbl_ViewLvlCompres.Text = Settings.Default.CompressLvl_0;
+                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_0;
                     break;
 
                 case 1:
                     LevelCompress = "/printer";
-                    lbl_ViewLvlCompres.Text = Settings.Default.CompressLvl_1;
+                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_1;
                     break;
 
                 case 2:
                     LevelCompress = "/ebook";
-                    lbl_ViewLvlCompres.Text = Settings.Default.CompressLvl_2;
+                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_2;
                     break;
 
                 case 3:
                     LevelCompress = "/screen";
-                    lbl_ViewLvlCompres.Text = Settings.Default.CompressLvl_3;
+                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_3;
                     break;
             }
         }
@@ -249,7 +249,7 @@ namespace UtilityPDF
         }
         private void Btn_Abort_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(Settings.Default.WarnConfirmAbort,
+            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnConfirmAbort,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
@@ -266,9 +266,9 @@ namespace UtilityPDF
             Btn_Exit.Enabled = isEnabled;
             PnlMerge.Enabled = isEnabled;
             PnlCompress.Enabled = isEnabled;
-            Btn_Start.Enabled = false;           
+            Btn_Start.Enabled = false;
             cmbLangConv.Enabled = isEnabled;
-            bConvert = !isEnabled;            
+            bConvert = !isEnabled;
         }
         private void ToggleControlMerge(bool isEnabled)
         {
@@ -290,7 +290,7 @@ namespace UtilityPDF
         }
         private void Btn_SelectDIROutputTXT_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(Settings.Default.WarnSelectOutDirTXT,
+            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirTXT,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
@@ -301,18 +301,18 @@ namespace UtilityPDF
                     lbl_TXT.Text = fBD_TXT.SelectedPath
                                    + @"\"
                                    + Path.GetFileNameWithoutExtension(lbl_PDF.Text)
-                                   + ".txt";                    
+                                   + ".txt";
                     Btn_Start.Enabled = true;
                     Btn_SelectDIROutputTXT.Enabled = false;
                 }
             }
             else
             {
-                lbl_PDF.Text = Settings.Default.LblMsgInputPDF_Extr;
-                lbl_TXT.Text = Settings.Default.LblMsgOutputDIR_Extr;
+                lbl_PDF.Text = SettingsString.LblMsgInputPDF_Extr;
+                lbl_TXT.Text = SettingsString.LblMsgOutputDIR_Extr;
                 Btn_SelectDIROutputTXT.Enabled = false;
                 Btn_SelectPDF.Enabled = true;
-            }                      
+            }
         }
         private void CalculatingCenter(Label lblName, Panel pnlName)
         {
@@ -328,9 +328,9 @@ namespace UtilityPDF
         {
             // Le due label di progressione vengono ridimensionate e poste al centro dei rispettvi pannelli
             lbl_CompressInProgress.Size = new Size(240, 110);
-            lbl_CompressInProgress.Text = Settings.Default.LblCompressInProgress;
+            lbl_CompressInProgress.Text = SettingsString.LblCompressInProgress;
             lbl_MergeInProgress.Size = new Size(240, 110);
-            lbl_MergeInProgress.Text = Settings.Default.LblMergeInProgress;
+            lbl_MergeInProgress.Text = SettingsString.LblMergeInProgress;
             CalculatingCenter(lbl_CompressInProgress, PnlCompress);
             CalculatingCenter(lbl_MergeInProgress, PnlMerge);
         }
@@ -338,25 +338,25 @@ namespace UtilityPDF
         {
             // Assegna i testi/immagini ai vari controlli
             pB_ICO.Image = Resources.PDFUti;
-            lblOCR.Text = Settings.Default.LblPanelExtract;
-            lblCompr.Text = Settings.Default.LblPanelCompress;
-            lblMerge.Text = Settings.Default.LblPanelMerge;
-            lblLang.Text = Settings.Default.LblMsgSelLang;
-            lbl_LvlCompr.Text = Settings.Default.LblCompressionLvl;
-            Btn_SelectPDF.Text = Settings.Default.TxtSelectPDFBtn;
-            Btn_SelectPDFToCompress.Text = Settings.Default.TxtSelectPDFBtn;
-            Btn_SelectPDFToMerge.Text = Settings.Default.TxtSelectPDFBtn;
-            Btn_Reset.Text = Settings.Default.TxtResetBtn;
-            Btn_ResetCompres.Text = Settings.Default.TxtResetBtn;
-            Btn_ResetMerge.Text = Settings.Default.TxtResetBtn;
-            Btn_SelectDIROutputTXT.Text = Settings.Default.TxtOutputDirBtn + "TXT";
-            Btn_SelectDIROutputMergedPDF.Text = Settings.Default.TxtOutputDirBtn + "PDF";
-            Btn_SelectDIROutputCompressPDF.Text = Settings.Default.TxtOutputDirBtn + "PDF";
-            Btn_Abort.Text = Settings.Default.TxtAbortBtn;
-            Btn_Compress.Text = Settings.Default.TxtCompressBtn;
-            Btn_Start.Text = Settings.Default.TxtExtractBtn;
-            Btn_Merge.Text = Settings.Default.TxtMergetBtn;
-            Btn_Exit.Text = Settings.Default.TxtExitBtn;
+            lblOCR.Text = SettingsString.LblPanelExtract;
+            lblCompr.Text = SettingsString.LblPanelCompress;
+            lblMerge.Text = SettingsString.LblPanelMerge;
+            lblLang.Text = SettingsString.LblMsgSelLang;
+            lbl_LvlCompr.Text = SettingsString.LblCompressionLvl;
+            Btn_SelectPDF.Text = SettingsString.TxtSelectPDFBtn;
+            Btn_SelectPDFToCompress.Text = SettingsString.TxtSelectPDFBtn;
+            Btn_SelectPDFToMerge.Text = SettingsString.TxtSelectPDFBtn;
+            Btn_Reset.Text = SettingsString.TxtResetBtn;
+            Btn_ResetCompres.Text = SettingsString.TxtResetBtn;
+            Btn_ResetMerge.Text = SettingsString.TxtResetBtn;
+            Btn_SelectDIROutputTXT.Text = SettingsString.TxtOutputDirBtn + "TXT";
+            Btn_SelectDIROutputMergedPDF.Text = SettingsString.TxtOutputDirBtn + "PDF";
+            Btn_SelectDIROutputCompressPDF.Text = SettingsString.TxtOutputDirBtn + "PDF";
+            Btn_Abort.Text = SettingsString.TxtAbortBtn;
+            Btn_Compress.Text = SettingsString.TxtCompressBtn;
+            Btn_Start.Text = SettingsString.TxtExtractBtn;
+            Btn_Merge.Text = SettingsString.TxtMergetBtn;
+            Btn_Exit.Text = SettingsString.TxtExitBtn;
         }
         private void PopulateComboLang()
         {

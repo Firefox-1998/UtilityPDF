@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using UtilityPDF.Properties;
 
 namespace UtilityPDF
 {
@@ -10,13 +9,13 @@ namespace UtilityPDF
         public static void ErrorGeneric(Exception ex)
         {
             // Display the exception message
-            MessageBox.Show(Settings.Default.GenericMessageError + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(SettingsString.GenericMessageError + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public static void ErrorIO(IOException ex)
         {
             // Display a more specific error message for IO exceptions
-            MessageBox.Show(Settings.Default.SpecificMessageErrorIO + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(SettingsString.SpecificMessageErrorIO + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
