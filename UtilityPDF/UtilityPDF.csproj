@@ -161,7 +161,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorFader.cs" />
+    <Compile Include="ConvertDOCX.cs" />
     <Compile Include="Compress.cs" />
+    <Compile Include="DataLangLoader.cs" />
     <Compile Include="DisplayError.cs" />
     <Compile Include="ExtractText.cs" />
     <Compile Include="FrmUtiPDF_Main.cs">
@@ -170,6 +173,7 @@
     <Compile Include="FrmUtiPDF_Main.Designer.cs">
       <DependentUpon>FrmUtiPDF_Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="LangData.cs" />
     <Compile Include="Merge.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,7 +182,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ResourceString.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SettingsString.cs" />
     <EmbeddedResource Include="FrmUtiPDF_Main.resx">
@@ -219,6 +222,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gsdll32.dll" />
+    <Content Include="gsdll64.dll" />
     <Content Include="PDFUtility.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

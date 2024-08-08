@@ -10,6 +10,7 @@ namespace UtilityPDF
         public static readonly string InfoCompleteExtraction = Settings.Default.InfoCompleteExtraction;
         public static readonly string WarnSelectOutDirMERGE = Settings.Default.WarnSelectOutDirMERGE;
         public static readonly string WarnSelectOutDirCOMP = Settings.Default.WarnSelectOutDirCOMP;
+        public static readonly string WarnSelectOutDirDOCX = Settings.Default.WarnSelectOutDirDOCX;
         public static readonly string WarnConfirmAbort = Settings.Default.WarnConfirmAbort;
         public static readonly string CompressLvl_0 = Settings.Default.CompressLvl_0;
         public static readonly string CompressLvl_1 = Settings.Default.CompressLvl_1;
@@ -23,6 +24,7 @@ namespace UtilityPDF
         public static readonly string LblPanelExtract = Settings.Default.LblPanelExtract;
         public static readonly string LblPanelCompress = Settings.Default.LblPanelCompress;
         public static readonly string LblPanelMerge = Settings.Default.LblPanelMerge;
+        public static readonly string lbl_ConvDOCX = Settings.Default.LblPanelConvDOCX;
         public static readonly string TxtSelectPDFBtn = Settings.Default.TxtSelectPDFBtn;
         public static readonly string TxtResetBtn = Settings.Default.TxtResetBtn;
         public static readonly string TxtOutputDirBtn = Settings.Default.TxtOutputDirBtn;
@@ -30,6 +32,7 @@ namespace UtilityPDF
         public static readonly string TxtCompressBtn = Settings.Default.TxtCompressBtn;
         public static readonly string TxtExtractBtn = Settings.Default.TxtExtractBtn;
         public static readonly string TxtMergetBtn = Settings.Default.TxtMergetBtn;
+        public static readonly string TxtConvertBtn = Settings.Default.TxtConvertBtn;
         public static readonly string TxtExitBtn = Settings.Default.TxtExitBtn;
         public static readonly string GenericMessageError = Settings.Default.GenericMessageError;
         public static readonly string SpecificMessageErrorIO = Settings.Default.SpecificMessageErrorIO;
@@ -37,5 +40,8 @@ namespace UtilityPDF
         public static readonly string MergeCompleted = Settings.Default.MergeCompleted;
         public static readonly string LblCompressInProgress = Settings.Default.LblCompressInProgress;
         public static readonly string LblMergeInProgress = Settings.Default.LblMergeInProgress;
+        public static readonly string LblConvertInProgress = Settings.Default.LblConvertInProgress;
+        public static readonly string trainerDataFolder = Settings.Default.trainerDataFolder;
+        public static readonly string csvLangFilename = Settings.Default.csvLangFilename;
     }
 }

@@ -70,24 +70,6 @@ namespace UtilityPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Convert >>> ABORTED <<< !!!")]
-        public string ConvertAborted {
-            get {
-                return ((string)(this["ConvertAborted"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Convert >>> COMPLETED <<<")]
-        public string ConvertCompleted {
-            get {
-                return ((string)(this["ConvertCompleted"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("An error occurred: ")]
         public string GenericMessageError {
             get {
@@ -309,7 +291,8 @@ namespace UtilityPDF.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("If a TXT file with the same name already exists (TXT file will have the SAME NAME" +
-            " as the selected PDF file) in the folder you select, it will be overwritten!!!")]
+            ".TXT as the selected PDF file) in the folder you select, it will be overwritten!" +
+            "!!")]
         public string WarnSelectOutDirTXT {
             get {
                 return ((string)(this["WarnSelectOutDirTXT"]));
@@ -318,7 +301,7 @@ namespace UtilityPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Convert >>> COMPLETED <<<")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Extraction >>> COMPLETED <<<")]
         public string InfoCompleteExtraction {
             get {
                 return ((string)(this["InfoCompleteExtraction"]));
@@ -327,10 +310,66 @@ namespace UtilityPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Convert >>> ABORTED <<< !!!")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Extraction >>> ABORTED <<< !!!")]
         public string WarnAbortedExtraction {
             get {
                 return ((string)(this["WarnAbortedExtraction"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tessdata")]
+        public string trainerDataFolder {
+            get {
+                return ((string)(this["trainerDataFolder"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("lang.csv")]
+        public string csvLangFilename {
+            get {
+                return ((string)(this["csvLangFilename"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Convert PDF to DOCX")]
+        public string LblPanelConvDOCX {
+            get {
+                return ((string)(this["LblPanelConvDOCX"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Convert")]
+        public string TxtConvertBtn {
+            get {
+                return ((string)(this["TxtConvertBtn"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Convert PDF in progress...")]
+        public string LblConvertInProgress {
+            get {
+                return ((string)(this["LblConvertInProgress"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("If a DOCX file with the same name already exists (DOCX file will have the SAME NA" +
+            "ME_CONVERT.DOCX as the selected PDF file) in the folder you select, it will be o" +
+            "verwritten!!!")]
+        public string WarnSelectOutDirDOCX {
+            get {
+                return ((string)(this["WarnSelectOutDirDOCX"]));
             }
         }
     }

@@ -41,7 +41,7 @@ namespace UtilityPDF
             try
             {
                 int numPages = GetPageCount(pdfPath);
-                using (var engine = new TesseractEngine(@"./tessdata", selectedLanguage, EngineMode.LstmOnly))
+                using (var engine = new TesseractEngine($@"./{SettingsString.trainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
                 {
                     using (Stream pdfStream = File.OpenRead(pdfPath))
                     {
