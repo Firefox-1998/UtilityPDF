@@ -41,6 +41,12 @@ namespace UtilityPDF
                         $"-dCompressStreams=true",
                         $"-dDetectDuplicateImages=true",
                         $"-sOutputFile={outputPath}",
+                        $"-dColorImageDownsampleType=/Bicubic",
+                        $"-dColorImageResolution=150",
+                        $"-dGrayImageDownsampleType=/Bicubic",
+                        $"-dGrayImageResolution=150", 
+                        $"-dMonoImageDownsampleType=/Bicubic",
+                        $"-dMonoImageResolution=150",
                         $"{pdfPath}"
                     };
                     processor.StartProcessing(switches.ToArray(), null);
