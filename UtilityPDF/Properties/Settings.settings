@@ -39,7 +39,7 @@
       <Value Profile="(Default)">Directory Output Merged PDF</Value>
     </Setting>
     <Setting Name="LblMsgSelLang" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Select the language that OCR should use for extraction</Value>
+      <Value Profile="(Default)">Select the language that OCR use</Value>
     </Setting>
     <Setting Name="LblPanelCompress" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Compress PDF</Value>

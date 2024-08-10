@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorFader.cs" />
+    <Compile Include="ControlTextImgAssigner.cs" />
     <Compile Include="ConvertDOCX.cs" />
     <Compile Include="Compress.cs" />
     <Compile Include="DataLangLoader.cs" />

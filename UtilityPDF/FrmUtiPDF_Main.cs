@@ -1,13 +1,9 @@
-﻿using Ghostscript.NET;
-using Ghostscript.NET.Processor;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 using UtilityPDF.Properties;
-
 
 namespace UtilityPDF
 {
@@ -16,6 +12,8 @@ namespace UtilityPDF
         private bool bConvert = false;
         private string LevelCompress = "/printer";
         private bool abortFlag = false;
+        private readonly Dictionary<string, string> cmbLangItems = new Dictionary<string, string>();
+
 
         public FrmUtiPDF_Main()
         {
@@ -39,12 +37,14 @@ namespace UtilityPDF
             string txtPath = lbl_TXT.Text;
             Btn_Reset.Enabled = false;
 
-            string selectedLanguage = "eng";
-            string selectedItem = cmbLangConv.SelectedItem.ToString();
-            int index = selectedItem.IndexOf(" -");
-            if (index > 0)
+            string selectedText = cmbLangConv.SelectedItem.ToString();
+            string selectedLanguage = cmbLangItems[selectedText]; // paramtro lingua "eng ad esempio" da passare all'engine di tesseract
+
+            // Verifico che la lingua selezionata abbia una corrispondenza
+            // se non ha corrispondenza imposto di default inglese
+            if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = selectedItem.Substring(0, index).Trim();                
+                selectedLanguage = "eng"; // Imposta il valore di default
             }
 
             ExtractText.Execute(pdfPath, txtPath, selectedLanguage, DrawPercentage, () => abortFlag);
@@ -72,7 +72,7 @@ namespace UtilityPDF
         private void FrmUtiPDF_Main_Load(object sender, EventArgs e)
         {
             PopulateComboLang();
-            AssignControlTextxImg();
+            ControlTextImgAssigner.AssignControlTextxImg(this);
             AssignTextPosLblProgress();
         }
         private void Btn_SelectPDFToMerge_Click(object sender, EventArgs e)
@@ -360,35 +360,7 @@ namespace UtilityPDF
             CalculatingCenter(lbl_MergeInProgress, PnlMerge);
             CalculatingCenter(lbl_ConvertInProgress, PnlConvert);            
         }
-        private void AssignControlTextxImg()
-        {
-            // Assegna i testi/immagini ai vari controlli
-            pB_ICO.Image = Resources.PDFUti;
-            lblOCR.Text = SettingsString.LblPanelExtract;
-            lblCompr.Text = SettingsString.LblPanelCompress;
-            lblMerge.Text = SettingsString.LblPanelMerge;
-            lbl_ConvDOCX.Text = SettingsString.lbl_ConvDOCX;
-            lblLang.Text = SettingsString.LblMsgSelLang;
-            lbl_LvlCompr.Text = SettingsString.LblCompressionLvl;
-            Btn_SelectPDF.Text = SettingsString.TxtSelectPDFBtn;
-            Btn_SelectPDFToCompress.Text = SettingsString.TxtSelectPDFBtn;
-            Btn_SelectPDFToMerge.Text = SettingsString.TxtSelectPDFBtn;
-            Btn_SelectPDFToConvert.Text = SettingsString.TxtSelectPDFBtn;
-            Btn_Reset.Text = SettingsString.TxtResetBtn;
-            Btn_ResetCompres.Text = SettingsString.TxtResetBtn;
-            Btn_ResetMerge.Text = SettingsString.TxtResetBtn;
-            Btn_ResetConvert.Text = SettingsString.TxtResetBtn;
-            Btn_SelectDIROutputTXT.Text = SettingsString.TxtOutputDirBtn + "TXT";
-            Btn_SelectDIROutputMergedPDF.Text = SettingsString.TxtOutputDirBtn + "PDF";
-            Btn_SelectDIROutputCompressPDF.Text = SettingsString.TxtOutputDirBtn + "PDF";
-            Btn_SelectDIROutputConvertPDF.Text = SettingsString.TxtOutputDirBtn + "PDF";
-            Btn_Abort.Text = SettingsString.TxtAbortBtn;
-            Btn_Compress.Text = SettingsString.TxtCompressBtn;
-            Btn_Convert.Text = SettingsString.TxtConvertBtn;
-            Btn_Start.Text = SettingsString.TxtExtractBtn;
-            Btn_Merge.Text = SettingsString.TxtMergetBtn;
-            Btn_Exit.Text = SettingsString.TxtExitBtn;
-        }
+        
         private void PopulateComboLang()
         {
             // Ottieni il percorso della directory dell'eseguibile
@@ -411,7 +383,11 @@ namespace UtilityPDF
 
                 if (result != null)
                 {
-                    cmbLangConv.Items.Add($"{result.LangParam1} - {result.LangParam2}");
+                    // Aggiungere l'elemento alla ComboBox
+                    cmbLangConv.Items.Add(result.LangParam2);
+
+                    // Aggiungere l'elemento al Dictionary
+                    cmbLangItems.Add(result.LangParam2, result.LangParam1);
                 }
             }
         }

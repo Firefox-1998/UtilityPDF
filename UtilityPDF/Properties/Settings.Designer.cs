@@ -133,7 +133,7 @@ namespace UtilityPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Select the language that OCR should use for extraction")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Select the language that OCR use")]
         public string LblMsgSelLang {
             get {
                 return ((string)(this["LblMsgSelLang"]));

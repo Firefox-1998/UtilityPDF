@@ -107,9 +107,9 @@
             // Btn_Abort
             // 
             this.Btn_Abort.Enabled = false;
-            this.Btn_Abort.Location = new System.Drawing.Point(223, 239);
+            this.Btn_Abort.Location = new System.Drawing.Point(221, 239);
             this.Btn_Abort.Name = "Btn_Abort";
-            this.Btn_Abort.Size = new System.Drawing.Size(100, 22);
+            this.Btn_Abort.Size = new System.Drawing.Size(104, 22);
             this.Btn_Abort.TabIndex = 11;
             this.Btn_Abort.UseVisualStyleBackColor = true;
             this.Btn_Abort.Click += new System.EventHandler(this.Btn_Abort_Click);
@@ -117,9 +117,9 @@
             // pBProgressExtract
             // 
             this.pBProgressExtract.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBProgressExtract.Location = new System.Drawing.Point(7, 267);
+            this.pBProgressExtract.Location = new System.Drawing.Point(5, 267);
             this.pBProgressExtract.Name = "pBProgressExtract";
-            this.pBProgressExtract.Size = new System.Drawing.Size(426, 21);
+            this.pBProgressExtract.Size = new System.Drawing.Size(428, 21);
             this.pBProgressExtract.TabIndex = 10;
             this.pBProgressExtract.TabStop = false;
             // 
@@ -137,18 +137,18 @@
             // 
             this.cmbLangConv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbLangConv.FormattingEnabled = true;
-            this.cmbLangConv.Location = new System.Drawing.Point(307, 210);
+            this.cmbLangConv.Location = new System.Drawing.Point(223, 210);
             this.cmbLangConv.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cmbLangConv.Name = "cmbLangConv";
-            this.cmbLangConv.Size = new System.Drawing.Size(126, 23);
+            this.cmbLangConv.Size = new System.Drawing.Size(210, 23);
             this.cmbLangConv.TabIndex = 8;
             // 
             // Btn_Reset
             // 
             this.Btn_Reset.Enabled = false;
-            this.Btn_Reset.Location = new System.Drawing.Point(115, 239);
+            this.Btn_Reset.Location = new System.Drawing.Point(113, 239);
             this.Btn_Reset.Name = "Btn_Reset";
-            this.Btn_Reset.Size = new System.Drawing.Size(100, 22);
+            this.Btn_Reset.Size = new System.Drawing.Size(104, 22);
             this.Btn_Reset.TabIndex = 7;
             this.Btn_Reset.UseVisualStyleBackColor = true;
             this.Btn_Reset.Click += new System.EventHandler(this.Btn_Reset_Click);
@@ -156,9 +156,9 @@
             // Btn_Start
             // 
             this.Btn_Start.Enabled = false;
-            this.Btn_Start.Location = new System.Drawing.Point(7, 239);
+            this.Btn_Start.Location = new System.Drawing.Point(5, 239);
             this.Btn_Start.Name = "Btn_Start";
-            this.Btn_Start.Size = new System.Drawing.Size(100, 22);
+            this.Btn_Start.Size = new System.Drawing.Size(104, 22);
             this.Btn_Start.TabIndex = 6;
             this.Btn_Start.UseVisualStyleBackColor = true;
             this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
@@ -173,25 +173,25 @@
             // Btn_SelectDIROutputTXT
             // 
             this.Btn_SelectDIROutputTXT.Enabled = false;
-            this.Btn_SelectDIROutputTXT.Location = new System.Drawing.Point(7, 122);
+            this.Btn_SelectDIROutputTXT.Location = new System.Drawing.Point(5, 122);
             this.Btn_SelectDIROutputTXT.Name = "Btn_SelectDIROutputTXT";
-            this.Btn_SelectDIROutputTXT.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputTXT.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectDIROutputTXT.TabIndex = 4;
             this.Btn_SelectDIROutputTXT.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputTXT.Click += new System.EventHandler(this.Btn_SelectDIROutputTXT_Click);
             // 
             // lbl_PDF
             // 
-            this.lbl_PDF.Location = new System.Drawing.Point(112, 33);
+            this.lbl_PDF.Location = new System.Drawing.Point(112, 27);
             this.lbl_PDF.Name = "lbl_PDF";
             this.lbl_PDF.Size = new System.Drawing.Size(275, 75);
             this.lbl_PDF.TabIndex = 3;
             // 
             // Btn_SelectPDF
             // 
-            this.Btn_SelectPDF.Location = new System.Drawing.Point(7, 33);
+            this.Btn_SelectPDF.Location = new System.Drawing.Point(5, 27);
             this.Btn_SelectPDF.Name = "Btn_SelectPDF";
-            this.Btn_SelectPDF.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectPDF.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectPDF.TabIndex = 2;
             this.Btn_SelectPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectPDF.Click += new System.EventHandler(this.Btn_SelectPDF_Click);
@@ -199,10 +199,11 @@
             // lblOCR
             // 
             this.lblOCR.AutoSize = true;
-            this.lblOCR.Location = new System.Drawing.Point(4, 5);
+            this.lblOCR.Font = new System.Drawing.Font("Calibri", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOCR.Location = new System.Drawing.Point(5, 3);
             this.lblOCR.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblOCR.Name = "lblOCR";
-            this.lblOCR.Size = new System.Drawing.Size(0, 15);
+            this.lblOCR.Size = new System.Drawing.Size(0, 18);
             this.lblOCR.TabIndex = 1;
             // 
             // oFD_PDF
@@ -237,7 +238,7 @@
             this.Btn_SelectDIROutputMergedPDF.Enabled = false;
             this.Btn_SelectDIROutputMergedPDF.Location = new System.Drawing.Point(5, 207);
             this.Btn_SelectDIROutputMergedPDF.Name = "Btn_SelectDIROutputMergedPDF";
-            this.Btn_SelectDIROutputMergedPDF.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputMergedPDF.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectDIROutputMergedPDF.TabIndex = 9;
             this.Btn_SelectDIROutputMergedPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputMergedPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputMergedPDF_Click);
@@ -246,7 +247,7 @@
             // 
             this.Lstb_FileMerge.FormattingEnabled = true;
             this.Lstb_FileMerge.ItemHeight = 15;
-            this.Lstb_FileMerge.Location = new System.Drawing.Point(113, 33);
+            this.Lstb_FileMerge.Location = new System.Drawing.Point(113, 27);
             this.Lstb_FileMerge.Name = "Lstb_FileMerge";
             this.Lstb_FileMerge.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.Lstb_FileMerge.Size = new System.Drawing.Size(254, 169);
@@ -257,7 +258,7 @@
             this.Btn_ResetMerge.Enabled = false;
             this.Btn_ResetMerge.Location = new System.Drawing.Point(113, 268);
             this.Btn_ResetMerge.Name = "Btn_ResetMerge";
-            this.Btn_ResetMerge.Size = new System.Drawing.Size(100, 22);
+            this.Btn_ResetMerge.Size = new System.Drawing.Size(104, 22);
             this.Btn_ResetMerge.TabIndex = 7;
             this.Btn_ResetMerge.UseVisualStyleBackColor = true;
             this.Btn_ResetMerge.Click += new System.EventHandler(this.Btn_ResetMerge_Click);
@@ -267,16 +268,16 @@
             this.Btn_Merge.Enabled = false;
             this.Btn_Merge.Location = new System.Drawing.Point(5, 268);
             this.Btn_Merge.Name = "Btn_Merge";
-            this.Btn_Merge.Size = new System.Drawing.Size(100, 22);
+            this.Btn_Merge.Size = new System.Drawing.Size(104, 22);
             this.Btn_Merge.TabIndex = 6;
             this.Btn_Merge.UseVisualStyleBackColor = true;
             this.Btn_Merge.Click += new System.EventHandler(this.Btn_Merge_Click);
             // 
             // Btn_SelectPDFToMerge
             // 
-            this.Btn_SelectPDFToMerge.Location = new System.Drawing.Point(7, 33);
+            this.Btn_SelectPDFToMerge.Location = new System.Drawing.Point(5, 27);
             this.Btn_SelectPDFToMerge.Name = "Btn_SelectPDFToMerge";
-            this.Btn_SelectPDFToMerge.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectPDFToMerge.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectPDFToMerge.TabIndex = 2;
             this.Btn_SelectPDFToMerge.UseVisualStyleBackColor = true;
             this.Btn_SelectPDFToMerge.Click += new System.EventHandler(this.Btn_SelectPDFToMerge_Click);
@@ -284,10 +285,11 @@
             // lblMerge
             // 
             this.lblMerge.AutoSize = true;
-            this.lblMerge.Location = new System.Drawing.Point(4, 5);
+            this.lblMerge.Font = new System.Drawing.Font("Calibri", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMerge.Location = new System.Drawing.Point(5, 3);
             this.lblMerge.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMerge.Name = "lblMerge";
-            this.lblMerge.Size = new System.Drawing.Size(0, 15);
+            this.lblMerge.Size = new System.Drawing.Size(0, 18);
             this.lblMerge.TabIndex = 1;
             // 
             // PnlCompress
@@ -318,9 +320,9 @@
             // Btn_SelectDIROutputCompressPDF
             // 
             this.Btn_SelectDIROutputCompressPDF.Enabled = false;
-            this.Btn_SelectDIROutputCompressPDF.Location = new System.Drawing.Point(9, 103);
+            this.Btn_SelectDIROutputCompressPDF.Location = new System.Drawing.Point(5, 103);
             this.Btn_SelectDIROutputCompressPDF.Name = "Btn_SelectDIROutputCompressPDF";
-            this.Btn_SelectDIROutputCompressPDF.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputCompressPDF.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectDIROutputCompressPDF.TabIndex = 14;
             this.Btn_SelectDIROutputCompressPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputCompressPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputCompressPDF_Click);
@@ -335,7 +337,7 @@
             // 
             // lbl_LvlCompr
             // 
-            this.lbl_LvlCompr.Location = new System.Drawing.Point(9, 173);
+            this.lbl_LvlCompr.Location = new System.Drawing.Point(5, 173);
             this.lbl_LvlCompr.Name = "lbl_LvlCompr";
             this.lbl_LvlCompr.Size = new System.Drawing.Size(116, 21);
             this.lbl_LvlCompr.TabIndex = 12;
@@ -362,9 +364,9 @@
             // 
             // Btn_SelectPDFToCompress
             // 
-            this.Btn_SelectPDFToCompress.Location = new System.Drawing.Point(9, 27);
+            this.Btn_SelectPDFToCompress.Location = new System.Drawing.Point(5, 27);
             this.Btn_SelectPDFToCompress.Name = "Btn_SelectPDFToCompress";
-            this.Btn_SelectPDFToCompress.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectPDFToCompress.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectPDFToCompress.TabIndex = 9;
             this.Btn_SelectPDFToCompress.UseVisualStyleBackColor = true;
             this.Btn_SelectPDFToCompress.Click += new System.EventHandler(this.Btn_SelectPDFToCompress_Click);
@@ -372,9 +374,9 @@
             // Btn_ResetCompres
             // 
             this.Btn_ResetCompres.Enabled = false;
-            this.Btn_ResetCompres.Location = new System.Drawing.Point(96, 224);
+            this.Btn_ResetCompres.Location = new System.Drawing.Point(113, 224);
             this.Btn_ResetCompres.Name = "Btn_ResetCompres";
-            this.Btn_ResetCompres.Size = new System.Drawing.Size(100, 22);
+            this.Btn_ResetCompres.Size = new System.Drawing.Size(104, 22);
             this.Btn_ResetCompres.TabIndex = 8;
             this.Btn_ResetCompres.UseVisualStyleBackColor = true;
             this.Btn_ResetCompres.Click += new System.EventHandler(this.Btn_ResetCompres_Click);
@@ -382,9 +384,9 @@
             // Btn_Compress
             // 
             this.Btn_Compress.Enabled = false;
-            this.Btn_Compress.Location = new System.Drawing.Point(9, 224);
+            this.Btn_Compress.Location = new System.Drawing.Point(5, 224);
             this.Btn_Compress.Name = "Btn_Compress";
-            this.Btn_Compress.Size = new System.Drawing.Size(75, 22);
+            this.Btn_Compress.Size = new System.Drawing.Size(104, 22);
             this.Btn_Compress.TabIndex = 3;
             this.Btn_Compress.UseVisualStyleBackColor = true;
             this.Btn_Compress.Click += new System.EventHandler(this.Btn_Compress_Click);
@@ -392,10 +394,11 @@
             // lblCompr
             // 
             this.lblCompr.AutoSize = true;
-            this.lblCompr.Location = new System.Drawing.Point(4, 6);
+            this.lblCompr.Font = new System.Drawing.Font("Calibri", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCompr.Location = new System.Drawing.Point(5, 3);
             this.lblCompr.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCompr.Name = "lblCompr";
-            this.lblCompr.Size = new System.Drawing.Size(0, 15);
+            this.lblCompr.Size = new System.Drawing.Size(0, 18);
             this.lblCompr.TabIndex = 2;
             // 
             // pB_ICO
@@ -466,9 +469,9 @@
             // Btn_SelectDIROutputConvertPDF
             // 
             this.Btn_SelectDIROutputConvertPDF.Enabled = false;
-            this.Btn_SelectDIROutputConvertPDF.Location = new System.Drawing.Point(9, 130);
+            this.Btn_SelectDIROutputConvertPDF.Location = new System.Drawing.Point(5, 130);
             this.Btn_SelectDIROutputConvertPDF.Name = "Btn_SelectDIROutputConvertPDF";
-            this.Btn_SelectDIROutputConvertPDF.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectDIROutputConvertPDF.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectDIROutputConvertPDF.TabIndex = 14;
             this.Btn_SelectDIROutputConvertPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputConvertPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputConvertPDF_Click);
@@ -482,9 +485,9 @@
             // 
             // Btn_SelectPDFToConvert
             // 
-            this.Btn_SelectPDFToConvert.Location = new System.Drawing.Point(9, 27);
+            this.Btn_SelectPDFToConvert.Location = new System.Drawing.Point(5, 27);
             this.Btn_SelectPDFToConvert.Name = "Btn_SelectPDFToConvert";
-            this.Btn_SelectPDFToConvert.Size = new System.Drawing.Size(100, 22);
+            this.Btn_SelectPDFToConvert.Size = new System.Drawing.Size(104, 22);
             this.Btn_SelectPDFToConvert.TabIndex = 9;
             this.Btn_SelectPDFToConvert.UseVisualStyleBackColor = true;
             this.Btn_SelectPDFToConvert.Click += new System.EventHandler(this.Btn_SelectPDFToConvert_Click);
@@ -492,9 +495,9 @@
             // Btn_ResetConvert
             // 
             this.Btn_ResetConvert.Enabled = false;
-            this.Btn_ResetConvert.Location = new System.Drawing.Point(96, 224);
+            this.Btn_ResetConvert.Location = new System.Drawing.Point(113, 224);
             this.Btn_ResetConvert.Name = "Btn_ResetConvert";
-            this.Btn_ResetConvert.Size = new System.Drawing.Size(100, 22);
+            this.Btn_ResetConvert.Size = new System.Drawing.Size(104, 22);
             this.Btn_ResetConvert.TabIndex = 8;
             this.Btn_ResetConvert.UseVisualStyleBackColor = true;
             this.Btn_ResetConvert.Click += new System.EventHandler(this.Btn_ResetConvert_Click);
@@ -502,9 +505,9 @@
             // Btn_Convert
             // 
             this.Btn_Convert.Enabled = false;
-            this.Btn_Convert.Location = new System.Drawing.Point(9, 224);
+            this.Btn_Convert.Location = new System.Drawing.Point(5, 224);
             this.Btn_Convert.Name = "Btn_Convert";
-            this.Btn_Convert.Size = new System.Drawing.Size(75, 22);
+            this.Btn_Convert.Size = new System.Drawing.Size(104, 22);
             this.Btn_Convert.TabIndex = 3;
             this.Btn_Convert.UseVisualStyleBackColor = true;
             this.Btn_Convert.Click += new System.EventHandler(this.Btn_Convert_Click);
@@ -512,10 +515,11 @@
             // lbl_ConvDOCX
             // 
             this.lbl_ConvDOCX.AutoSize = true;
-            this.lbl_ConvDOCX.Location = new System.Drawing.Point(4, 6);
+            this.lbl_ConvDOCX.Font = new System.Drawing.Font("Calibri", 11.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_ConvDOCX.Location = new System.Drawing.Point(5, 3);
             this.lbl_ConvDOCX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbl_ConvDOCX.Name = "lbl_ConvDOCX";
-            this.lbl_ConvDOCX.Size = new System.Drawing.Size(0, 15);
+            this.lbl_ConvDOCX.Size = new System.Drawing.Size(0, 18);
             this.lbl_ConvDOCX.TabIndex = 2;
             // 
             // lbl_ConvertInProgress
