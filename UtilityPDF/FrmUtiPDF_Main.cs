@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using UtilityPDF.Properties;
 
 namespace UtilityPDF
 {
@@ -14,11 +13,11 @@ namespace UtilityPDF
         private bool abortFlag = false;
         private readonly Dictionary<string, string> cmbLangItems = new Dictionary<string, string>();
 
-
         public FrmUtiPDF_Main()
         {
             InitializeComponent();
         }
+
         private void Btn_SelectPDF_Click(object sender, EventArgs e)
         {
             if (oFD_PDF.ShowDialog() == DialogResult.OK)
@@ -50,6 +49,7 @@ namespace UtilityPDF
             ExtractText.Execute(pdfPath, txtPath, selectedLanguage, DrawPercentage, () => abortFlag);
             ToggleControlsExtract(true);
         }
+
         private void Btn_Reset_Click(object sender, EventArgs e)
         {
             lbl_PDF.Text = SettingsString.LblMsgInputPDF_Extr;
@@ -109,7 +109,7 @@ namespace UtilityPDF
             ToggleControlMerge(true);
             lbl_MergeInProgress.SendToBack();
             Application.DoEvents();
-            Btn_ResetMerge_Click(sender, e);
+            Btn_ResetMerge_Click(null, EventArgs.Empty);
         }
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
@@ -144,7 +144,7 @@ namespace UtilityPDF
             ToggleControlCompress(true);
             lbl_CompressInProgress.SendToBack();
             Application.DoEvents();
-            Btn_ResetCompres_Click(sender, e);
+            Btn_ResetCompres_Click(null, EventArgs.Empty);
         }
         private void Btn_ResetCompres_Click(object sender, EventArgs e)
         {
@@ -158,6 +158,7 @@ namespace UtilityPDF
             Btn_SelectPDFToCompress.Enabled = true;
             Btn_SelectDIROutputCompressPDF.Enabled = false;
         }
+
         private void Btn_SelectDIROutputCompressPDF_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirCOMP,
@@ -337,6 +338,15 @@ namespace UtilityPDF
                 Btn_SelectPDF.Enabled = true;
             }
         }
+
+        private void AssignTextPosLblProgress()
+        {
+            // Le label di progressione vengono poste al centro dei rispettvi pannelli
+            CalculatingCenter(lbl_CompressInProgress, PnlCompress);
+            CalculatingCenter(lbl_MergeInProgress, PnlMerge);
+            CalculatingCenter(lbl_ConvertInProgress, PnlConvert);            
+        }
+
         private void CalculatingCenter(Label lblName, Panel pnlName)
         {
             // Calcola la posizione centrale del pannello
@@ -347,20 +357,7 @@ namespace UtilityPDF
             lblName.Left = pnlName.Location.X + (centerX - (lblName.Width / 2));
             lblName.Top = pnlName.Location.Y + (centerY - (lblName.Height / 2));
         }
-        private void AssignTextPosLblProgress()
-        {
-            // Le label di progressione vengono ridimensionate e poste al centro dei rispettvi pannelli
-            lbl_CompressInProgress.Size = new Size(240, 110);
-            lbl_CompressInProgress.Text = SettingsString.LblCompressInProgress;
-            lbl_MergeInProgress.Size = new Size(240, 110);
-            lbl_MergeInProgress.Text = SettingsString.LblMergeInProgress;
-            lbl_ConvertInProgress.Size = new Size(240, 110);
-            lbl_ConvertInProgress.Text = SettingsString.LblConvertInProgress;
-            CalculatingCenter(lbl_CompressInProgress, PnlCompress);
-            CalculatingCenter(lbl_MergeInProgress, PnlMerge);
-            CalculatingCenter(lbl_ConvertInProgress, PnlConvert);            
-        }
-        
+
         private void PopulateComboLang()
         {
             // Ottieni il percorso della directory dell'eseguibile
@@ -405,7 +402,7 @@ namespace UtilityPDF
             ToggleControlConvert(true);
             lbl_ConvertInProgress.SendToBack();
             Application.DoEvents();
-            Btn_ResetConvert_Click(sender, e);
+            Btn_ResetConvert_Click(null, EventArgs.Empty);
         }
 
         private void Btn_SelectPDFToConvert_Click(object sender, EventArgs e)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using UtilityPDF.Properties;
 
@@ -35,6 +36,18 @@ namespace UtilityPDF
                                 break;
                             case "lbl_LvlCompr":
                                 label.Text = SettingsString.LblCompressionLvl;
+                                break;
+                            case "lbl_CompressInProgress":
+                                label.Size = new Size(240, 110);
+                                label.Text = SettingsString.LblCompressInProgress;
+                                break;
+                            case "lbl_MergeInProgress":
+                                label.Size = new Size(240, 110);
+                                label.Text = SettingsString.LblCompressInProgress;
+                                break;
+                            case "lbl_ConvertInProgress":
+                                label.Size = new Size(240, 110);
+                                label.Text = SettingsString.LblCompressInProgress;
                                 break;
                         }
                     }
