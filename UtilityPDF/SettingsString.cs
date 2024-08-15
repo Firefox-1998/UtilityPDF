@@ -42,6 +42,7 @@ namespace UtilityPDF
         public static readonly string SpecificMessageErrorIO = Settings.Default.SpecificMessageErrorIO;
         public static readonly string CompressCompleted = Settings.Default.CompressCompleted;
         public static readonly string MergeCompleted = Settings.Default.MergeCompleted;
+        public static readonly string ConvertCompleted = Settings.Default.ConvertCompleted;
         public static readonly string LblCompressInProgress = Settings.Default.LblCompressInProgress;
         public static readonly string LblMergeInProgress = Settings.Default.LblMergeInProgress;
         public static readonly string LblConvertInProgress = Settings.Default.LblConvertInProgress;

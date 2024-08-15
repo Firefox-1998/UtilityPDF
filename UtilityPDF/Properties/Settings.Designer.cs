@@ -372,5 +372,14 @@ namespace UtilityPDF.Properties {
                 return ((string)(this["WarnSelectOutDirDOCX"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Convert >>> COMPLETED <<<")]
+        public string ConvertCompleted {
+            get {
+                return ((string)(this["ConvertCompleted"]));
+            }
+        }
     }
 }

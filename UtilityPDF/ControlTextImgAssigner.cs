@@ -43,11 +43,11 @@ namespace UtilityPDF
                                 break;
                             case "lbl_MergeInProgress":
                                 label.Size = new Size(240, 110);
-                                label.Text = SettingsString.LblCompressInProgress;
+                                label.Text = SettingsString.LblMergeInProgress;
                                 break;
                             case "lbl_ConvertInProgress":
                                 label.Size = new Size(240, 110);
-                                label.Text = SettingsString.LblCompressInProgress;
+                                label.Text = SettingsString.LblConvertInProgress;
                                 break;
                         }
                     }

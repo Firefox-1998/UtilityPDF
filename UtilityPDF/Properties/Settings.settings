@@ -116,5 +116,8 @@
     <Setting Name="WarnSelectOutDirDOCX" Type="System.String" Scope="Application">
       <Value Profile="(Default)">If a DOCX file with the same name already exists (DOCX file will have the SAME NAME_CONVERT.DOCX as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
     </Setting>
+    <Setting Name="ConvertCompleted" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
