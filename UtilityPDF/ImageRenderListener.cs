@@ -112,10 +112,7 @@ namespace UtilityPDF
                             )
                         )
                     {
-                        DistanceFromTop = (UInt32Value)0U,
-                        DistanceFromBottom = (UInt32Value)0U,
-                        DistanceFromLeft = (UInt32Value)0U,
-                        DistanceFromRight = (UInt32Value)0U,
+
                         EditId = editId
                     });
 
