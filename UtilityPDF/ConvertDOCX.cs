@@ -1,6 +1,6 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using DocWord = DocumentFormat.OpenXml.WordprocessingDocumentType;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
@@ -19,7 +19,7 @@ namespace UtilityPDF
             {
                 colorFader.StartFader(lblProgress);
                 await Task.Run(() => StartExec(pdfPath, outputPath, colorFader));
-            };
+            }
         }
 
         private static void StartExec(string pdfPath, string outputPath, ColorFader colorFader)
@@ -28,7 +28,7 @@ namespace UtilityPDF
             {
                 using (PdfReader pdfReader = new PdfReader(pdfPath))
                 using (PdfDocument pdfDocument = new PdfDocument(pdfReader))
-                using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(outputPath, DocWord.Document))
+                using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(outputPath, WordprocessingDocumentType.Document))
                 {
                     MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
                     mainPart.Document = new Document();
@@ -36,17 +36,7 @@ namespace UtilityPDF
 
                     for (int page = 1; page <= pdfDocument.GetNumberOfPages(); page++)
                     {
-                        PdfPage pdfPage = pdfDocument.GetPage(page);
-                        ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
-                        string text = PdfTextExtractor.GetTextFromPage(pdfPage, strategy);
-
-                        Paragraph para = body.AppendChild(new Paragraph());
-                        Run run = para.AppendChild(new Run());
-                        run.AppendChild(new Text(text));
-
-                        IEventListener listener = new ImageRenderListener(body, mainPart, wordDocument);
-                        PdfCanvasProcessor processor = new PdfCanvasProcessor(listener);
-                        processor.ProcessPageContent(pdfPage);
+                        ProcessPage(pdfDocument, page, body, mainPart);
                     }
                 }
                 colorFader.StopFader();
@@ -54,14 +44,27 @@ namespace UtilityPDF
             }
             catch (IOException ex)
             {
-                // Display a more specific error message for IO exceptions
                 DisplayError.ErrorIO(ex);
             }
             catch (Exception ex)
             {
-                // Display the exception message
                 DisplayError.ErrorGeneric(ex);
             }
+        }
+
+        private static void ProcessPage(PdfDocument pdfDocument, int page, Body body, MainDocumentPart mainPart)
+        {
+            PdfPage pdfPage = pdfDocument.GetPage(page);
+            ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+            string text = PdfTextExtractor.GetTextFromPage(pdfPage, strategy);
+
+            Paragraph para = body.AppendChild(new Paragraph());
+            Run run = para.AppendChild(new Run());
+            run.AppendChild(new Text(text));
+
+            IEventListener listener = new ImageRenderListener(body, mainPart);
+            PdfCanvasProcessor processor = new PdfCanvasProcessor(listener);
+            processor.ProcessPageContent(pdfPage);
         }
     }
 }

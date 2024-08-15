@@ -18,14 +18,12 @@ namespace UtilityPDF
     {
         private readonly Body body;
         private readonly MainDocumentPart mainPart;
-        private readonly WordprocessingDocument wordDoc;
         private int imageCounter = 1;
 
-        public ImageRenderListener(Body body, MainDocumentPart mainPart, WordprocessingDocument wordDoc)
+        public ImageRenderListener(Body body, MainDocumentPart mainPart)
         {
             this.body = body;
             this.mainPart = mainPart;
-            this.wordDoc = wordDoc;
         }
 
         public void EventOccurred(IEventData data, EventType type)
@@ -36,19 +34,23 @@ namespace UtilityPDF
                 PdfImageXObject image = renderInfo.GetImage();
                 if (image != null)
                 {
-                    byte[] imageBytes = image.GetImageBytes(true);
-                    string imagePartId = $"image{imageCounter++}";
-                    ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Png, imagePartId);
-                    using (MemoryStream ms = new MemoryStream(imageBytes))
-                    {
-                        imagePart.FeedData(ms);
-                    }
-
-                    string relationshipId = mainPart.GetIdOfPart(imagePart);
-
-                    AddImageToBody(relationshipId);
+                    AddImageToDocument(image);
                 }
             }
+        }
+
+        private void AddImageToDocument(PdfImageXObject image)
+        {
+            byte[] imageBytes = image.GetImageBytes(true);
+            string imagePartId = $"image{imageCounter++}";
+            ImagePart imagePart = mainPart.AddImagePart(ImagePartType.Png, imagePartId);
+            using (MemoryStream ms = new MemoryStream(imageBytes))
+            {
+                imagePart.FeedData(ms);
+            }
+
+            string relationshipId = mainPart.GetIdOfPart(imagePart);
+            AddImageToBody(relationshipId);
         }
 
         private void AddImageToBody(string relationshipId)
@@ -106,21 +108,17 @@ namespace UtilityPDF
                                             new A.AdjustValueList()
                                         )
                                         { Preset = A.ShapeTypeValues.Rectangle })))
-                                { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" }
+                            { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" }
                             )
                         )
                     {
-                        DistanceFromTop = (UInt32Value)0U,
-                        DistanceFromBottom = (UInt32Value)0U,
-                        DistanceFromLeft = (UInt32Value)0U,
-                        DistanceFromRight = (UInt32Value)0U,
                         EditId = editId
                     });
 
-            wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph(new Run(element)));
+            body.AppendChild(new Paragraph(new Run(element)));
         }
 
-        ICollection<EventType> IEventListener.GetSupportedEvents()
+        public ICollection<EventType> GetSupportedEvents()
         {
             return new HashSet<EventType> { EventType.RENDER_IMAGE };
         }
