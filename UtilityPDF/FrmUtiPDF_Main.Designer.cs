@@ -67,6 +67,9 @@
             this.lbl_CompressInProgress = new System.Windows.Forms.Label();
             this.lbl_MergeInProgress = new System.Windows.Forms.Label();
             this.PnlConvert = new System.Windows.Forms.Panel();
+            this.rBOutputFormat_2 = new System.Windows.Forms.RadioButton();
+            this.rBOutputFormat_1 = new System.Windows.Forms.RadioButton();
+            this.rBOutputFormat_0 = new System.Windows.Forms.RadioButton();
             this.lbl_DIROutputConvertPDF = new System.Windows.Forms.Label();
             this.Btn_SelectDIROutputConvertPDF = new System.Windows.Forms.Button();
             this.lbl_PDFToConvert = new System.Windows.Forms.Label();
@@ -405,9 +408,9 @@
             // 
             this.pB_ICO.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pB_ICO.InitialImage = null;
-            this.pB_ICO.Location = new System.Drawing.Point(751, 475);
+            this.pB_ICO.Location = new System.Drawing.Point(749, 455);
             this.pB_ICO.Name = "pB_ICO";
-            this.pB_ICO.Size = new System.Drawing.Size(128, 116);
+            this.pB_ICO.Size = new System.Drawing.Size(128, 128);
             this.pB_ICO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pB_ICO.TabIndex = 13;
             this.pB_ICO.TabStop = false;
@@ -428,7 +431,7 @@
             this.lbl_CompressInProgress.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_CompressInProgress.Location = new System.Drawing.Point(751, 314);
             this.lbl_CompressInProgress.Name = "lbl_CompressInProgress";
-            this.lbl_CompressInProgress.Size = new System.Drawing.Size(50, 50);
+            this.lbl_CompressInProgress.Size = new System.Drawing.Size(30, 30);
             this.lbl_CompressInProgress.TabIndex = 15;
             this.lbl_CompressInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbl_CompressInProgress.Visible = false;
@@ -437,9 +440,9 @@
             // 
             this.lbl_MergeInProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbl_MergeInProgress.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_MergeInProgress.Location = new System.Drawing.Point(807, 314);
+            this.lbl_MergeInProgress.Location = new System.Drawing.Point(787, 314);
             this.lbl_MergeInProgress.Name = "lbl_MergeInProgress";
-            this.lbl_MergeInProgress.Size = new System.Drawing.Size(50, 50);
+            this.lbl_MergeInProgress.Size = new System.Drawing.Size(30, 30);
             this.lbl_MergeInProgress.TabIndex = 16;
             this.lbl_MergeInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbl_MergeInProgress.Visible = false;
@@ -447,6 +450,9 @@
             // PnlConvert
             // 
             this.PnlConvert.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PnlConvert.Controls.Add(this.rBOutputFormat_2);
+            this.PnlConvert.Controls.Add(this.rBOutputFormat_1);
+            this.PnlConvert.Controls.Add(this.rBOutputFormat_0);
             this.PnlConvert.Controls.Add(this.lbl_DIROutputConvertPDF);
             this.PnlConvert.Controls.Add(this.Btn_SelectDIROutputConvertPDF);
             this.PnlConvert.Controls.Add(this.lbl_PDFToConvert);
@@ -459,9 +465,41 @@
             this.PnlConvert.Size = new System.Drawing.Size(300, 251);
             this.PnlConvert.TabIndex = 17;
             // 
+            // rBOutputFormat_2
+            // 
+            this.rBOutputFormat_2.AutoSize = true;
+            this.rBOutputFormat_2.Enabled = false;
+            this.rBOutputFormat_2.Location = new System.Drawing.Point(8, 200);
+            this.rBOutputFormat_2.Name = "rBOutputFormat_2";
+            this.rBOutputFormat_2.Size = new System.Drawing.Size(14, 13);
+            this.rBOutputFormat_2.TabIndex = 18;
+            this.rBOutputFormat_2.UseVisualStyleBackColor = true;
+            // 
+            // rBOutputFormat_1
+            // 
+            this.rBOutputFormat_1.AutoSize = true;
+            this.rBOutputFormat_1.Enabled = false;
+            this.rBOutputFormat_1.Location = new System.Drawing.Point(8, 175);
+            this.rBOutputFormat_1.Name = "rBOutputFormat_1";
+            this.rBOutputFormat_1.Size = new System.Drawing.Size(14, 13);
+            this.rBOutputFormat_1.TabIndex = 17;
+            this.rBOutputFormat_1.UseVisualStyleBackColor = true;
+            // 
+            // rBOutputFormat_0
+            // 
+            this.rBOutputFormat_0.AutoSize = true;
+            this.rBOutputFormat_0.Checked = true;
+            this.rBOutputFormat_0.Enabled = false;
+            this.rBOutputFormat_0.Location = new System.Drawing.Point(8, 150);
+            this.rBOutputFormat_0.Name = "rBOutputFormat_0";
+            this.rBOutputFormat_0.Size = new System.Drawing.Size(14, 13);
+            this.rBOutputFormat_0.TabIndex = 16;
+            this.rBOutputFormat_0.TabStop = true;
+            this.rBOutputFormat_0.UseVisualStyleBackColor = true;
+            // 
             // lbl_DIROutputConvertPDF
             // 
-            this.lbl_DIROutputConvertPDF.Location = new System.Drawing.Point(112, 130);
+            this.lbl_DIROutputConvertPDF.Location = new System.Drawing.Point(122, 124);
             this.lbl_DIROutputConvertPDF.Name = "lbl_DIROutputConvertPDF";
             this.lbl_DIROutputConvertPDF.Size = new System.Drawing.Size(170, 85);
             this.lbl_DIROutputConvertPDF.TabIndex = 15;
@@ -469,16 +507,17 @@
             // Btn_SelectDIROutputConvertPDF
             // 
             this.Btn_SelectDIROutputConvertPDF.Enabled = false;
-            this.Btn_SelectDIROutputConvertPDF.Location = new System.Drawing.Point(5, 130);
+            this.Btn_SelectDIROutputConvertPDF.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Btn_SelectDIROutputConvertPDF.Location = new System.Drawing.Point(5, 103);
             this.Btn_SelectDIROutputConvertPDF.Name = "Btn_SelectDIROutputConvertPDF";
-            this.Btn_SelectDIROutputConvertPDF.Size = new System.Drawing.Size(104, 22);
+            this.Btn_SelectDIROutputConvertPDF.Size = new System.Drawing.Size(112, 43);
             this.Btn_SelectDIROutputConvertPDF.TabIndex = 14;
             this.Btn_SelectDIROutputConvertPDF.UseVisualStyleBackColor = true;
             this.Btn_SelectDIROutputConvertPDF.Click += new System.EventHandler(this.Btn_SelectDIROutputConvertPDF_Click);
             // 
             // lbl_PDFToConvert
             // 
-            this.lbl_PDFToConvert.Location = new System.Drawing.Point(114, 27);
+            this.lbl_PDFToConvert.Location = new System.Drawing.Point(122, 27);
             this.lbl_PDFToConvert.Name = "lbl_PDFToConvert";
             this.lbl_PDFToConvert.Size = new System.Drawing.Size(170, 85);
             this.lbl_PDFToConvert.TabIndex = 10;
@@ -487,7 +526,7 @@
             // 
             this.Btn_SelectPDFToConvert.Location = new System.Drawing.Point(5, 27);
             this.Btn_SelectPDFToConvert.Name = "Btn_SelectPDFToConvert";
-            this.Btn_SelectPDFToConvert.Size = new System.Drawing.Size(104, 22);
+            this.Btn_SelectPDFToConvert.Size = new System.Drawing.Size(112, 22);
             this.Btn_SelectPDFToConvert.TabIndex = 9;
             this.Btn_SelectPDFToConvert.UseVisualStyleBackColor = true;
             this.Btn_SelectPDFToConvert.Click += new System.EventHandler(this.Btn_SelectPDFToConvert_Click);
@@ -526,9 +565,9 @@
             // 
             this.lbl_ConvertInProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbl_ConvertInProgress.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_ConvertInProgress.Location = new System.Drawing.Point(751, 423);
+            this.lbl_ConvertInProgress.Location = new System.Drawing.Point(823, 314);
             this.lbl_ConvertInProgress.Name = "lbl_ConvertInProgress";
-            this.lbl_ConvertInProgress.Size = new System.Drawing.Size(50, 50);
+            this.lbl_ConvertInProgress.Size = new System.Drawing.Size(30, 30);
             this.lbl_ConvertInProgress.TabIndex = 18;
             this.lbl_ConvertInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbl_ConvertInProgress.Visible = false;
@@ -621,5 +660,8 @@
         private System.Windows.Forms.Button Btn_Convert;
         private System.Windows.Forms.Label lbl_ConvDOCX;
         private System.Windows.Forms.Label lbl_ConvertInProgress;
+        private System.Windows.Forms.RadioButton rBOutputFormat_0;
+        private System.Windows.Forms.RadioButton rBOutputFormat_2;
+        private System.Windows.Forms.RadioButton rBOutputFormat_1;
     }
 }

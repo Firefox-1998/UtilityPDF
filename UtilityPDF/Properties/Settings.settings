@@ -87,7 +87,7 @@
       <Value Profile="(Default)">If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
     </Setting>
     <Setting Name="WarnSelectOutDirMERGE" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME + MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!</Value>
+      <Value Profile="(Default)">If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME_MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!</Value>
     </Setting>
     <Setting Name="WarnSelectOutDirTXT" Type="System.String" Scope="Application">
       <Value Profile="(Default)">If a TXT file with the same name already exists (TXT file will have the SAME NAME.TXT as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
@@ -105,7 +105,7 @@
       <Value Profile="(Default)">lang.csv</Value>
     </Setting>
     <Setting Name="LblPanelConvDOCX" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Convert PDF to DOCX</Value>
+      <Value Profile="(Default)">Convert PDF to DOCX/RTF</Value>
     </Setting>
     <Setting Name="TxtConvertBtn" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Convert</Value>
@@ -114,10 +114,25 @@
       <Value Profile="(Default)">Convert PDF in progress...</Value>
     </Setting>
     <Setting Name="WarnSelectOutDirDOCX" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">If a DOCX file with the same name already exists (DOCX file will have the SAME NAME_CONVERT.DOCX as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
+      <Value Profile="(Default)">If a DOCX/RTF file with the same name already exists (DOCX/RTF file will have the SAME NAME_CONVERT.DOCX/RTF as the selected PDF file) in the folder you select, it will be overwritten!!!</Value>
     </Setting>
     <Setting Name="ConvertCompleted" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</Value>
+    </Setting>
+    <Setting Name="RdBtnOutFormat_2" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DOCX and RTF</Value>
+    </Setting>
+    <Setting Name="RdBtnOutFormat_0" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Only DOCX</Value>
+    </Setting>
+    <Setting Name="RdBtnOutFormat_1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Only RTF</Value>
+    </Setting>
+    <Setting Name="LblMsgInputPDF_Conv" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PDF file to DOCX/RTF CONVERT</Value>
+    </Setting>
+    <Setting Name="LblMsgOutputDIR_Conv" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Directory Output DOCX/RTF</Value>
     </Setting>
   </Settings>
 </SettingsFile>

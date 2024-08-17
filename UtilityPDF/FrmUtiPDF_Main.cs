@@ -396,8 +396,18 @@ namespace UtilityPDF
             Application.DoEvents();
             string pdfPath = lbl_PDFToConvert.Text;
             string outputPath = lbl_DIROutputConvertPDF.Text;
+            int formatOutput = 0;
 
-            await ConvertDOCX.Execute(pdfPath, outputPath, lbl_ConvertInProgress);
+            if (rBOutputFormat_2.Checked)
+            {
+                formatOutput = 2;
+            }
+            else if (rBOutputFormat_1.Checked)
+            {
+                formatOutput = 1; 
+            }
+
+            await ConvertDOCX.Execute(pdfPath, outputPath, lbl_ConvertInProgress, formatOutput);
 
             ToggleControlConvert(true);
             lbl_ConvertInProgress.SendToBack();
@@ -412,6 +422,9 @@ namespace UtilityPDF
                 lbl_PDFToConvert.Text = oFD_PDF.FileName;
                 Btn_SelectDIROutputConvertPDF.Enabled = true;
                 Btn_ResetConvert.Enabled = true;
+                rBOutputFormat_0.Enabled = true;
+                rBOutputFormat_1.Enabled = true;
+                rBOutputFormat_2.Enabled = true;
                 Btn_SelectPDFToConvert.Enabled = false;
             }
         }
@@ -439,8 +452,13 @@ namespace UtilityPDF
 
         private void Btn_ResetConvert_Click(object sender, EventArgs e)
         {
-            lbl_PDFToConvert.Text = "PDF file to DOCX CONVERT.";
-            lbl_DIROutputConvertPDF.Text = "Directory Output DOCX";
+            lbl_PDFToConvert.Text = SettingsString.LblMsgInputPDF_Conv;
+            lbl_DIROutputConvertPDF.Text = SettingsString.LblMsgOutputDIR_Conv;
+
+            rBOutputFormat_0.Checked = true;
+            rBOutputFormat_0.Enabled = false;
+            rBOutputFormat_1.Enabled = false;
+            rBOutputFormat_2.Enabled = false;
             Btn_Convert.Enabled = false;
             Btn_ResetConvert.Enabled = false;
             Btn_SelectPDFToConvert.Enabled = true;

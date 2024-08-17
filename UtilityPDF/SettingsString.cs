@@ -21,8 +21,10 @@ namespace UtilityPDF
         public static readonly string CompressLvl_2 = Settings.Default.CompressLvl_2;
         public static readonly string CompressLvl_3 = Settings.Default.CompressLvl_3;
         public static readonly string LblMsgInputPDF_Extr = Settings.Default.LblMsgInputPDF_Extr;
+        public static readonly string LblMsgInputPDF_Conv = Settings.Default.LblMsgInputPDF_Conv;        
         public static readonly string LblMsgOutputDIR_Extr = Settings.Default.LblMsgOutputDIR_Extr;
         public static readonly string LblMsgOutputDIR_Merge = Settings.Default.LblMsgOutputDIR_Merge;
+        public static readonly string LblMsgOutputDIR_Conv = Settings.Default.LblMsgOutputDIR_Conv;
         public static readonly string LblMsgSelLang = Settings.Default.LblMsgSelLang;
         public static readonly string LblCompressionLvl = Settings.Default.LblCompressionLvl;
         public static readonly string LblPanelExtract = Settings.Default.LblPanelExtract;
@@ -48,6 +50,9 @@ namespace UtilityPDF
         public static readonly string LblConvertInProgress = Settings.Default.LblConvertInProgress;
         public static readonly string trainerDataFolder = Settings.Default.trainerDataFolder;
         public static readonly string csvLangFilename = Settings.Default.csvLangFilename;
+        public static readonly string RdBtnOutFormat_0 = Settings.Default.RdBtnOutFormat_0;
+        public static readonly string RdBtnOutFormat_1 = Settings.Default.RdBtnOutFormat_1;
+        public static readonly string RdBtnOutFormat_2 = Settings.Default.RdBtnOutFormat_2;
 
         // Set Ghostscript dll path
         private static readonly string binPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

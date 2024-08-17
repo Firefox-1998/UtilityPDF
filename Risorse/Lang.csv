@@ -14,7 +14,9 @@ cat;"Catalan; Valencian";cat.traineddata
 ceb;Cebuano;ceb.traineddata
 ces;Czech;ces.traineddata
 chi_sim;Chinese - Simplified;chi_sim.traineddata
+chi_sim_vert;Chinese - Simplified Vertical;chi_sim_vert.traineddata
 chi_tra;Chinese - Traditional;chi_tra.traineddata
+chi_tra_vert;Chinese - Traditional Vertical;chi_tra_vert.traineddata
 chr;Cherokee;chr.traineddata
 cym;Welsh;cym.traineddata
 dan;Danish;dan.traineddata
@@ -47,6 +49,7 @@ ita;Italian;ita.traineddata
 ita_old;Italian - Old;ita_old.traineddata
 jav;Javanese;jav.traineddata
 jpn;Japanese;jpn.traineddata
+jpn_vert;Japanese Vertical;jpn_vert.traineddata
 kan;Kannada;kan.traineddata
 kat;Georgian;kat.traineddata
 kat_old;Georgian - Old;kat_old.traineddata
@@ -54,6 +57,7 @@ kaz;Kazakh;kaz.traineddata
 khm;Central Khmer;khm.traineddata
 kir;"Kirghiz; Kyrgyz";kir.traineddata
 kor;Korean;kor.traineddata
+kor_vert;Korean Vertical;kor_vert.traineddata
 kur;Kurdish;kur.traineddata
 lao;Lao;lao.traineddata
 lat;Latin;lat.traineddata
@@ -101,3 +105,4 @@ uzb;Uzbek;uzb.traineddata
 uzb_cyrl;Uzbek - Cyrillic;uzb_cyrl.traineddata
 vie;Vietnamese;vie.traineddata
 yid;Yiddish;yid.traineddata
+yor;Yoruba;yor.traineddata

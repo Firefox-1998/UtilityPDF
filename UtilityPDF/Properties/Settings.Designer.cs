@@ -12,7 +12,7 @@ namespace UtilityPDF.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -280,8 +280,8 @@ namespace UtilityPDF.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("If a PDF file with the same name already exists (PDF_MERGED file will have the SA" +
-            "ME NAME + MERGED as the first selected PDF file) in the folder you select, it wi" +
-            "ll be overwritten!!!")]
+            "ME NAME_MERGED as the first selected PDF file) in the folder you select, it will" +
+            " be overwritten!!!")]
         public string WarnSelectOutDirMERGE {
             get {
                 return ((string)(this["WarnSelectOutDirMERGE"]));
@@ -337,7 +337,7 @@ namespace UtilityPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Convert PDF to DOCX")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Convert PDF to DOCX/RTF")]
         public string LblPanelConvDOCX {
             get {
                 return ((string)(this["LblPanelConvDOCX"]));
@@ -364,9 +364,9 @@ namespace UtilityPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("If a DOCX file with the same name already exists (DOCX file will have the SAME NA" +
-            "ME_CONVERT.DOCX as the selected PDF file) in the folder you select, it will be o" +
-            "verwritten!!!")]
+        [global::System.Configuration.DefaultSettingValueAttribute("If a DOCX/RTF file with the same name already exists (DOCX/RTF file will have the" +
+            " SAME NAME_CONVERT.DOCX/RTF as the selected PDF file) in the folder you select, " +
+            "it will be overwritten!!!")]
         public string WarnSelectOutDirDOCX {
             get {
                 return ((string)(this["WarnSelectOutDirDOCX"]));
@@ -379,6 +379,51 @@ namespace UtilityPDF.Properties {
         public string ConvertCompleted {
             get {
                 return ((string)(this["ConvertCompleted"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DOCX and RTF")]
+        public string RdBtnOutFormat_2 {
+            get {
+                return ((string)(this["RdBtnOutFormat_2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Only DOCX")]
+        public string RdBtnOutFormat_0 {
+            get {
+                return ((string)(this["RdBtnOutFormat_0"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Only RTF")]
+        public string RdBtnOutFormat_1 {
+            get {
+                return ((string)(this["RdBtnOutFormat_1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PDF file to DOCX/RTF CONVERT")]
+        public string LblMsgInputPDF_Conv {
+            get {
+                return ((string)(this["LblMsgInputPDF_Conv"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Directory Output DOCX/RTF")]
+        public string LblMsgOutputDIR_Conv {
+            get {
+                return ((string)(this["LblMsgOutputDIR_Conv"]));
             }
         }
     }
