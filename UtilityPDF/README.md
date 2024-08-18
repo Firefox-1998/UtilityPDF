@@ -31,5 +31,4 @@ Downolad languages to https://github.com/tesseract-ocr/tessdata_best
 	
 This software is released under the MIT license
 
-08/2024
-By Giovanni Limongiello aka Firefox_1998 
+[2024] [Giovanni Limongiello aka Firefox_1998]
