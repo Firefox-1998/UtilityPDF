@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
 [assembly: AssemblyTitle("Utility PDF")]
-[assembly: AssemblyDescription("Various tools with PDF (Extract text, Merge multiple PDF, Compress PDF)")]
+[assembly: AssemblyDescription("Various tools with PDF (Extract text, Merge multiple PDF, Compress PDF, Convert PDF)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Joe Soft Inc.")]
 [assembly: AssemblyProduct("UtilityPDF")]
-[assembly: AssemblyCopyright("FF_1998 aka GL Copyright © 2024")]
+[assembly: AssemblyCopyright("Gianni L. aka Firefox_1998 Copyright © 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // È possibile specificare tutti i valori oppure impostare valori predefiniti per i numeri relativi alla revisione e alla build
 // usando l'asterisco '*' come illustrato di seguito:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.6.1.0")]
-[assembly: AssemblyFileVersion("1.6.1.0")]
+[assembly: AssemblyVersion("1.6.1.1")]
+[assembly: AssemblyFileVersion("1.6.1.1")]
