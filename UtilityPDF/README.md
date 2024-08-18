@@ -26,7 +26,7 @@ Used library:
 	All library dependencies, mentioned above, are MIT LICENSED
 
  
-For TESSERACT traineddata (LSTM	only - best) put in tessadata directory trained languages.
+For TESSERACT traineddata (LSTM	only - best) put in tessdata directory trained languages.
 Downolad languages to https://github.com/tesseract-ocr/tessdata_best
 	
 This software is released under the MIT license
