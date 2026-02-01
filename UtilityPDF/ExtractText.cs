@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Tesseract;
+using UtilityPDF.Resources;
 
 
 namespace UtilityPDF
@@ -50,11 +51,11 @@ namespace UtilityPDF
                 }
                 if (shouldAbort())
                 {
-                    MessageBox.Show(SettingsString.WarnAbortedExtraction, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(Strings.WarnAbortedExtraction, Strings.MsgBoxWarningTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                 {
-                    MessageBox.Show(SettingsString.InfoCompleteExtraction, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Strings.InfoCompleteExtraction, Strings.MsgBoxInformationTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (IOException ex)

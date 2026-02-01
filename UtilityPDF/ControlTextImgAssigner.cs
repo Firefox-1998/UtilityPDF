@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using UtilityPDF.Properties;
+using UtilityPDF.Resources;
 
 namespace UtilityPDF
 {
@@ -20,34 +20,58 @@ namespace UtilityPDF
                     switch (label.Name)
                     {
                         case "lblOCR":
-                            label.Text = SettingsString.LblPanelExtract;
+                            label.Text = Strings.LblPanelExtract;
                             break;
                         case "lblCompr":
-                            label.Text = SettingsString.LblPanelCompress;
+                            label.Text = Strings.LblPanelCompress;
                             break;
                         case "lblMerge":
-                            label.Text = SettingsString.LblPanelMerge;
+                            label.Text = Strings.LblPanelMerge;
                             break;
                         case "lbl_ConvDOCX":
-                            label.Text = SettingsString.lbl_ConvDOCX;
+                            label.Text = Strings.LblPanelConvDOCX;
                             break;
                         case "lblLang":
-                            label.Text = SettingsString.LblMsgSelLang;
+                            label.Text = Strings.LblMsgSelLang;
                             break;
                         case "lbl_LvlCompr":
-                            label.Text = SettingsString.LblCompressionLvl;
+                            label.Text = Strings.LblCompressionLvl;
                             break;
                         case "lbl_CompressInProgress":
                             label.Size = new Size(240, 110);
-                            label.Text = SettingsString.LblCompressInProgress;
+                            label.Text = Strings.LblCompressInProgress;
                             break;
                         case "lbl_MergeInProgress":
                             label.Size = new Size(240, 110);
-                            label.Text = SettingsString.LblMergeInProgress;
+                            label.Text = Strings.LblMergeInProgress;
                             break;
                         case "lbl_ConvertInProgress":
                             label.Size = new Size(240, 110);
-                            label.Text = SettingsString.LblConvertInProgress;
+                            label.Text = Strings.LblConvertInProgress;
+                            break;
+                        case "lbl_PDF":
+                            label.Text = Strings.LblMsgInputPDF_Extr;
+                            break;
+                        case "lbl_TXT":
+                            label.Text = Strings.LblMsgOutputDIR_Extr;
+                            break;
+                        case "lbl_DIROutputMergePDF":
+                            label.Text = Strings.LblMsgOutputDIR_Merge;
+                            break;
+                        case "lbl_PDFToConvert":
+                            label.Text = Strings.LblMsgInputPDF_Conv;
+                            break;
+                        case "lbl_DIROutputConvertPDF":
+                            label.Text = Strings.LblMsgOutputDIR_Conv;
+                            break;
+                        case "lbl_Language":
+                            label.Text = Strings.LblLanguage;
+                            break;
+                        case "lbl_PDFToCompress":
+                            label.Text = Strings.PDFFileToCOMPRESS;
+                            break;
+                        case "lbl_DIROutputCompressPDF":
+                            label.Text = Strings.DirectoryOutputCompressedPDF;
                             break;
                     }
                 }
@@ -60,41 +84,41 @@ namespace UtilityPDF
                         case "Btn_SelectPDFToCompress":
                         case "Btn_SelectPDFToMerge":
                         case "Btn_SelectPDFToConvert":
-                            button.Text = SettingsString.TxtSelectPDFBtn;
+                            button.Text = Strings.TxtSelectPDFBtn;
                             break;
                         case "Btn_Reset":
                         case "Btn_ResetCompres":
                         case "Btn_ResetMerge":
                         case "Btn_ResetConvert":
-                            button.Text = SettingsString.TxtResetBtn;
+                            button.Text = Strings.TxtResetBtn;
                             break;
                         case "Btn_SelectDIROutputTXT":
-                            button.Text = SettingsString.TxtOutputDirBtn + "TXT";
+                            button.Text = Strings.TxtOutputDirBtn + "TXT";
                             break;
                         case "Btn_SelectDIROutputMergedPDF":
                         case "Btn_SelectDIROutputCompressPDF":
-                            button.Text = SettingsString.TxtOutputDirBtn + "PDF";
+                            button.Text = Strings.TxtOutputDirBtn + "PDF";
                             break;
                         case "Btn_SelectDIROutputConvertPDF":
-                            button.Text = SettingsString.TxtOutputDirBtn + "DOCX/RTF";
+                            button.Text = Strings.TxtOutputDirBtn + "DOCX/RTF";
                             break;
                         case "Btn_Abort":
-                            button.Text = SettingsString.TxtAbortBtn;
+                            button.Text = Strings.TxtAbortBtn;
                             break;
                         case "Btn_Compress":
-                            button.Text = SettingsString.TxtCompressBtn;
+                            button.Text = Strings.TxtCompressBtn;
                             break;
                         case "Btn_Convert":
-                            button.Text = SettingsString.TxtConvertBtn;
+                            button.Text = Strings.TxtConvertBtn;
                             break;
                         case "Btn_Start":
-                            button.Text = SettingsString.TxtExtractBtn;
+                            button.Text = Strings.TxtExtractBtn;
                             break;
                         case "Btn_Merge":
-                            button.Text = SettingsString.TxtMergetBtn;
+                            button.Text = Strings.TxtMergetBtn;
                             break;
                         case "Btn_Exit":
-                            button.Text = SettingsString.TxtExitBtn;
+                            button.Text = Strings.TxtExitBtn;
                             break;
                     }
                 }
@@ -104,24 +128,16 @@ namespace UtilityPDF
                     switch (radiobutton.Name)
                     {
                         case "rBOutputFormat_0":
-                            radiobutton.Text = SettingsString.RdBtnOutFormat_0;
+                            radiobutton.Text = Strings.RdBtnOutFormat_0;
                             break;
 
                         case "rBOutputFormat_1":
-                            radiobutton.Text = SettingsString.RdBtnOutFormat_1;
+                            radiobutton.Text = Strings.RdBtnOutFormat_1;
                             break;
 
                         case "rBOutputFormat_2":
-                            radiobutton.Text = SettingsString.RdBtnOutFormat_2;
+                            radiobutton.Text = Strings.RdBtnOutFormat_2;
                             break;
-                    }
-                }
-                else if (control.FieldType == typeof(PictureBox))
-                {
-                    var pictureBox = (PictureBox)control.GetValue(frmMain);
-                    if (pictureBox.Name == "pB_ICO")
-                    {
-                        pictureBox.Image = Resources.PDFUti;
                     }
                 }
             }

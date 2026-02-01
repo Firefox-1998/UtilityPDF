@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using UtilityPDF.Resources;
 
 namespace UtilityPDF
 {
@@ -52,8 +53,8 @@ namespace UtilityPDF
 
         private void Btn_Reset_Click(object sender, EventArgs e)
         {
-            lbl_PDF.Text = SettingsString.LblMsgInputPDF_Extr;
-            lbl_TXT.Text = SettingsString.LblMsgOutputDIR_Extr;
+            lbl_PDF.Text = Strings.LblMsgInputPDF_Extr;
+            lbl_TXT.Text = Strings.LblMsgOutputDIR_Extr;
             Btn_SelectDIROutputTXT.Enabled = false;
             Btn_SelectPDF.Enabled = true;
             Btn_Start.Enabled = false;
@@ -71,6 +72,7 @@ namespace UtilityPDF
         }
         private void FrmUtiPDF_Main_Load(object sender, EventArgs e)
         {
+            InitializeLanguageSelector();
             PopulateComboLang();
             ControlTextImgAssigner.AssignControlTextxImg(this);
             AssignTextPosLblProgress();
@@ -91,7 +93,7 @@ namespace UtilityPDF
         private void Btn_ResetMerge_Click(object sender, EventArgs e)
         {
             Lstb_FileMerge.Items.Clear();
-            lbl_DIROutputMergePDF.Text = SettingsString.LblMsgOutputDIR_Merge;
+            lbl_DIROutputMergePDF.Text = Strings.LblMsgOutputDIR_Merge;
             Btn_SelectDIROutputMergedPDF.Enabled = false;
             Btn_Merge.Enabled = false;
             Btn_ResetMerge.Enabled = false;
@@ -113,7 +115,7 @@ namespace UtilityPDF
         }
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirMERGE,
+            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirMERGE,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
@@ -148,9 +150,9 @@ namespace UtilityPDF
         }
         private void Btn_ResetCompres_Click(object sender, EventArgs e)
         {
-            lbl_PDFToCompress.Text = "PDF file to COMPRESS.";
-            lbl_DIROutputCompressPDF.Text = "Directory Output Compressed PDF";
-            lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_1;
+            lbl_PDFToCompress.Text = Strings.PDFFileToCOMPRESS;
+            lbl_DIROutputCompressPDF.Text = Strings.DirectoryOutputCompressedPDF;
+            lbl_ViewLvlCompres.Text = Strings.CompressLvl_1;
             Tb_Compress.Value = 1;
             Tb_Compress.Enabled = false;
             Btn_Compress.Enabled = false;
@@ -161,8 +163,8 @@ namespace UtilityPDF
 
         private void Btn_SelectDIROutputCompressPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirCOMP,
-                                                        "Warning",
+            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirCOMP,
+                                                        Strings.MsgBoxWarningTitle,
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.OK)
@@ -196,22 +198,22 @@ namespace UtilityPDF
             {
                 case 0:
                     LevelCompress = "/prepress";
-                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_0;
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_0;
                     break;
 
                 case 1:
                     LevelCompress = "/printer";
-                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_1;
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_1;
                     break;
 
                 case 2:
                     LevelCompress = "/ebook";
-                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_2;
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_2;
                     break;
 
                 case 3:
                     LevelCompress = "/screen";
-                    lbl_ViewLvlCompres.Text = SettingsString.CompressLvl_3;
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_3;
                     break;
             }
         }
@@ -261,7 +263,7 @@ namespace UtilityPDF
         }
         private void Btn_Abort_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnConfirmAbort,
+            DialogResult dialogResult = MessageBox.Show(Strings.WarnConfirmAbort,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
@@ -314,10 +316,11 @@ namespace UtilityPDF
 
         private void Btn_SelectDIROutputTXT_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirTXT,
+            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirTXT,
                                                         "Warning",
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
+                
             if (dialogResult == DialogResult.OK)
             {
                 if (fBD_TXT.ShowDialog() == DialogResult.OK)
@@ -332,8 +335,8 @@ namespace UtilityPDF
             }
             else
             {
-                lbl_PDF.Text = SettingsString.LblMsgInputPDF_Extr;
-                lbl_TXT.Text = SettingsString.LblMsgOutputDIR_Extr;
+                lbl_PDF.Text = Strings.LblMsgInputPDF_Extr;
+                lbl_TXT.Text = Strings.LblMsgOutputDIR_Extr;
                 Btn_SelectDIROutputTXT.Enabled = false;
                 Btn_SelectPDF.Enabled = true;
             }
@@ -431,7 +434,7 @@ namespace UtilityPDF
 
         private void Btn_SelectDIROutputConvertPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(SettingsString.WarnSelectOutDirDOCX,
+            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirDOCX,
                                             "Warning",
                                             MessageBoxButtons.OKCancel,
                                             MessageBoxIcon.Warning);
@@ -452,8 +455,8 @@ namespace UtilityPDF
 
         private void Btn_ResetConvert_Click(object sender, EventArgs e)
         {
-            lbl_PDFToConvert.Text = SettingsString.LblMsgInputPDF_Conv;
-            lbl_DIROutputConvertPDF.Text = SettingsString.LblMsgOutputDIR_Conv;
+            lbl_PDFToConvert.Text = Strings.LblMsgInputPDF_Conv;
+            lbl_DIROutputConvertPDF.Text = Strings.LblMsgOutputDIR_Conv;
 
             rBOutputFormat_0.Checked = true;
             rBOutputFormat_0.Enabled = false;
@@ -463,6 +466,90 @@ namespace UtilityPDF
             Btn_ResetConvert.Enabled = false;
             Btn_SelectPDFToConvert.Enabled = true;
             Btn_SelectDIROutputConvertPDF.Enabled = false;
+        }
+
+        /// <summary>
+        /// Inizializza il selettore di lingua con tutte le lingue supportate
+        /// </summary>
+        private void InitializeLanguageSelector()
+        {
+            cmb_Language.Items.Clear();
+            
+            // Aggiungi tutte le lingue supportate
+            foreach (string culture in LocalizationManager.GetSupportedLanguages())
+            {
+                cmb_Language.Items.Add(new LanguageItem(culture));
+            }
+
+            // Seleziona la lingua corrente o inglese come default
+            string currentCulture = LocalizationManager.GetCurrentLanguageCode();
+            for (int i = 0; i < cmb_Language.Items.Count; i++)
+            {
+                var item = (LanguageItem)cmb_Language.Items[i];
+                if (item.CultureCode == currentCulture)
+                {
+                    cmb_Language.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            // Se non trovata, seleziona inglese (primo elemento)
+            if (cmb_Language.Items.Count > 0)
+            {
+                cmb_Language.SelectedIndex = 0;
+            }
+        }
+
+        /// <summary>
+        /// Gestisce il cambio lingua quando l'utente seleziona una nuova lingua
+        /// </summary>
+        private void Cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmb_Language.SelectedItem == null)
+                return;
+
+            var selectedLanguage = (LanguageItem)cmb_Language.SelectedItem;
+            
+            // Imposta la nuova cultura
+            LocalizationManager.SetCulture(selectedLanguage.CultureCode);
+
+            // Ricarica tutti i testi della form
+            RefreshUILanguage();
+        }
+
+        /// <summary>
+        /// Ricarica tutti i testi dell'interfaccia dopo un cambio lingua
+        /// </summary>
+        private void RefreshUILanguage()
+        {
+            // Riassegna tutti i testi e le immagini
+            ControlTextImgAssigner.AssignControlTextxImg(this);
+
+            // Aggiorna i testi delle label che non sono gestiti dal ControlTextImgAssigner
+            UpdateLabelTexts();
+        }
+
+        /// <summary>
+        /// Aggiorna i testi delle label dinamiche
+        /// </summary>
+        private void UpdateLabelTexts()
+        {
+            // Aggiorna i livelli di compressione
+            switch (Tb_Compress.Value)
+            {
+                case 0:
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_0;
+                    break;
+                case 1:
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_1;
+                    break;
+                case 2:
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_2;
+                    break;
+                case 3:
+                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_3;
+                    break;
+            }
         }
     }
 }

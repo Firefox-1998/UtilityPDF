@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UtilityPDF.Resources; 
 
 namespace UtilityPDF
 {
@@ -41,7 +42,7 @@ namespace UtilityPDF
                     outputDocument.Save(pdfPath);
                 }
                 colorFader.StopFader();
-                MessageBox.Show(SettingsString.MergeCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Strings.MergeCompleted, Strings.MsgBoxInformationTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {

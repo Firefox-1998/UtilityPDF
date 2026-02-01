@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UtilityPDF.Resources;
 
 
 namespace UtilityPDF
@@ -59,7 +60,7 @@ namespace UtilityPDF
                 }
 
                 colorFader.StopFader();
-                MessageBox.Show(SettingsString.ConvertCompleted, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Strings.ConvertCompleted, Strings.MsgBoxInformationTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (IOException ex)
             {
