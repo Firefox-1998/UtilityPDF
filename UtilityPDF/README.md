@@ -12,7 +12,28 @@ Currently the possible operations are:
 * **PDF Conversion** - Convert PDF files to editable DOCX and/or RTF formats. >>> No Office installation required <<< to convert.
   If PDF contains only images, output DOCX and/or RTF files will have only images. Use text extraction (with OCR) to convert text inside images.
 
-## Multilingual Interface
+## Modern UI Interface 🎨
+
+The application features a **completely redesigned modern interface** with:
+
+### Custom Controls
+- **ModernCard** - Stylish card containers with colored headers and rounded corners for each operation section
+- **ModernButton** - Smooth gradient buttons with hover effects and rounded borders
+- **ModernProgressBar** - Enhanced progress bar with percentage display and smooth animations
+- **LoadingSpinner** - Animated circular spinner for visual feedback during long operations
+
+### Visual Enhancements
+- **Color-coded sections**: Each operation has its own distinctive color theme:
+  - 🔵 Text Extraction (OCR): Blue (`#3498DB`)
+  - 🟣 PDF Merging: Purple (`#9B59B6`)
+  - 🟠 PDF Compression: Orange (`#E67E22`)
+  - 🟢 PDF Conversion: Teal (`#1ABC9C`)
+- **Emoji icons** throughout the interface for better visual recognition
+- **Responsive layout** with centered, organized panels
+- **Smooth animations** for loading states and transitions
+- **Professional color palette** with subtle shadows and modern styling
+
+## Multilingual Interface 🌍
 
 The application now supports **7 languages** with real-time interface switching:
 - 🇺🇸 English (default)

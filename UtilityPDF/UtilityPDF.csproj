@@ -240,9 +240,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorFader.cs" />
+    <Compile Include="Controls\LoadingSpinner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ModernButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ModernCard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ModernProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ControlTextImgAssigner.cs" />
     <Compile Include="ConvertDOCX.cs" />
     <Compile Include="Compress.cs" />
+    <Compile Include="DataLang.cs" />
     <Compile Include="DataLangLoader.cs" />
     <Compile Include="DisplayError.cs" />
     <Compile Include="ExtractText.cs" />
@@ -264,6 +277,7 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="SettingsString.cs" />
+    <Compile Include="UI\ProgressHelper.cs" />
     <EmbeddedResource Include="FrmUtiPDF_Main.resx">
       <DependentUpon>FrmUtiPDF_Main.cs</DependentUpon>
     </EmbeddedResource>
@@ -306,12 +320,24 @@
     <None Include="Properties\app.manifest" />
     <None Include="README.md" />
     <None Include="Resources\PDFUti.png" />
-    <Content Include="tessdata\deu.traineddata" />
-    <Content Include="tessdata\eng.traineddata" />
-    <Content Include="tessdata\fra.traineddata" />
-    <Content Include="tessdata\ita.traineddata" />
-    <Content Include="tessdata\Lang.csv" />
-    <Content Include="tessdata\spa.traineddata" />
+    <Content Include="tessdata\deu.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\eng.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\fra.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\ita.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\Lang.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="tessdata\spa.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="UtilityPDF_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -330,8 +356,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="gsdll32.dll" />
-    <Content Include="gsdll64.dll" />
+    <Content Include="gsdll32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="gsdll64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE.txt" />
     <Content Include="PDFUtility.ico" />
     <Content Include="x64\leptonica-1.82.0.dll" />

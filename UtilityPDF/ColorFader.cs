@@ -1,79 +1,65 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
+using UtilityPDF.Controls;
 
 namespace UtilityPDF
 {
+    /// <summary>
+    /// Gestisce lo spinner di caricamento animato
+    /// </summary>
     internal class ColorFader : IDisposable
     {
-        private Timer progressTimer;
-        private int colorStep;
-        private bool fadingOut;
-        private Color startColor;
-        private Color endColor;
-        private Label progressLabel;
+        private LoadingSpinner spinner;
         private bool disposed = false;
 
-        public void StartFader(Label lblPr)
+        /// <summary>
+        /// Avvia lo spinner di caricamento con un controllo LoadingSpinner
+        /// </summary>
+        public void StartFader(LoadingSpinner loadingSpinner)
         {
-            Startfd(lblPr);
-        }
-
-        public void StopFader()
-        {
-            progressTimer.Stop();
-            progressLabel.ForeColor = Color.Black;
-        }
-
-        private void Startfd(Label lblProgr)
-        {
-            progressLabel = lblProgr;
-            InitializeColors();
-            InitializeTimer();
-        }
-
-        private void ProgressTimer_Tick(object sender, EventArgs e)
-        {
-            if (fadingOut)
+            if (loadingSpinner == null)
             {
-                colorStep -= 10;
-                if (colorStep <= 0)
+                return;
+            }
+
+            spinner = loadingSpinner;
+
+            if (spinner.InvokeRequired)
+            {
+                spinner.Invoke(new Action(() =>
                 {
-                    colorStep = 0;
-                    fadingOut = false;
-                }
+                    spinner.Visible = true;
+                    spinner.Start();
+                }));
             }
             else
             {
-                colorStep += 10;
-                if (colorStep >= 255)
+                spinner.Visible = true;
+                spinner.Start();
+            }
+        }
+
+        /// <summary>
+        /// Ferma lo spinner di caricamento
+        /// </summary>
+        public void StopFader()
+        {
+            if (spinner != null && !spinner.IsDisposed)
+            {
+                if (spinner.InvokeRequired)
                 {
-                    colorStep = 255;
-                    fadingOut = true;
+                    spinner.Invoke(new Action(() =>
+                    {
+                        spinner.Stop();
+                        spinner.Visible = false;
+                    }));
+                }
+                else
+                {
+                    spinner.Stop();
+                    spinner.Visible = false;
                 }
             }
-
-            int r = startColor.R + (endColor.R - startColor.R) * colorStep / 255;
-            int g = startColor.G + (endColor.G - startColor.G) * colorStep / 255;
-            int b = startColor.B + (endColor.B - startColor.B) * colorStep / 255;
-
-            progressLabel.ForeColor = Color.FromArgb(r, g, b);
-        }
-
-        private void InitializeTimer()
-        {
-            progressTimer = new Timer
-            {
-                Interval = 100 // Cambia l'opacità ogni 100 ms                
-            };
-            progressTimer.Tick += ProgressTimer_Tick;
-            progressTimer.Start();
-        }
-
-        private void InitializeColors()
-        {
-            startColor = Color.Black;
-            endColor = progressLabel.BackColor;
         }
 
         public void Dispose()
@@ -88,21 +74,8 @@ namespace UtilityPDF
             {
                 if (disposing)
                 {
-                    // Rilascia risorse gestite qui
-                    if (progressTimer != null)
-                    {
-                        progressTimer.Dispose();
-                        progressTimer = null;
-                    }
-
-                    if (progressLabel != null)
-                    {
-                        progressLabel.Dispose();
-                        progressLabel = null;
-                    }
+                    spinner = null;
                 }
-
-                // Rilascia risorse non gestite qui
 
                 disposed = true;
             }

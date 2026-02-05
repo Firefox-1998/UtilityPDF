@@ -1,53 +1,114 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
 namespace UtilityPDF
 {
+    /// <summary>
+    /// Carica i dati delle lingue disponibili per l'OCR da un file CSV
+    /// </summary>
     internal class DataLangLoader
     {
-        public IReadOnlyList<LangData> LoadData(string csvFilePath)
+        /// <summary>
+        /// Carica i dati delle lingue dal file CSV specificato
+        /// </summary>
+        public ReadOnlyCollection<DataLang> LoadData(string filePath)
         {
-            var dataList = new List<LangData>();
+            List<DataLang> dataList = new List<DataLang>();
 
-            // Leggi il file CSV e popola la collection
-            using (var reader = new StreamReader(csvFilePath))
+            if (!File.Exists(filePath))
             {
-                // Leggi la prima riga (nomi dei parametri)
-                var headerLine = reader.ReadLine();
-                var headers = headerLine.Split(';');
-
-                // Leggi le righe successive (dati)
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    var values = line.Split(';');
-
-                    var data = new LangData
-                    {
-                        LangParam1 = values[0],
-                        LangParam2 = values[1],
-                        LangParam3 = values[2]
-                    };
-
-                    dataList.Add(data);
-                }
+                return new ReadOnlyCollection<DataLang>(dataList);
             }
 
-            // Converti la lista in una collection di sola lettura
-            return dataList.AsReadOnly();
+            try
+            {
+                string[] lines = File.ReadAllLines(filePath);
+
+                int lineNumber = 0;
+                foreach (string line in lines)
+                {
+                    lineNumber++;
+                    
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    // Salta la prima riga (header)
+                    if (lineNumber == 1)
+                    {
+                        continue;
+                    }
+
+                    // Usa TAB come separatore invece della virgola
+                    string[] parts = line.Split(';');
+
+                    if (parts.Length >= 3)
+                    {
+                        DataLang dataLang = new DataLang
+                        {
+                            LangParam1 = parts[0].Trim(),
+                            LangParam2 = parts[1].Trim(),
+                            LangParam3 = parts[2].Trim()
+                        };
+
+                        dataList.Add(dataLang);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DisplayError.ErrorGeneric(ex);
+            }
+
+            return new ReadOnlyCollection<DataLang>(dataList);
         }
 
-        public IEnumerable<string> GetFiles(string exeDirectory, string trainerDataFolder, string csvFilename)
+        /// <summary>
+        /// Ottiene tutti i file traineddata dalla cartella specificata
+        /// </summary>
+        public string[] GetFiles(string exeDirectory, string trainerDataFolder, string csvFilename)
         {
-            // Ottieni tutti i file nella cartella tessdata (escludendo il file CSV)
-            return Directory.GetFiles(Path.Combine(exeDirectory, trainerDataFolder))
-                            .Where(file => !file.EndsWith(csvFilename));
+            string tessDataPath = Path.Combine(exeDirectory, trainerDataFolder);
+
+            if (!Directory.Exists(tessDataPath))
+            {
+                return new string[0];
+            }
+
+            try
+            {
+                string[] allFiles = Directory.GetFiles(tessDataPath, "*.traineddata");                
+                return allFiles;
+            }
+            catch (Exception ex)
+            {
+                DisplayError.ErrorGeneric(ex);
+                return new string[0];
+            }
         }
 
-        public LangData FindByParam3(IReadOnlyList<LangData> dataList, string param3)
+        /// <summary>
+        /// Cerca un elemento DataLang per nome file traineddata
+        /// </summary>
+        public DataLang FindByParam3(ReadOnlyCollection<DataLang> dataList, string fileName)
         {
-            return dataList.FirstOrDefault(data => data.LangParam3 == param3);
+            if (dataList == null || string.IsNullOrEmpty(fileName))
+            {
+                return null;
+            }
+
+            foreach (DataLang data in dataList)
+            {                
+                if (data.LangParam3.Equals(fileName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return data;
+                }
+            }
+            return null;
         }
     }
 }

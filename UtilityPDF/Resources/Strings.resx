@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WarnSelectOutDirTXT" xml:space="preserve">
-    <value>If a TXT file with the same name already exists (TXT file will have the SAME NAME.TXT as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <value>Select the output directory for the TXT file.</value>
   </data>
   <data name="WarnSelectOutDirMERGE" xml:space="preserve">
-    <value>If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME_MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <value>Select the output directory for the merged PDF file.</value>
   </data>
   <data name="WarnSelectOutDirCOMP" xml:space="preserve">
-    <value>If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <value>Select the output directory for the compressed PDF file.</value>
   </data>
   <data name="WarnSelectOutDirDOCX" xml:space="preserve">
-    <value>If a DOCX/RTF file with the same name already exists (DOCX/RTF file will have the SAME NAME_CONVERT.DOCX/RTF as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
+    <value>Select the output directory for the DOCX/RTF file.</value>
   </data>
   <data name="WarnConfirmAbort" xml:space="preserve">
-    <value>Do you confirm extraction &gt;&gt;&gt; ABORT &lt;&lt;&lt; ?</value>
+    <value>Are you sure you want to abort the current operation?</value>
   </data>
   <data name="WarnAbortedExtraction" xml:space="preserve">
     <value>Extraction &gt;&gt;&gt; ABORTED &lt;&lt;&lt; !!!</value>
@@ -139,7 +139,7 @@
     <value>Extraction &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
   </data>
   <data name="CompressCompleted" xml:space="preserve">
-    <value>Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
+    <value>Compression completed successfully!</value>
   </data>
   <data name="MergeCompleted" xml:space="preserve">
     <value>Merge &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
@@ -148,16 +148,16 @@
     <value>Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
   </data>
   <data name="CompressLvl_0" xml:space="preserve">
-    <value>VERY LOW COMPRESS --&gt; MAX QUALITY</value>
+    <value>Maximum Quality (Prepress)</value>
   </data>
   <data name="CompressLvl_1" xml:space="preserve">
-    <value>LOW COMPRESS --&gt; HIGH QUALITY</value>
+    <value>High Quality (Printer)</value>
   </data>
   <data name="CompressLvl_2" xml:space="preserve">
-    <value>MEDIUM COMPRESS --&gt; MEDIUM QUALITY</value>
+    <value>Medium Quality (eBook)</value>
   </data>
   <data name="CompressLvl_3" xml:space="preserve">
-    <value>HIGH COMPRESS --&gt; LOW QUALITY</value>
+    <value>Low Quality (Screen)</value>
   </data>
   <data name="LblMsgInputPDF_Extr" xml:space="preserve">
     <value>PDF file from EXTRACT TEXT</value>
@@ -175,31 +175,37 @@
     <value>Directory Output DOCX/RTF</value>
   </data>
   <data name="LblMsgSelLang" xml:space="preserve">
-    <value>Select the language that OCR use</value>
+    <value>Select OCR Language:</value>
   </data>
   <data name="LblCompressionLvl" xml:space="preserve">
-    <value>Compression LEVEL</value>
+    <value>Compression Level:</value>
   </data>
   <data name="LblPanelExtract" xml:space="preserve">
-    <value>Extract Text From PDF Using OCR</value>
+    <value>Extract Text (OCR)</value>
   </data>
   <data name="LblPanelCompress" xml:space="preserve">
     <value>Compress PDF</value>
   </data>
   <data name="LblPanelMerge" xml:space="preserve">
-    <value>Merge PDF</value>
+    <value>Merge PDFs</value>
   </data>
   <data name="LblPanelConvDOCX" xml:space="preserve">
-    <value>Convert PDF to DOCX/RTF</value>
+    <value>Convert to DOCX/RTF</value>
   </data>
   <data name="LblCompressInProgress" xml:space="preserve">
-    <value>Compress PDF in progress...</value>
+    <value>Compression in progress...
+
+Please wait...</value>
   </data>
   <data name="LblMergeInProgress" xml:space="preserve">
-    <value>Merge PDF in progress...</value>
+    <value>Merge in progress...
+
+Please wait...</value>
   </data>
   <data name="LblConvertInProgress" xml:space="preserve">
-    <value>Convert PDF in progress...</value>
+    <value>Conversion in progress...
+
+Please wait...</value>
   </data>
   <data name="TxtSelectPDFBtn" xml:space="preserve">
     <value>Select PDF</value>
@@ -208,7 +214,7 @@
     <value>Reset</value>
   </data>
   <data name="TxtOutputDirBtn" xml:space="preserve">
-    <value>Select DIR</value>
+    <value>Output</value>
   </data>
   <data name="TxtAbortBtn" xml:space="preserve">
     <value>Abort</value>
@@ -216,41 +222,38 @@
   <data name="TxtCompressBtn" xml:space="preserve">
     <value>Compress</value>
   </data>
+  <data name="TxtConvertBtn" xml:space="preserve">
+    <value>Convert</value>
+  </data>
   <data name="TxtExtractBtn" xml:space="preserve">
-    <value>Extract</value>
+    <value>Start</value>
   </data>
   <data name="TxtMergetBtn" xml:space="preserve">
     <value>Merge</value>
-  </data>
-  <data name="TxtConvertBtn" xml:space="preserve">
-    <value>Convert</value>
   </data>
   <data name="TxtExitBtn" xml:space="preserve">
     <value>Exit</value>
   </data>
   <data name="RdBtnOutFormat_0" xml:space="preserve">
-    <value>Only DOCX</value>
+    <value>DOCX only</value>
   </data>
   <data name="RdBtnOutFormat_1" xml:space="preserve">
-    <value>Only RTF</value>
+    <value>RTF only</value>
   </data>
   <data name="RdBtnOutFormat_2" xml:space="preserve">
     <value>DOCX and RTF</value>
   </data>
-  <data name="GenericMessageError" xml:space="preserve">
-    <value>An error occurred:</value>
+  <data name="MsgBoxWarningTitle" xml:space="preserve">
+    <value>Warning</value>
   </data>
-  <data name="SpecificMessageErrorIO" xml:space="preserve">
-    <value>An IO error occurred:</value>
+  <data name="PDFFileToCOMPRESS" xml:space="preserve">
+    <value>Select PDF file to compress...</value>
+  </data>
+  <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
+    <value>Select output directory for compressed PDF...</value>
   </data>
   <data name="LblLanguage" xml:space="preserve">
     <value>Language UI</value>
-  </data>
-  <data name="MsgRestartRequired" xml:space="preserve">
-    <value>Language changed. Please restart the application for all changes to take effect.</value>
-  </data>
-  <data name="TitleLanguageChanged" xml:space="preserve">
-    <value>Language Changed</value>
   </data>
   <data name="MsgBoxInformationTitle" xml:space="preserve">
     <value>Information</value>
@@ -258,13 +261,10 @@
   <data name="MsgBoxErrorTitle" xml:space="preserve">
     <value>Error</value>
   </data>
-  <data name="MsgBoxWarningTitle" xml:space="preserve">
-    <value>Warning</value>
+  <data name="GenericMessageError" xml:space="preserve">
+    <value>An error occurred:</value>
   </data>
-  <data name="PDFFileToCOMPRESS" xml:space="preserve">
-    <value>PDF file to COMPRESS.</value>
-  </data>
-  <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
-    <value>Directory Output Compressed PDF</value>
+  <data name="SpecificMessageErrorIO" xml:space="preserve">
+    <value>An IO error occurred:</value>
   </data>
 </root>

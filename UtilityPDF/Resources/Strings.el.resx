@@ -216,14 +216,14 @@
   <data name="TxtCompressBtn" xml:space="preserve">
     <value>Κομπρέσα</value>
   </data>
+  <data name="TxtConvertBtn" xml:space="preserve">
+    <value>Μετατρέπω</value>
+  </data>
   <data name="TxtExtractBtn" xml:space="preserve">
     <value>Εκχύλισμα</value>
   </data>
   <data name="TxtMergetBtn" xml:space="preserve">
     <value>Συγχώνευση</value>
-  </data>
-  <data name="TxtConvertBtn" xml:space="preserve">
-    <value>Μετατρέπω</value>
   </data>
   <data name="TxtExitBtn" xml:space="preserve">
     <value>Εξοδος</value>
@@ -237,27 +237,6 @@
   <data name="RdBtnOutFormat_2" xml:space="preserve">
     <value>DOCX και RTF</value>
   </data>
-  <data name="GenericMessageError" xml:space="preserve">
-    <value>Παρουσιάστηκε σφάλμα:</value>
-  </data>
-  <data name="SpecificMessageErrorIO" xml:space="preserve">
-    <value>Παρουσιάστηκε σφάλμα IO:</value>
-  </data>
-  <data name="LblLanguage" xml:space="preserve">
-    <value>Γλώσσα UI</value>
-  </data>
-  <data name="MsgRestartRequired" xml:space="preserve">
-    <value>Η γλώσσα άλλαξε. Κάντε επανεκκίνηση της εφαρμογής για να τεθούν σε ισχύ όλες οι αλλαγές.</value>
-  </data>
-  <data name="TitleLanguageChanged" xml:space="preserve">
-    <value>Η γλώσσα άλλαξε</value>
-  </data>
-  <data name="MsgBoxInformationTitle" xml:space="preserve">
-    <value>Πληροφορίες</value>
-  </data>
-  <data name="MsgBoxErrorTitle" xml:space="preserve">
-    <value>Σφάλμα</value>
-  </data>
   <data name="MsgBoxWarningTitle" xml:space="preserve">
     <value>Προειδοποίηση</value>
   </data>
@@ -266,5 +245,27 @@
   </data>
   <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
     <value>Έξοδος καταλόγου Συμπιεσμένο PDF</value>
+  </data>
+  <data name="LblLanguage" xml:space="preserve">
+    <value>Γλώσσα UI</value>
+  </data>
+  <data name="MsgBoxInformationTitle" xml:space="preserve">
+    <value>Πληροφορίες</value>
+  </data>
+  <data name="MsgBoxErrorTitle" xml:space="preserve">
+    <value>Σφάλμα</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="GenericMessageError" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SpecificMessageErrorIO" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GenericMessageError" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα:</value>
+  </data>
+  <data name="SpecificMessageErrorIO" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα IO:</value>
   </data>
 </root>

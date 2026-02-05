@@ -44,10 +44,8 @@ namespace UtilityPDF
                 int numPages = GetPageCount(pdfPath);
                 using (var engine = new TesseractEngine($@"./{SettingsString.trainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
                 {
-                    using (Stream pdfStream = File.OpenRead(pdfPath))
-                    {
-                        ProcessPages(pdfStream, numPages, engine, txtPath);
-                    }
+                    using Stream pdfStream = File.OpenRead(pdfPath);
+                    ProcessPages(pdfStream, numPages, engine, txtPath);
                 }
                 if (shouldAbort())
                 {
@@ -72,10 +70,8 @@ namespace UtilityPDF
 
         private int GetPageCount(string pdfPath)
         {
-            using (PdfDocument inputDocument = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import))
-            {
-                return inputDocument.PageCount;
-            }
+            using PdfDocument inputDocument = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import);
+            return inputDocument.PageCount;
         }
 
         private void ProcessPages(Stream pdfStream, int numPages, TesseractEngine engine, string txtPath)
@@ -97,27 +93,21 @@ namespace UtilityPDF
         {
             byte[] page = Pdf2Png.Convert(pdfStream, i + 1, 300);
             Application.DoEvents();
-            using (var ms = new MemoryStream(page))
-            {
-                Application.DoEvents();
-                Image img = Image.FromStream(ms);
+            using var ms = new MemoryStream(page);
+            Application.DoEvents();
+            Image img = Image.FromStream(ms);
 
-                Application.DoEvents();
-                using (var imgPix = PixConverter.ToPix((Bitmap)img))
-                {
-                    var grayImage = imgPix.ConvertRGBToGray();
+            Application.DoEvents();
+            using var imgPix = PixConverter.ToPix((Bitmap)img);
+            var grayImage = imgPix.ConvertRGBToGray();
 
-                    Application.DoEvents();
-                    using (var imgPage = engine.Process(grayImage))
-                    {
-                        Application.DoEvents();
-                        string text = imgPage.GetText();
-                        Application.DoEvents();
-                        File.AppendAllText(txtPath, text);
-                        Application.DoEvents();
-                    }
-                }
-            }
+            Application.DoEvents();
+            using var imgPage = engine.Process(grayImage);
+            Application.DoEvents();
+            string text = imgPage.GetText();
+            Application.DoEvents();
+            File.AppendAllText(txtPath, text);
+            Application.DoEvents();
         }
     }
 }

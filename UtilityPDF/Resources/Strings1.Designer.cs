@@ -61,7 +61,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
+        ///   Cerca una stringa localizzata simile a Compression completed successfully!.
         /// </summary>
         internal static string CompressCompleted {
             get {
@@ -70,7 +70,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a VERY LOW COMPRESS --&gt; MAX QUALITY.
+        ///   Cerca una stringa localizzata simile a Maximum Quality (Prepress).
         /// </summary>
         internal static string CompressLvl_0 {
             get {
@@ -79,7 +79,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a LOW COMPRESS --&gt; HIGH QUALITY.
+        ///   Cerca una stringa localizzata simile a High Quality (Printer).
         /// </summary>
         internal static string CompressLvl_1 {
             get {
@@ -88,7 +88,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a MEDIUM COMPRESS --&gt; MEDIUM QUALITY.
+        ///   Cerca una stringa localizzata simile a Medium Quality (eBook).
         /// </summary>
         internal static string CompressLvl_2 {
             get {
@@ -97,7 +97,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a HIGH COMPRESS --&gt; LOW QUALITY.
+        ///   Cerca una stringa localizzata simile a Low Quality (Screen).
         /// </summary>
         internal static string CompressLvl_3 {
             get {
@@ -115,7 +115,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Directory Output Compressed PDF.
+        ///   Cerca una stringa localizzata simile a Select output directory for compressed PDF....
         /// </summary>
         internal static string DirectoryOutputCompressedPDF {
             get {
@@ -142,7 +142,9 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Compress PDF in progress....
+        ///   Cerca una stringa localizzata simile a Compression in progress...
+        ///
+        ///Please wait....
         /// </summary>
         internal static string LblCompressInProgress {
             get {
@@ -151,7 +153,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Compression LEVEL.
+        ///   Cerca una stringa localizzata simile a Compression Level:.
         /// </summary>
         internal static string LblCompressionLvl {
             get {
@@ -160,7 +162,9 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Convert PDF in progress....
+        ///   Cerca una stringa localizzata simile a Conversion in progress...
+        ///
+        ///Please wait....
         /// </summary>
         internal static string LblConvertInProgress {
             get {
@@ -178,7 +182,9 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Merge PDF in progress....
+        ///   Cerca una stringa localizzata simile a Merge in progress...
+        ///
+        ///Please wait....
         /// </summary>
         internal static string LblMergeInProgress {
             get {
@@ -232,7 +238,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select the language that OCR use.
+        ///   Cerca una stringa localizzata simile a Select OCR Language:.
         /// </summary>
         internal static string LblMsgSelLang {
             get {
@@ -250,7 +256,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Convert PDF to DOCX/RTF.
+        ///   Cerca una stringa localizzata simile a Convert to DOCX/RTF.
         /// </summary>
         internal static string LblPanelConvDOCX {
             get {
@@ -259,7 +265,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Extract Text From PDF Using OCR.
+        ///   Cerca una stringa localizzata simile a Extract Text (OCR).
         /// </summary>
         internal static string LblPanelExtract {
             get {
@@ -268,7 +274,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Merge PDF.
+        ///   Cerca una stringa localizzata simile a Merge PDFs.
         /// </summary>
         internal static string LblPanelMerge {
             get {
@@ -313,16 +319,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Language changed. Please restart the application for all changes to take effect..
-        /// </summary>
-        internal static string MsgRestartRequired {
-            get {
-                return ResourceManager.GetString("MsgRestartRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una stringa localizzata simile a PDF file to COMPRESS..
+        ///   Cerca una stringa localizzata simile a Select PDF file to compress....
         /// </summary>
         internal static string PDFFileToCOMPRESS {
             get {
@@ -331,7 +328,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Only DOCX.
+        ///   Cerca una stringa localizzata simile a DOCX only.
         /// </summary>
         internal static string RdBtnOutFormat_0 {
             get {
@@ -340,7 +337,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Only RTF.
+        ///   Cerca una stringa localizzata simile a RTF only.
         /// </summary>
         internal static string RdBtnOutFormat_1 {
             get {
@@ -363,15 +360,6 @@ namespace UtilityPDF.Resources {
         internal static string SpecificMessageErrorIO {
             get {
                 return ResourceManager.GetString("SpecificMessageErrorIO", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Cerca una stringa localizzata simile a Language Changed.
-        /// </summary>
-        internal static string TitleLanguageChanged {
-            get {
-                return ResourceManager.GetString("TitleLanguageChanged", resourceCulture);
             }
         }
         
@@ -412,7 +400,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Extract.
+        ///   Cerca una stringa localizzata simile a Start.
         /// </summary>
         internal static string TxtExtractBtn {
             get {
@@ -430,7 +418,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select DIR.
+        ///   Cerca una stringa localizzata simile a Output.
         /// </summary>
         internal static string TxtOutputDirBtn {
             get {
@@ -466,7 +454,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Do you confirm extraction &gt;&gt;&gt; ABORT &lt;&lt;&lt; ?.
+        ///   Cerca una stringa localizzata simile a Are you sure you want to abort the current operation?.
         /// </summary>
         internal static string WarnConfirmAbort {
             get {
@@ -475,7 +463,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!.
+        ///   Cerca una stringa localizzata simile a Select the output directory for the compressed PDF file..
         /// </summary>
         internal static string WarnSelectOutDirCOMP {
             get {
@@ -484,7 +472,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a If a DOCX/RTF file with the same name already exists (DOCX/RTF file will have the SAME NAME_CONVERT.DOCX/RTF as the selected PDF file) in the folder you select, it will be overwritten!!!.
+        ///   Cerca una stringa localizzata simile a Select the output directory for the DOCX/RTF file..
         /// </summary>
         internal static string WarnSelectOutDirDOCX {
             get {
@@ -493,7 +481,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME_MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!.
+        ///   Cerca una stringa localizzata simile a Select the output directory for the merged PDF file..
         /// </summary>
         internal static string WarnSelectOutDirMERGE {
             get {
@@ -502,7 +490,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a If a TXT file with the same name already exists (TXT file will have the SAME NAME.TXT as the selected PDF file) in the folder you select, it will be overwritten!!!.
+        ///   Cerca una stringa localizzata simile a Select the output directory for the TXT file..
         /// </summary>
         internal static string WarnSelectOutDirTXT {
             get {

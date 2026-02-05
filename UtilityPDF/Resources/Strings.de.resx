@@ -216,14 +216,14 @@
   <data name="TxtCompressBtn" xml:space="preserve">
     <value>Kompresse</value>
   </data>
+  <data name="TxtConvertBtn" xml:space="preserve">
+    <value>Konvertieren</value>
+  </data>
   <data name="TxtExtractBtn" xml:space="preserve">
     <value>Extrakt</value>
   </data>
   <data name="TxtMergetBtn" xml:space="preserve">
     <value>Verschmelzen</value>
-  </data>
-  <data name="TxtConvertBtn" xml:space="preserve">
-    <value>Konvertieren</value>
   </data>
   <data name="TxtExitBtn" xml:space="preserve">
     <value>Ausfahrt</value>
@@ -237,27 +237,6 @@
   <data name="RdBtnOutFormat_2" xml:space="preserve">
     <value>DOCX und RTF</value>
   </data>
-  <data name="GenericMessageError" xml:space="preserve">
-    <value>Es ist ein Fehler aufgetreten:</value>
-  </data>
-  <data name="SpecificMessageErrorIO" xml:space="preserve">
-    <value>Ein IO-Fehler ist aufgetreten:</value>
-  </data>
-  <data name="LblLanguage" xml:space="preserve">
-    <value>Sprache UI</value>
-  </data>
-  <data name="MsgRestartRequired" xml:space="preserve">
-    <value>Sprache geändert. Bitte starten Sie die Anwendung neu, damit alle Änderungen wirksam werden.</value>
-  </data>
-  <data name="TitleLanguageChanged" xml:space="preserve">
-    <value>Sprache geändert</value>
-  </data>
-  <data name="MsgBoxInformationTitle" xml:space="preserve">
-    <value>Information</value>
-  </data>
-  <data name="MsgBoxErrorTitle" xml:space="preserve">
-    <value>Fehler</value>
-  </data>
   <data name="MsgBoxWarningTitle" xml:space="preserve">
     <value>Warnung</value>
   </data>
@@ -266,5 +245,27 @@
   </data>
   <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
     <value>Verzeichnisausgabe komprimiertes PDF</value>
+  </data>
+  <data name="LblLanguage" xml:space="preserve">
+    <value>Sprache UI</value>
+  </data>
+  <data name="MsgBoxInformationTitle" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="MsgBoxErrorTitle" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="GenericMessageError" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SpecificMessageErrorIO" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GenericMessageError" xml:space="preserve">
+    <value>Es ist ein Fehler aufgetreten:</value>
+  </data>
+  <data name="SpecificMessageErrorIO" xml:space="preserve">
+    <value>Ein IO-Fehler ist aufgetreten:</value>
   </data>
 </root>

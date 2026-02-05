@@ -216,14 +216,14 @@
   <data name="TxtCompressBtn" xml:space="preserve">
     <value>Compressa</value>
   </data>
+  <data name="TxtConvertBtn" xml:space="preserve">
+    <value>Converter</value>
+  </data>
   <data name="TxtExtractBtn" xml:space="preserve">
     <value>Extrair</value>
   </data>
   <data name="TxtMergetBtn" xml:space="preserve">
     <value>Mesclar</value>
-  </data>
-  <data name="TxtConvertBtn" xml:space="preserve">
-    <value>Converter</value>
   </data>
   <data name="TxtExitBtn" xml:space="preserve">
     <value>Saída</value>
@@ -237,27 +237,6 @@
   <data name="RdBtnOutFormat_2" xml:space="preserve">
     <value>DOCX e RTF</value>
   </data>
-  <data name="GenericMessageError" xml:space="preserve">
-    <value>Ocorreu um erro:</value>
-  </data>
-  <data name="SpecificMessageErrorIO" xml:space="preserve">
-    <value>Ocorreu um erro de E/S:</value>
-  </data>
-  <data name="LblLanguage" xml:space="preserve">
-    <value>Linguagem UI</value>
-  </data>
-  <data name="MsgRestartRequired" xml:space="preserve">
-    <value>A linguagem mudou. Reinicie o aplicativo para que todas as alterações tenham efeito.</value>
-  </data>
-  <data name="TitleLanguageChanged" xml:space="preserve">
-    <value>Idioma alterado</value>
-  </data>
-  <data name="MsgBoxInformationTitle" xml:space="preserve">
-    <value>Informação</value>
-  </data>
-  <data name="MsgBoxErrorTitle" xml:space="preserve">
-    <value>Erro</value>
-  </data>
   <data name="MsgBoxWarningTitle" xml:space="preserve">
     <value>Aviso</value>
   </data>
@@ -266,5 +245,27 @@
   </data>
   <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
     <value>PDF compactado de saída de diretório</value>
+  </data>
+  <data name="LblLanguage" xml:space="preserve">
+    <value>Linguagem UI</value>
+  </data>
+  <data name="MsgBoxInformationTitle" xml:space="preserve">
+    <value>Informação</value>
+  </data>
+  <data name="MsgBoxErrorTitle" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="GenericMessageError" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SpecificMessageErrorIO" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GenericMessageError" xml:space="preserve">
+    <value>Ocorreu um erro:</value>
+  </data>
+  <data name="SpecificMessageErrorIO" xml:space="preserve">
+    <value>Ocorreu um erro de E/S:</value>
   </data>
 </root>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using UtilityPDF.Resources;
+using UtilityPDF.Controls;
 
 namespace UtilityPDF
 {
@@ -17,6 +17,7 @@ namespace UtilityPDF
         public FrmUtiPDF_Main()
         {
             InitializeComponent();
+            PopulateComboLang(); // Popola la combo box OCR lingue
         }
 
         private void Btn_SelectPDF_Click(object sender, EventArgs e)
@@ -29,6 +30,7 @@ namespace UtilityPDF
                 Btn_SelectPDF.Enabled = false;
             }
         }
+
         private void Btn_Start_Click(object sender, EventArgs e)
         {
             ToggleControlsExtract(false);
@@ -38,16 +40,14 @@ namespace UtilityPDF
             Btn_Reset.Enabled = false;
 
             string selectedText = cmbLangConv.SelectedItem.ToString();
-            string selectedLanguage = cmbLangItems[selectedText]; // paramtro lingua "eng ad esempio" da passare all'engine di tesseract
+            string selectedLanguage = cmbLangItems[selectedText];
 
-            // Verifico che la lingua selezionata abbia una corrispondenza
-            // se non ha corrispondenza imposto di default inglese
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = "eng"; // Imposta il valore di default
+                selectedLanguage = "eng";
             }
 
-            ExtractText.Execute(pdfPath, txtPath, selectedLanguage, DrawPercentage, () => abortFlag);
+            ExtractText.Execute(pdfPath, txtPath, selectedLanguage, UpdateProgress, () => abortFlag);
             ToggleControlsExtract(true);
         }
 
@@ -60,9 +60,16 @@ namespace UtilityPDF
             Btn_Start.Enabled = false;
             Btn_Reset.Enabled = false;
             Btn_Abort.Enabled = false;
-            cmbLangConv.SelectedIndex = 0;
-            DrawPercentage(0);
+            
+            // Imposta la prima lingua disponibile, se presente
+            if (cmbLangConv.Items.Count > 0)
+            {
+                cmbLangConv.SelectedIndex = 0;
+            }
+            
+            UpdateProgress(0);
         }
+
         private void FrmUtiPDF_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (bConvert)
@@ -70,26 +77,32 @@ namespace UtilityPDF
                 e.Cancel = true;
             }
         }
+
         private void FrmUtiPDF_Main_Load(object sender, EventArgs e)
         {
-            InitializeLanguageSelector();
-            PopulateComboLang();
+            InitializeLanguageSelector(); // Popola la combo box UI lingue
             ControlTextImgAssigner.AssignControlTextxImg(this);
             AssignTextPosLblProgress();
         }
+
         private void Btn_SelectPDFToMerge_Click(object sender, EventArgs e)
         {
             if (oFD_PDF.ShowDialog() == DialogResult.OK)
             {
                 if (!Btn_ResetMerge.Enabled)
+                {
                     Btn_ResetMerge.Enabled = true;
+                }
 
                 Lstb_FileMerge.Items.Add(oFD_PDF.FileName);
 
                 if (Lstb_FileMerge.Items.Count == 2)
+                {
                     Btn_SelectDIROutputMergedPDF.Enabled = true;
+                }
             }
         }
+
         private void Btn_ResetMerge_Click(object sender, EventArgs e)
         {
             Lstb_FileMerge.Items.Clear();
@@ -99,20 +112,25 @@ namespace UtilityPDF
             Btn_ResetMerge.Enabled = false;
             Btn_SelectPDFToMerge.Enabled = true;
         }
+
         private async void Btn_Merge_Click(object sender, EventArgs e)
         {
             ToggleControlMerge(false);
             lbl_MergeInProgress.BringToFront();
+            spinnerMerge.BringToFront();
             Application.DoEvents();
+            
             string pdfPath = lbl_DIROutputMergePDF.Text;
 
-            await Merge.Execute(pdfPath, Lstb_FileMerge.Items, lbl_MergeInProgress);
+            await Merge.Execute(pdfPath, Lstb_FileMerge.Items, lbl_MergeInProgress, spinnerMerge);
 
-            ToggleControlMerge(true);
             lbl_MergeInProgress.SendToBack();
+            spinnerMerge.SendToBack();
+            ToggleControlMerge(true);
             Application.DoEvents();
             Btn_ResetMerge_Click(null, EventArgs.Empty);
         }
+
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirMERGE,
@@ -133,21 +151,27 @@ namespace UtilityPDF
                 }
             }
         }
+
         private async void Btn_Compress_Click(object sender, EventArgs e)
         {
             ToggleControlCompress(false);
             lbl_CompressInProgress.BringToFront();
+            spinnerCompress.BringToFront();
             Application.DoEvents();
+            
             string pdfPath = lbl_PDFToCompress.Text;
             string outputPath = lbl_DIROutputCompressPDF.Text;
 
-            await Compress.Execute(pdfPath, LevelCompress, outputPath, lbl_CompressInProgress);
+            await Compress.Execute(pdfPath, LevelCompress, outputPath, lbl_CompressInProgress, spinnerCompress);
+
+            lbl_CompressInProgress.SendToBack();
+            spinnerCompress.SendToBack();
 
             ToggleControlCompress(true);
-            lbl_CompressInProgress.SendToBack();
             Application.DoEvents();
             Btn_ResetCompres_Click(null, EventArgs.Empty);
         }
+
         private void Btn_ResetCompres_Click(object sender, EventArgs e)
         {
             lbl_PDFToCompress.Text = Strings.PDFFileToCOMPRESS;
@@ -182,6 +206,7 @@ namespace UtilityPDF
                 }
             }
         }
+
         private void Btn_SelectPDFToCompress_Click(object sender, EventArgs e)
         {
             if (oFD_PDF.ShowDialog() == DialogResult.OK)
@@ -192,6 +217,7 @@ namespace UtilityPDF
                 Btn_SelectPDFToCompress.Enabled = false;
             }
         }
+
         private void Tb_Compress_ValueChanged(object sender, EventArgs e)
         {
             switch (Tb_Compress.Value)
@@ -217,63 +243,59 @@ namespace UtilityPDF
                     break;
             }
         }
-        private void DrawPercentage(int percentage)
+
+        /// <summary>
+        /// Aggiorna la progress bar moderna con la percentuale
+        /// </summary>
+        private void UpdateProgress(int percentage)
         {
-            if (pBProgressExtract.InvokeRequired)
+            if (modernProgressExtract.InvokeRequired)
             {
-                pBProgressExtract.Invoke(new Action<int>(DrawPercentage), percentage);
+                modernProgressExtract.Invoke(new Action<int>(UpdateProgress), percentage);
             }
             else
             {
-                // Ottieni un oggetto Graphics per il PictureBox
-                Graphics g = pBProgressExtract.CreateGraphics();
-
-                // Pulisci il PictureBox
-                g.Clear(pBProgressExtract.BackColor);
-
-                // Calcola la larghezza della barra di avanzamento
-                int progressWidth = (int)(percentage / 100.0 * pBProgressExtract.Width);
-
-                // Disegna la barra di avanzamento
-                g.FillRectangle(Brushes.LightGreen, 0, 0, progressWidth, pBProgressExtract.Height);
-
-                // Disegna il testo della percentuale
-                string text = percentage + "%";
-                Font boldFont = new Font(pBProgressExtract.Font.FontFamily, pBProgressExtract.Font.Size, FontStyle.Bold);
-                SizeF textSize = g.MeasureString(text, boldFont);
-                PointF location = new PointF((pBProgressExtract.Width - textSize.Width) / 2, (pBProgressExtract.Height - textSize.Height) / 2);
-                g.DrawString(text, boldFont, Brushes.Black, location);
-
-                // Clean
-                g.Dispose();
+                modernProgressExtract.Value = percentage;
                 Application.DoEvents();
             }
         }
+
         private void FrmUtiPDF_Main_Shown(object sender, EventArgs e)
         {
             Btn_ResetMerge_Click(null, EventArgs.Empty);
             Btn_ResetCompres_Click(null, EventArgs.Empty);
             Btn_ResetConvert_Click(null, EventArgs.Empty);
-            Btn_Reset_Click(null, EventArgs.Empty);            
-            DrawPercentage(0);
+            Btn_Reset_Click(null, EventArgs.Empty);
+            UpdateProgress(0);
+
+            CenterSpinnerOnLabel(spinnerCompress, lbl_CompressInProgress);
+            CenterSpinnerOnLabel(spinnerMerge, lbl_MergeInProgress);
+            CenterSpinnerOnLabel(spinnerConvert, lbl_ConvertInProgress);
         }
+
         private void Btn_Exit_Click(object sender, EventArgs e)
         {
             Close();
         }
+
         private void Btn_Abort_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show(Strings.WarnConfirmAbort,
-                                                        "Warning",
+                                                        Strings.MsgBoxWarningTitle,
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
             if (dialogResult == DialogResult.OK)
+            {
                 abortFlag = true;
+            }
         }
+
         private void ToggleControlsExtract(bool isEnabled)
         {
             if (isEnabled)
+            {
                 Btn_Reset_Click(null, EventArgs.Empty);
+            }
 
             abortFlag = false;
             Btn_Abort.Enabled = !isEnabled;
@@ -281,6 +303,7 @@ namespace UtilityPDF
             EnabledDisabledPanel(isEnabled);
             Btn_Start.Enabled = false;
             cmbLangConv.Enabled = isEnabled;
+            cmb_Language.Enabled = isEnabled;
             bConvert = !isEnabled;
         }
 
@@ -294,13 +317,16 @@ namespace UtilityPDF
         private void ToggleControlMerge(bool isEnabled)
         {
             bConvert = !isEnabled;
+            cmb_Language.Enabled = isEnabled;
             lbl_MergeInProgress.Visible = !isEnabled;
             Btn_Exit.Enabled = isEnabled;
             EnabledDisabledPanel(isEnabled);
         }
+
         private void ToggleControlCompress(bool isEnabled)
         {
             bConvert = !isEnabled;
+            cmb_Language.Enabled = isEnabled;
             lbl_CompressInProgress.Visible = !isEnabled;
             Btn_Exit.Enabled = isEnabled;
             EnabledDisabledPanel(isEnabled);
@@ -309,6 +335,7 @@ namespace UtilityPDF
         private void ToggleControlConvert(bool isEnabled)
         {
             bConvert = !isEnabled;
+            cmb_Language.Enabled = isEnabled;
             lbl_ConvertInProgress.Visible = !isEnabled;
             Btn_Exit.Enabled = isEnabled;
             EnabledDisabledPanel(isEnabled);
@@ -317,10 +344,10 @@ namespace UtilityPDF
         private void Btn_SelectDIROutputTXT_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirTXT,
-                                                        "Warning",
+                                                        Strings.MsgBoxWarningTitle,
                                                         MessageBoxButtons.OKCancel,
                                                         MessageBoxIcon.Warning);
-                
+
             if (dialogResult == DialogResult.OK)
             {
                 if (fBD_TXT.ShowDialog() == DialogResult.OK)
@@ -344,59 +371,70 @@ namespace UtilityPDF
 
         private void AssignTextPosLblProgress()
         {
-            // Le label di progressione vengono poste al centro dei rispettvi pannelli
             CalculatingCenter(lbl_CompressInProgress, PnlCompress);
             CalculatingCenter(lbl_MergeInProgress, PnlMerge);
-            CalculatingCenter(lbl_ConvertInProgress, PnlConvert);            
+            CalculatingCenter(lbl_ConvertInProgress, PnlConvert);
         }
 
-        private void CalculatingCenter(Label lblName, Panel pnlName)
+        private void CalculatingCenter(Label lblName, Control pnlName)
         {
-            // Calcola la posizione centrale del pannello
             int centerX = pnlName.Width / 2;
             int centerY = pnlName.Height / 2;
 
-            // Calcola la posizione della label per centrarla nel pannello
             lblName.Left = pnlName.Location.X + (centerX - (lblName.Width / 2));
             lblName.Top = pnlName.Location.Y + (centerY - (lblName.Height / 2));
         }
 
         private void PopulateComboLang()
         {
-            // Ottieni il percorso della directory dell'eseguibile
+            // Verifica che il controllo esista prima di usarlo
+            if (cmbLangConv == null)
+            {
+                return;
+            }
+            
+            cmbLangConv.Items.Clear(); // Pulisce eventuali elementi esistenti
+            
             string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            // Costruisci il percorso completo del file CSV
             string csvFilePath = Path.Combine(exeDirectory, SettingsString.trainerDataFolder, SettingsString.csvLangFilename);
 
-            // Crea un'istanza della classe DataLoader e carica i dati
-            var dataLoader = new DataLangLoader();
-            var readOnlyDataList = dataLoader.LoadData(csvFilePath);
+            DataLangLoader dataLoader = new DataLangLoader();
+            System.Collections.ObjectModel.ReadOnlyCollection<DataLang> readOnlyDataList = dataLoader.LoadData(csvFilePath);
 
-            // Ottieni tutti i file nella cartella tessdata (escludendo il file CSV)
-            var files = dataLoader.GetFiles(exeDirectory, SettingsString.trainerDataFolder, SettingsString.csvLangFilename);
+            string[] files = dataLoader.GetFiles(exeDirectory, SettingsString.trainerDataFolder, SettingsString.csvLangFilename);
 
-            // Cerca ogni file nella collection e popola la ComboBox
-            foreach (var file in files)
+            foreach (string file in files)
             {
-                var fileName = Path.GetFileName(file);
-                var result = dataLoader.FindByParam3(readOnlyDataList, fileName);
+                string fileName = Path.GetFileName(file);
+
+                DataLang result = dataLoader.FindByParam3(readOnlyDataList, fileName);
 
                 if (result != null)
                 {
-                    // Aggiungere l'elemento alla ComboBox
                     cmbLangConv.Items.Add(result.LangParam2);
-
-                    // Aggiungere l'elemento al Dictionary
-                    cmbLangItems.Add(result.LangParam2, result.LangParam1);
+                    
+                    // Controlla se la chiave esiste già
+                    if (!cmbLangItems.ContainsKey(result.LangParam2))
+                    {
+                        cmbLangItems.Add(result.LangParam2, result.LangParam1);
+                    }
                 }
+            }
+            
+            // Seleziona automaticamente il primo elemento se disponibile
+            if (cmbLangConv.Items.Count > 0)
+            {
+                cmbLangConv.SelectedIndex = 0;
             }
         }
 
         private async void Btn_Convert_Click(object sender, EventArgs e)
         {
-            ToggleControlConvert(false);
+            ToggleControlConvert(false);            
             lbl_ConvertInProgress.BringToFront();
+            spinnerConvert.BringToFront();
             Application.DoEvents();
+            
             string pdfPath = lbl_PDFToConvert.Text;
             string outputPath = lbl_DIROutputConvertPDF.Text;
             int formatOutput = 0;
@@ -407,13 +445,14 @@ namespace UtilityPDF
             }
             else if (rBOutputFormat_1.Checked)
             {
-                formatOutput = 1; 
+                formatOutput = 1;
             }
 
-            await ConvertDOCX.Execute(pdfPath, outputPath, lbl_ConvertInProgress, formatOutput);
+            await ConvertDOCX.Execute(pdfPath, outputPath, lbl_ConvertInProgress, spinnerConvert, formatOutput);
 
-            ToggleControlConvert(true);
             lbl_ConvertInProgress.SendToBack();
+            spinnerConvert.SendToBack();
+            ToggleControlConvert(true);
             Application.DoEvents();
             Btn_ResetConvert_Click(null, EventArgs.Empty);
         }
@@ -446,7 +485,7 @@ namespace UtilityPDF
                                                     + @"\"
                                                     + Path.GetFileNameWithoutExtension(lbl_PDFToConvert.Text)
                                                     + "_Convert.docx";
-                    Btn_SelectDIROutputConvertPDF.Enabled = false;                    
+                    Btn_SelectDIROutputConvertPDF.Enabled = false;
                     Btn_Convert.Enabled = true;
                     Btn_SelectPDFToConvert.Enabled = false;
                 }
@@ -468,24 +507,19 @@ namespace UtilityPDF
             Btn_SelectDIROutputConvertPDF.Enabled = false;
         }
 
-        /// <summary>
-        /// Inizializza il selettore di lingua con tutte le lingue supportate
-        /// </summary>
         private void InitializeLanguageSelector()
         {
             cmb_Language.Items.Clear();
-            
-            // Aggiungi tutte le lingue supportate
+
             foreach (string culture in LocalizationManager.GetSupportedLanguages())
             {
                 cmb_Language.Items.Add(new LanguageItem(culture));
             }
 
-            // Seleziona la lingua corrente o inglese come default
             string currentCulture = LocalizationManager.GetCurrentLanguageCode();
             for (int i = 0; i < cmb_Language.Items.Count; i++)
             {
-                var item = (LanguageItem)cmb_Language.Items[i];
+                LanguageItem item = (LanguageItem)cmb_Language.Items[i];
                 if (item.CultureCode == currentCulture)
                 {
                     cmb_Language.SelectedIndex = i;
@@ -493,48 +527,31 @@ namespace UtilityPDF
                 }
             }
 
-            // Se non trovata, seleziona inglese (primo elemento)
             if (cmb_Language.Items.Count > 0)
             {
                 cmb_Language.SelectedIndex = 0;
             }
         }
 
-        /// <summary>
-        /// Gestisce il cambio lingua quando l'utente seleziona una nuova lingua
-        /// </summary>
         private void Cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmb_Language.SelectedItem == null)
+            {
                 return;
-
-            var selectedLanguage = (LanguageItem)cmb_Language.SelectedItem;
-            
-            // Imposta la nuova cultura
+            }
+            LanguageItem selectedLanguage = (LanguageItem)cmb_Language.SelectedItem;
             LocalizationManager.SetCulture(selectedLanguage.CultureCode);
-
-            // Ricarica tutti i testi della form
             RefreshUILanguage();
         }
 
-        /// <summary>
-        /// Ricarica tutti i testi dell'interfaccia dopo un cambio lingua
-        /// </summary>
         private void RefreshUILanguage()
         {
-            // Riassegna tutti i testi e le immagini
             ControlTextImgAssigner.AssignControlTextxImg(this);
-
-            // Aggiorna i testi delle label che non sono gestiti dal ControlTextImgAssigner
             UpdateLabelTexts();
         }
 
-        /// <summary>
-        /// Aggiorna i testi delle label dinamiche
-        /// </summary>
         private void UpdateLabelTexts()
         {
-            // Aggiorna i livelli di compressione
             switch (Tb_Compress.Value)
             {
                 case 0:
@@ -550,6 +567,20 @@ namespace UtilityPDF
                     lbl_ViewLvlCompres.Text = Strings.CompressLvl_3;
                     break;
             }
+        }
+
+        private void CenterSpinnerOnLabel(LoadingSpinner spinner, Label label)
+        {
+            if (spinner == null || label == null)
+            {
+                return;
+            }
+
+            int centerX = label.Left + (label.Width / 2) - (spinner.Width / 2);
+            int centerY = label.Top + (label.Height / 2) - (spinner.Height / 2) - 80; // 80px sopra il centro
+
+            spinner.Left = centerX;
+            spinner.Top = centerY;
         }
     }
 }
