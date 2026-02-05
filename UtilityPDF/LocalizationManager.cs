@@ -1,16 +1,34 @@
-﻿using System.Globalization;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 
 namespace UtilityPDF
 {
+    /// <summary>
+    /// Manages application localization and culture settings
+    /// </summary>
     internal static class LocalizationManager
     {
         private static CultureInfo currentCulture;
 
+        private static readonly Dictionary<string, (string DisplayName, string Flag)> SupportedLanguages =
+            new Dictionary<string, (string, string)>
+            {
+                { "en-US", ("English", "🇺🇸") },
+                { "it-IT", ("Italiano", "🇮🇹") },
+                { "fr-FR", ("Français", "🇫🇷") },
+                { "de-DE", ("Deutsch", "🇩🇪") },
+                { "es-ES", ("Español", "🇪🇸") },
+                { "pt-PT", ("Português", "🇵🇹") },
+                { "el-GR", ("Ελληνικά", "🇬🇷") }
+            };
+
+        private const string DefaultCulture = "en-US";
+
         /// <summary>
-        /// Imposta la cultura dell'applicazione
+        /// Sets the application culture
         /// </summary>
-        /// <param name="cultureName">Nome della cultura (es. "it-IT", "en-US")</param>
+        /// <param name="cultureName">Culture name (e.g., "it-IT", "en-US")</param>
         public static void SetCulture(string cultureName)
         {
             try
@@ -22,13 +40,16 @@ namespace UtilityPDF
             }
             catch (CultureNotFoundException)
             {
-                // Fallback all'inglese se la cultura non è supportata
-                SetCulture("en-US");
+                // Fallback to English if culture is not supported
+                if (cultureName != DefaultCulture)
+                {
+                    SetCulture(DefaultCulture);
+                }
             }
         }
 
         /// <summary>
-        /// Ottiene la cultura corrente dell'applicazione
+        /// Gets the current application culture
         /// </summary>
         public static CultureInfo GetCurrentCulture()
         {
@@ -36,64 +57,55 @@ namespace UtilityPDF
         }
 
         /// <summary>
-        /// Ottiene l'array delle lingue supportate
-        /// </summary>
-        public static string[] GetSupportedLanguages()
-        {
-            return new string[]
-            {
-                "en-US", // Inglese (default)
-                "it-IT", // Italiano
-                "fr-FR", // Francese
-                "de-DE", // Tedesco
-                "es-ES", // Spagnolo
-                "pt-PT", // Portoghese
-                "el-GR"  // Greco
-            };
-        }
-
-        /// <summary>
-        /// Ottiene il nome visualizzato della lingua
-        /// </summary>
-        public static string GetLanguageDisplayName(string cultureName)
-        {
-            return cultureName switch
-            {
-                "en-US" => "English",
-                "it-IT" => "Italiano",
-                "fr-FR" => "Français",
-                "de-DE" => "Deutsch",
-                "es-ES" => "Español",
-                "pt-PT" => "Português",
-                "el-GR" => "Ελληνικά",
-                _ => cultureName,
-            };
-        }
-
-        /// <summary>
-        /// Ottiene il codice emoji della bandiera per la lingua
-        /// </summary>
-        public static string GetLanguageFlag(string cultureName)
-        {
-            return cultureName switch
-            {
-                "en-US" => "🇺🇸",
-                "it-IT" => "🇮🇹",
-                "fr-FR" => "🇫🇷",
-                "de-DE" => "🇩🇪",
-                "es-ES" => "🇪🇸",
-                "pt-PT" => "🇵🇹",
-                "el-GR" => "🇬🇷",
-                _ => "🌐",
-            };
-        }
-
-        /// <summary>
-        /// Ottiene il codice della lingua dalla culture corrente
+        /// Gets the current language code
         /// </summary>
         public static string GetCurrentLanguageCode()
         {
             return GetCurrentCulture().Name;
+        }
+
+        /// <summary>
+        /// Gets the array of supported language codes
+        /// </summary>
+        public static string[] GetSupportedLanguages()
+        {
+            string[] languages = new string[SupportedLanguages.Count];
+            SupportedLanguages.Keys.CopyTo(languages, 0);
+            return languages;
+        }
+
+        /// <summary>
+        /// Gets the display name for a language
+        /// </summary>
+        public static string GetLanguageDisplayName(string cultureName)
+        {
+            if (SupportedLanguages.TryGetValue(cultureName, out (string DisplayName, string Flag) info))
+            {
+                return info.DisplayName;
+            }
+
+            return cultureName;
+        }
+
+        /// <summary>
+        /// Gets the flag emoji for a language
+        /// </summary>
+        public static string GetLanguageFlag(string cultureName)
+        {
+            if (SupportedLanguages.TryGetValue(cultureName, out (string DisplayName, string Flag) info))
+            {
+                return info.Flag;
+            }
+
+            return "🌐";
+        }
+
+        /// <summary>
+        /// Checks if a culture is supported
+        /// </summary>
+        public static bool IsCultureSupported(string cultureName)
+        {
+            return SupportedLanguages.ContainsKey(cultureName);
         }
     }
 }

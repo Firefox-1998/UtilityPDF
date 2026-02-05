@@ -7,68 +7,49 @@ using System.Linq;
 namespace UtilityPDF
 {
     /// <summary>
-    /// Carica i dati delle lingue disponibili per l'OCR da un file CSV
+    /// Loads available OCR language data from a CSV file
     /// </summary>
     internal class DataLangLoader
     {
+        private static readonly ReadOnlyCollection<DataLang> EmptyCollection =
+            new ReadOnlyCollection<DataLang>(Array.Empty<DataLang>());
+
         /// <summary>
-        /// Carica i dati delle lingue dal file CSV specificato
+        /// Loads language data from the specified CSV file
         /// </summary>
         public ReadOnlyCollection<DataLang> LoadData(string filePath)
         {
-            List<DataLang> dataList = new List<DataLang>();
-
             if (!File.Exists(filePath))
             {
-                return new ReadOnlyCollection<DataLang>(dataList);
+                return EmptyCollection;
             }
 
             try
             {
-                string[] lines = File.ReadAllLines(filePath);
-
-                int lineNumber = 0;
-                foreach (string line in lines)
-                {
-                    lineNumber++;
-                    
-                    if (string.IsNullOrWhiteSpace(line))
+                List<DataLang> dataList = File.ReadLines(filePath)
+                    .Skip(1) // Skip header row
+                    .Where(line => !string.IsNullOrWhiteSpace(line))
+                    .Select(line => line.Split(';'))
+                    .Where(parts => parts.Length >= 3)
+                    .Select(parts => new DataLang
                     {
-                        continue;
-                    }
+                        LangParam1 = parts[0].Trim(),
+                        LangParam2 = parts[1].Trim(),
+                        LangParam3 = parts[2].Trim()
+                    })
+                    .ToList();
 
-                    // Salta la prima riga (header)
-                    if (lineNumber == 1)
-                    {
-                        continue;
-                    }
-
-                    // Usa TAB come separatore invece della virgola
-                    string[] parts = line.Split(';');
-
-                    if (parts.Length >= 3)
-                    {
-                        DataLang dataLang = new DataLang
-                        {
-                            LangParam1 = parts[0].Trim(),
-                            LangParam2 = parts[1].Trim(),
-                            LangParam3 = parts[2].Trim()
-                        };
-
-                        dataList.Add(dataLang);
-                    }
-                }
+                return new ReadOnlyCollection<DataLang>(dataList);
             }
             catch (Exception ex)
             {
                 DisplayError.ErrorGeneric(ex);
+                return EmptyCollection;
             }
-
-            return new ReadOnlyCollection<DataLang>(dataList);
         }
 
         /// <summary>
-        /// Ottiene tutti i file traineddata dalla cartella specificata
+        /// Gets all traineddata files from the specified folder
         /// </summary>
         public string[] GetFiles(string exeDirectory, string trainerDataFolder, string csvFilename)
         {
@@ -76,23 +57,23 @@ namespace UtilityPDF
 
             if (!Directory.Exists(tessDataPath))
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
 
             try
             {
-                string[] allFiles = Directory.GetFiles(tessDataPath, "*.traineddata");                
+                string[] allFiles = Directory.GetFiles(tessDataPath, "*.traineddata");
                 return allFiles;
             }
             catch (Exception ex)
             {
                 DisplayError.ErrorGeneric(ex);
-                return new string[0];
+                return Array.Empty<string>();
             }
         }
 
         /// <summary>
-        /// Cerca un elemento DataLang per nome file traineddata
+        /// Searches for a DataLang element by traineddata filename
         /// </summary>
         public DataLang FindByParam3(ReadOnlyCollection<DataLang> dataList, string fileName)
         {
@@ -101,14 +82,10 @@ namespace UtilityPDF
                 return null;
             }
 
-            foreach (DataLang data in dataList)
-            {                
-                if (data.LangParam3.Equals(fileName, StringComparison.OrdinalIgnoreCase))
-                {
-                    return data;
-                }
-            }
-            return null;
+            DataLang result = dataList.FirstOrDefault(data =>
+                data.LangParam3.Equals(fileName, StringComparison.OrdinalIgnoreCase));
+
+            return result;
         }
     }
 }

@@ -1,14 +1,28 @@
 namespace UtilityPDF
 {
     /// <summary>
-    /// Rappresenta un elemento lingua per la ComboBox
+    /// Represents a language item for the ComboBox
     /// </summary>
-    internal class LanguageItem
+    internal sealed class LanguageItem
     {
-        public string CultureCode { get; set; }
-        public string Flag { get; set; }
-        public string DisplayName { get; set; }
+        /// <summary>
+        /// Gets the culture code (e.g., "en-US", "it-IT")
+        /// </summary>
+        public string CultureCode { get; }
 
+        /// <summary>
+        /// Gets the flag emoji for this language
+        /// </summary>
+        public string Flag { get; }
+
+        /// <summary>
+        /// Gets the display name of the language
+        /// </summary>
+        public string DisplayName { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the LanguageItem class
+        /// </summary>
         public LanguageItem(string cultureCode)
         {
             CultureCode = cultureCode;
@@ -16,9 +30,12 @@ namespace UtilityPDF
             DisplayName = LocalizationManager.GetLanguageDisplayName(cultureCode);
         }
 
+        /// <summary>
+        /// Returns the string representation for display in ComboBox
+        /// </summary>
         public override string ToString()
         {
-            return $"{Flag} {DisplayName} ({CultureCode})";
+            return $"{Flag} {DisplayName}";
         }
     }
 }

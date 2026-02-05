@@ -1,4 +1,4 @@
-﻿using Freeware;
+using Freeware;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
@@ -8,106 +8,138 @@ using System.Windows.Forms;
 using Tesseract;
 using UtilityPDF.Resources;
 
-
 namespace UtilityPDF
 {
+    /// <summary>
+    /// Handles PDF text extraction using OCR
+    /// </summary>
     internal class ExtractText
     {
-        private Action<int> updateProgressBar;
-        private Func<bool> shouldAbort;
+        private readonly Action<int> updateProgressBar;
+        private readonly Func<bool> shouldAbort;
 
-        public static void Execute(string pdfPath, string txtPath, string selectedLanguage,
-                                   Action<int> updateProgressBar, Func<bool> shouldAbort)
-        {
-            ExtractText MyStartExec = new ExtractText();
-            MyStartExec.StartExec(pdfPath,
-                                  txtPath,
-                                  selectedLanguage,
-                                  updateProgressBar,
-                                  shouldAbort);
-        }
+        private const int DefaultDpi = 300;
 
-        private void StartExec(string pdfPath, string txtPath, string selectedLanguage, Action<int> updateProgressBar,
-                               Func<bool> shouldAbort)
+        private ExtractText(Action<int> updateProgressBar, Func<bool> shouldAbort)
         {
             this.updateProgressBar = updateProgressBar;
             this.shouldAbort = shouldAbort;
+        }
 
-            // Clear the content of the output file if it exists
-            if (File.Exists(txtPath))
-            {
-                File.WriteAllText(txtPath, String.Empty);
-            }
+        /// <summary>
+        /// Executes the text extraction operation
+        /// </summary>
+        public static void Execute(string pdfPath, string txtPath, string selectedLanguage,
+                                   Action<int> updateProgressBar, Func<bool> shouldAbort)
+        {
+            ExtractText extractor = new ExtractText(updateProgressBar, shouldAbort);
+            extractor.StartExtraction(pdfPath, txtPath, selectedLanguage);
+        }
+
+        private void StartExtraction(string pdfPath, string txtPath, string selectedLanguage)
+        {
+            ClearOutputFile(txtPath);
 
             try
             {
-                int numPages = GetPageCount(pdfPath);
-                using (var engine = new TesseractEngine($@"./{SettingsString.trainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
+                int pageCount = GetPageCount(pdfPath);
+
+                using (TesseractEngine engine = new TesseractEngine(
+                    $@"./{SettingsString.TrainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
                 {
                     using Stream pdfStream = File.OpenRead(pdfPath);
-                    ProcessPages(pdfStream, numPages, engine, txtPath);
+                    ProcessAllPages(pdfStream, pageCount, engine, txtPath);
                 }
-                if (shouldAbort())
-                {
-                    MessageBox.Show(Strings.WarnAbortedExtraction, Strings.MsgBoxWarningTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(Strings.InfoCompleteExtraction, Strings.MsgBoxInformationTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+
+                ShowCompletionMessage();
             }
             catch (IOException ex)
             {
-                // Display a more specific error message for IO exceptions
                 DisplayError.ErrorIO(ex);
             }
             catch (Exception ex)
             {
-                // Display the exception message
                 DisplayError.ErrorGeneric(ex);
             }
         }
 
-        private int GetPageCount(string pdfPath)
+        private static void ClearOutputFile(string txtPath)
         {
-            using PdfDocument inputDocument = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import);
-            return inputDocument.PageCount;
-        }
-
-        private void ProcessPages(Stream pdfStream, int numPages, TesseractEngine engine, string txtPath)
-        {
-            for (int i = 0; i < numPages; i++)
+            if (File.Exists(txtPath))
             {
-                ProcessPage(pdfStream, i, engine, txtPath);
-                updateProgressBar((i + 1) * 100 / numPages);
-
-                // Verify abortFlag 
-                if (shouldAbort())
-                {
-                    // If abortFlag is "true" cancel extraction.
-                    break;
-                }
+                File.WriteAllText(txtPath, string.Empty);
             }
         }
-        private void ProcessPage(Stream pdfStream, int i, TesseractEngine engine, string txtPath)
+
+        private static int GetPageCount(string pdfPath)
         {
-            byte[] page = Pdf2Png.Convert(pdfStream, i + 1, 300);
-            Application.DoEvents();
-            using var ms = new MemoryStream(page);
-            Application.DoEvents();
-            Image img = Image.FromStream(ms);
+            using PdfDocument document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import);
+            return document.PageCount;
+        }
 
-            Application.DoEvents();
-            using var imgPix = PixConverter.ToPix((Bitmap)img);
-            var grayImage = imgPix.ConvertRGBToGray();
+        private void ProcessAllPages(Stream pdfStream, int pageCount, TesseractEngine engine, string txtPath)
+        {
+            for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
+            {
+                if (shouldAbort())
+                {
+                    break;
+                }
 
+                ProcessSinglePage(pdfStream, pageIndex, engine, txtPath);
+                ReportProgress(pageIndex + 1, pageCount);
+            }
+        }
+
+        private void ProcessSinglePage(Stream pdfStream, int pageIndex, TesseractEngine engine, string txtPath)
+        {
+            // Convert PDF page to PNG (1-based index for Pdf2Png)
+            byte[] pageImage = Pdf2Png.Convert(pdfStream, pageIndex + 1, DefaultDpi);
             Application.DoEvents();
-            using var imgPage = engine.Process(grayImage);
+
+            using MemoryStream imageStream = new MemoryStream(pageImage);
+            using Image image = Image.FromStream(imageStream);
             Application.DoEvents();
-            string text = imgPage.GetText();
+            string extractedText = ExtractTextFromImage((Bitmap)image, engine);
+            File.AppendAllText(txtPath, extractedText);
             Application.DoEvents();
-            File.AppendAllText(txtPath, text);
+        }
+
+        private static string ExtractTextFromImage(Bitmap bitmap, TesseractEngine engine)
+        {
+            using Pix pixImage = PixConverter.ToPix(bitmap);
+            using Pix grayImage = pixImage.ConvertRGBToGray();
             Application.DoEvents();
+
+            using Page ocrPage = engine.Process(grayImage);
+            Application.DoEvents();
+            return ocrPage.GetText();
+        }
+
+        private void ReportProgress(int currentPage, int totalPages)
+        {
+            int percentage = currentPage * 100 / totalPages;
+            updateProgressBar(percentage);
+        }
+
+        private void ShowCompletionMessage()
+        {
+            if (shouldAbort())
+            {
+                MessageBox.Show(
+                    Strings.WarnAbortedExtraction,
+                    Strings.MsgBoxWarningTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+            else
+            {
+                MessageBox.Show(
+                    Strings.InfoCompleteExtraction,
+                    Strings.MsgBoxInformationTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
         }
     }
 }

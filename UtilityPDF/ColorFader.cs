@@ -5,7 +5,7 @@ using UtilityPDF.Controls;
 namespace UtilityPDF
 {
     /// <summary>
-    /// Gestisce lo spinner di caricamento animato
+    /// Manages the animated loading spinner
     /// </summary>
     internal class ColorFader : IDisposable
     {
@@ -13,7 +13,7 @@ namespace UtilityPDF
         private bool disposed = false;
 
         /// <summary>
-        /// Avvia lo spinner di caricamento con un controllo LoadingSpinner
+        /// Starts the loading spinner with a LoadingSpinner control
         /// </summary>
         public void StartFader(LoadingSpinner loadingSpinner)
         {
@@ -40,7 +40,7 @@ namespace UtilityPDF
         }
 
         /// <summary>
-        /// Ferma lo spinner di caricamento
+        /// Stops the loading spinner
         /// </summary>
         public void StopFader()
         {
@@ -62,12 +62,18 @@ namespace UtilityPDF
             }
         }
 
+        /// <summary>
+        /// Releases all resources used by the ColorFader
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources and optionally releases the managed resources
+        /// </summary>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
@@ -81,6 +87,9 @@ namespace UtilityPDF
             }
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~ColorFader()
         {
             Dispose(false);

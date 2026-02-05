@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="WarnSelectOutDirTXT" xml:space="preserve">
-    <value>Select the output directory for the TXT file.</value>
+    <value>If a TXT file with the same name already exists (TXT file will have the SAME NAME.TXT as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
   </data>
   <data name="WarnSelectOutDirMERGE" xml:space="preserve">
-    <value>Select the output directory for the merged PDF file.</value>
+    <value>If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME_MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!</value>
   </data>
   <data name="WarnSelectOutDirCOMP" xml:space="preserve">
-    <value>Select the output directory for the compressed PDF file.</value>
+    <value>If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
   </data>
   <data name="WarnSelectOutDirDOCX" xml:space="preserve">
-    <value>Select the output directory for the DOCX/RTF file.</value>
+    <value>If a DOCX/RTF file with the same name already exists (DOCX/RTF file will have the SAME NAME_CONVERT.DOCX/RTF as the selected PDF file) in the folder you select, it will be overwritten!!!</value>
   </data>
   <data name="WarnConfirmAbort" xml:space="preserve">
     <value>Are you sure you want to abort the current operation?</value>
@@ -139,7 +139,7 @@
     <value>Extraction &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
   </data>
   <data name="CompressCompleted" xml:space="preserve">
-    <value>Compression completed successfully!</value>
+    <value>Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>
   </data>
   <data name="MergeCompleted" xml:space="preserve">
     <value>Merge &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;</value>

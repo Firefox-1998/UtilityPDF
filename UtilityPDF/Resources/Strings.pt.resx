@@ -175,10 +175,10 @@
     <value>Saída de diretório DOCX/RTF</value>
   </data>
   <data name="LblMsgSelLang" xml:space="preserve">
-    <value>Selecione o idioma que o OCR usa</value>
+    <value>Selecione o idioma que o OCR usa:</value>
   </data>
   <data name="LblCompressionLvl" xml:space="preserve">
-    <value>NÍVEL de compressão</value>
+    <value>NÍVEL de compressão:</value>
   </data>
   <data name="LblPanelExtract" xml:space="preserve">
     <value>Extraia texto de PDF usando OCR</value>
@@ -241,10 +241,10 @@
     <value>Aviso</value>
   </data>
   <data name="PDFFileToCOMPRESS" xml:space="preserve">
-    <value>Arquivo PDF para COMPRESS.</value>
+    <value>Arquivo PDF para COMPRESS...</value>
   </data>
   <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
-    <value>PDF compactado de saída de diretório</value>
+    <value>PDF compactado de saída de diretório...</value>
   </data>
   <data name="LblLanguage" xml:space="preserve">
     <value>Linguagem UI</value>

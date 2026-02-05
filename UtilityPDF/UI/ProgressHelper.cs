@@ -4,16 +4,19 @@ using UtilityPDF.Controls;
 namespace UtilityPDF.UI
 {
     /// <summary>
-    /// Helper per gestire l'aggiornamento thread-safe della progress bar
+    /// Helper for thread-safe progress bar updates
     /// </summary>
     internal static class ProgressHelper
     {
         /// <summary>
-        /// Aggiorna la progress bar in modo thread-safe
+        /// Updates the progress bar in a thread-safe manner
         /// </summary>
         public static void UpdateProgress(ModernProgressBar progressBar, int percentage)
         {
-            if (progressBar == null) return;
+            if (progressBar == null)
+            {
+                return;
+            }
 
             if (progressBar.InvokeRequired)
             {
@@ -21,16 +24,25 @@ namespace UtilityPDF.UI
             }
             else
             {
-                progressBar.Value = Math.Max(0, Math.Min(100, percentage));
+                int clampedValue = Math.Max(0, Math.Min(100, percentage));
+                progressBar.Value = clampedValue;
             }
         }
 
         /// <summary>
-        /// Reset della progress bar
+        /// Resets the progress bar to zero
         /// </summary>
         public static void ResetProgress(ModernProgressBar progressBar)
         {
             UpdateProgress(progressBar, 0);
+        }
+
+        /// <summary>
+        /// Sets the progress bar to complete (100%)
+        /// </summary>
+        public static void CompleteProgress(ModernProgressBar progressBar)
+        {
+            UpdateProgress(progressBar, 100);
         }
     }
 }

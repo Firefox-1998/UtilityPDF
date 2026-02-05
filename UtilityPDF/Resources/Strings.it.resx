@@ -117,18 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WarnSelectOutDirTXT" xml:space="preserve">
-    <value>Seleziona la cartella di output per il file TXT.</value>
-  </data>
-  <data name="WarnSelectOutDirMERGE" xml:space="preserve">
-    <value>Seleziona la cartella di output per il file PDF unito.</value>
-  </data>
-  <data name="WarnSelectOutDirCOMP" xml:space="preserve">
-    <value>Seleziona la cartella di output per il file PDF compresso.</value>
-  </data>
-  <data name="WarnSelectOutDirDOCX" xml:space="preserve">
-    <value>Seleziona la cartella di output per il file DOCX/RTF.</value>
-  </data>
   <data name="WarnConfirmAbort" xml:space="preserve">
     <value>Sei sicuro di voler interrompere l'operazione corrente?</value>
   </data>
@@ -137,9 +125,6 @@
   </data>
   <data name="InfoCompleteExtraction" xml:space="preserve">
     <value>Estrazione &gt;&gt;&gt; COMPLETATA &lt;&lt;&lt;</value>
-  </data>
-  <data name="CompressCompleted" xml:space="preserve">
-    <value>Compressione completata con successo!</value>
   </data>
   <data name="MergeCompleted" xml:space="preserve">
     <value>Unisci &gt;&gt;&gt; COMPLETATO &lt;&lt;&lt;</value>
@@ -160,19 +145,19 @@
     <value>Qualità Bassa (Schermo)</value>
   </data>
   <data name="LblMsgInputPDF_Extr" xml:space="preserve">
-    <value>Seleziona file PDF da cui estrarre il testo...</value>
+    <value>Seleziona file PDF da cui estrarre il testo</value>
   </data>
   <data name="LblMsgInputPDF_Conv" xml:space="preserve">
-    <value>Seleziona file PDF da convertire...</value>
+    <value>Seleziona file PDF da convertire</value>
   </data>
   <data name="LblMsgOutputDIR_Extr" xml:space="preserve">
-    <value>Seleziona cartella di output per il file TXT...</value>
+    <value>Seleziona cartella di output per il file TXT</value>
   </data>
   <data name="LblMsgOutputDIR_Merge" xml:space="preserve">
-    <value>Seleziona cartella di output per il PDF unito...</value>
+    <value>Seleziona cartella di output per il PDF unito</value>
   </data>
   <data name="LblMsgOutputDIR_Conv" xml:space="preserve">
-    <value>Seleziona cartella di output per il file DOCX/RTF...</value>
+    <value>Seleziona cartella di output per il file DOCX/RTF</value>
   </data>
   <data name="LblMsgSelLang" xml:space="preserve">
     <value>Seleziona Lingua OCR:</value>
@@ -253,7 +238,7 @@ Attendere prego...</value>
     <value>Seleziona cartella di output per il PDF compresso...</value>
   </data>
   <data name="LblLanguage" xml:space="preserve">
-    <value>Lingua UI:</value>
+    <value>Lingua UI</value>
   </data>
   <data name="MsgBoxInformationTitle" xml:space="preserve">
     <value>Information</value>
@@ -266,5 +251,20 @@ Attendere prego...</value>
   </data>
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>Si è verificato un errore IO:</value>
+  </data>
+  <data name="WarnSelectOutDirTXT" xml:space="preserve">
+    <value>Se esiste già un file TXT con lo stesso nome (il file TXT avrà lo STESSO NOME.TXT del file PDF selezionato) nella cartella selezionata, verrà sovrascritto!!!</value>
+  </data>
+  <data name="WarnSelectOutDirMERGE" xml:space="preserve">
+    <value>Se esiste già un file PDF con lo stesso nome (il file PDFMERGED avrà lo STESSO NOME_MERGED del primo file PDF selezionato) nella cartella selezionata, verrà sovrascritto!!!</value>
+  </data>
+  <data name="WarnSelectOutDirCOMP" xml:space="preserve">
+    <value>Se esiste già un file PDF con lo stesso nome (il file OUTPUT avrà lo STESSO NOME_COMPRESSED del file PDF selezionato) nella cartella selezionata, verrà sovrascritto!!!</value>
+  </data>
+  <data name="WarnSelectOutDirDOCX" xml:space="preserve">
+    <value>Se esiste già un file DOCX/RTF con lo stesso nome (il file DOCX/RTF avrà lo STESSO NOME_CONVERT.DOCX/RTF del file PDF selezionato) nella cartella selezionata, verrà sovrascritto!!!</value>
+  </data>
+  <data name="CompressCompleted" xml:space="preserve">
+    <value>Compressione &gt;&gt;&gt; COMPLETATA &lt;&lt;&lt;</value>
   </data>
 </root>

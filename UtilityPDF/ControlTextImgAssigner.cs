@@ -1,167 +1,163 @@
-﻿using System.Linq;
-using System.Windows.Forms;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using UtilityPDF.Resources;
 
 namespace UtilityPDF
 {
-    internal class ControlTextImgAssigner
+    /// <summary>
+    /// Assigns localized text and emoji icons to form controls
+    /// </summary>
+    internal static class ControlTextImgAssigner
     {
-        public static void AssignControlTextxImg(FrmUtiPDF_Main frmMain)
-        {
-            System.Reflection.FieldInfo[] controls = frmMain.GetType()
-                .GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Where(f => f.FieldType == typeof(Label) || 
-                           f.FieldType == typeof(Button) || 
-                           f.FieldType == typeof(RadioButton) || 
-                           f.FieldType == typeof(PictureBox) ||
-                           f.FieldType.IsSubclassOf(typeof(Button)))
-                .ToArray();
+        private static readonly Font LabelFont = new Font("Segoe UI Emoji", 9F, FontStyle.Regular);
+        private static readonly Font ButtonFont = new Font("Segoe UI Emoji", 8.5F, FontStyle.Regular);
+        private static readonly Font RadioButtonFont = new Font("Segoe UI Emoji", 9F, FontStyle.Regular);
 
-            foreach (System.Reflection.FieldInfo control in controls)
+        /// <summary>
+        /// Assigns text and images to all supported controls in the form
+        /// </summary>
+        public static void AssignControlTextxImg(Form form)
+        {
+            if (form == null)
             {
-                if (control.FieldType == typeof(Label))
+                return;
+            }
+
+            AssignControlsRecursively(form.Controls);
+        }
+
+        private static void AssignControlsRecursively(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                AssignControlText(control);
+
+                if (control.HasChildren)
                 {
-                    Label label = (Label)control.GetValue(frmMain);
-                    AssignLabelText(label);
-                }
-                else if (control.FieldType == typeof(Button) || control.FieldType.IsSubclassOf(typeof(Button)))
-                {
-                    Button button = (Button)control.GetValue(frmMain);
-                    AssignButtonText(button);
-                }
-                else if (control.FieldType == typeof(RadioButton))
-                {
-                    RadioButton radiobutton = (RadioButton)control.GetValue(frmMain);
-                    AssignRadioButtonText(radiobutton);
+                    AssignControlsRecursively(control.Controls);
                 }
             }
         }
+
+        private static void AssignControlText(Control control)
+        {
+            switch (control)
+            {
+                case Label label:
+                    AssignLabelText(label);
+                    break;
+                case RadioButton radioButton:
+                    AssignRadioButtonText(radioButton);
+                    break;
+                case Button button:
+                    AssignButtonText(button);
+                    break;
+            }
+        }
+
+        #region Label Assignments
+
+        private static readonly Dictionary<string, Func<string>> LabelTextMap = new Dictionary<string, Func<string>>
+        {
+            { "lblLang", () => "🌍 " + Strings.LblMsgSelLang },
+            { "lbl_LvlCompr", () => "⚙ " + Strings.LblCompressionLvl },
+            { "lbl_CompressInProgress", () => "⏳ " + Strings.LblCompressInProgress },
+            { "lbl_MergeInProgress", () => "⏳ " + Strings.LblMergeInProgress },
+            { "lbl_ConvertInProgress", () => "⏳ " + Strings.LblConvertInProgress },
+            { "lbl_PDF", () => Strings.LblMsgInputPDF_Extr },
+            { "lbl_TXT", () => Strings.LblMsgOutputDIR_Extr },
+            { "lbl_DIROutputMergePDF", () => Strings.LblMsgOutputDIR_Merge },
+            { "lbl_PDFToConvert", () => Strings.LblMsgInputPDF_Conv },
+            { "lbl_DIROutputConvertPDF", () => Strings.LblMsgOutputDIR_Conv },
+            { "lbl_Language", () => "🌐 " + Strings.LblLanguage },
+            { "lbl_PDFToCompress", () => Strings.PDFFileToCOMPRESS },
+            { "lbl_DIROutputCompressPDF", () => Strings.DirectoryOutputCompressedPDF }
+        };
 
         private static void AssignLabelText(Label label)
         {
-            // Imposta font che supporta emoji per le label
-            label.Font = new Font("Segoe UI Emoji", label.Font.Size, label.Font.Style);
-            
-            switch (label.Name)
+            if (label == null)
             {
-                case "lblLang":
-                    label.Text = "🌍 " + Strings.LblMsgSelLang;
-                    break;
-                case "lbl_LvlCompr":
-                    label.Text = "⚙ " + Strings.LblCompressionLvl;
-                    break;
-                case "lbl_CompressInProgress":
-                    label.Text = "⏳ " + Strings.LblCompressInProgress;
-                    break;
-                case "lbl_MergeInProgress":
-                    label.Text = "⏳ " + Strings.LblMergeInProgress;
-                    break;
-                case "lbl_ConvertInProgress":
-                    label.Text = "⏳ " + Strings.LblConvertInProgress;
-                    break;
-                case "lbl_PDF":
-                    label.Text = Strings.LblMsgInputPDF_Extr;
-                    break;
-                case "lbl_TXT":
-                    label.Text = Strings.LblMsgOutputDIR_Extr;
-                    break;
-                case "lbl_DIROutputMergePDF":
-                    label.Text = Strings.LblMsgOutputDIR_Merge;
-                    break;
-                case "lbl_PDFToConvert":
-                    label.Text = Strings.LblMsgInputPDF_Conv;
-                    break;
-                case "lbl_DIROutputConvertPDF":
-                    label.Text = Strings.LblMsgOutputDIR_Conv;
-                    break;
-                case "lbl_Language":
-                    label.Text = "🌐 " + Strings.LblLanguage;
-                    break;
-                case "lbl_PDFToCompress":
-                    label.Text = Strings.PDFFileToCOMPRESS;
-                    break;
-                case "lbl_DIROutputCompressPDF":
-                    label.Text = Strings.DirectoryOutputCompressedPDF;
-                    break;
+                return;
+            }
+
+            label.Font = new Font(LabelFont.FontFamily, label.Font.Size, label.Font.Style);
+
+            if (LabelTextMap.TryGetValue(label.Name, out Func<string> textFunc))
+            {
+                label.Text = textFunc();
             }
         }
+
+        #endregion
+
+        #region Button Assignments
+
+        private static readonly Dictionary<string, Func<string>> ButtonTextMap = new Dictionary<string, Func<string>>
+        {
+            { "Btn_SelectPDF", () => "📄\r\n" + Strings.TxtSelectPDFBtn },
+            { "Btn_SelectPDFToCompress", () => "📄 " + Strings.TxtSelectPDFBtn },
+            { "Btn_SelectPDFToMerge", () => "📄\r\n" + Strings.TxtSelectPDFBtn },
+            { "Btn_SelectPDFToConvert", () => "📄 " + Strings.TxtSelectPDFBtn },
+            { "Btn_Reset", () => "🔄 " + Strings.TxtResetBtn },
+            { "Btn_ResetCompres", () => "🔄 " + Strings.TxtResetBtn },
+            { "Btn_ResetMerge", () => "🔄 " + Strings.TxtResetBtn },
+            { "Btn_ResetConvert", () => "🔄 " + Strings.TxtResetBtn },
+            { "Btn_SelectDIROutputTXT", () => "📁\r\n" + Strings.TxtOutputDirBtn + " TXT" },
+            { "Btn_SelectDIROutputMergedPDF", () => "📁\r\n" + Strings.TxtOutputDirBtn + " PDF" },
+            { "Btn_SelectDIROutputCompressPDF", () => "📁\r\n" + Strings.TxtOutputDirBtn + " PDF" },
+            { "Btn_SelectDIROutputConvertPDF", () => "📁 " + Strings.TxtOutputDirBtn },
+            { "Btn_Abort", () => "⏹ " + Strings.TxtAbortBtn },
+            { "Btn_Compress", () => "🗜 " + Strings.TxtCompressBtn },
+            { "Btn_Convert", () => "🔄 " + Strings.TxtConvertBtn },
+            { "Btn_Start", () => "▶ " + Strings.TxtExtractBtn },
+            { "Btn_Merge", () => "🔗 " + Strings.TxtMergetBtn },
+            { "Btn_Exit", () => "❌ " + Strings.TxtExitBtn }
+        };
 
         private static void AssignButtonText(Button button)
         {
-            // Imposta font più piccolo che supporta emoji per i bottoni
-            button.Font = new Font("Segoe UI Emoji", 8.5F, FontStyle.Regular);
-            
-            switch (button.Name)
+            if (button == null)
             {
-                case "Btn_SelectPDF":
-                    button.Text = "📄\r\n" + Strings.TxtSelectPDFBtn;
-                    break;
-                case "Btn_SelectPDFToCompress":
-                    button.Text = "📄 " + Strings.TxtSelectPDFBtn;
-                    break;
-                case "Btn_SelectPDFToMerge":
-                    button.Text = "📄\r\n" + Strings.TxtSelectPDFBtn;
-                    break;
-                case "Btn_SelectPDFToConvert":
-                    button.Text = "📄 " + Strings.TxtSelectPDFBtn;
-                    break;
-                case "Btn_Reset":
-                case "Btn_ResetCompres":
-                case "Btn_ResetMerge":
-                case "Btn_ResetConvert":
-                    button.Text = "🔄 " + Strings.TxtResetBtn;
-                    break;
-                case "Btn_SelectDIROutputTXT":
-                    button.Text = "📁\r\n" + Strings.TxtOutputDirBtn + " TXT";
-                    break;
-                case "Btn_SelectDIROutputMergedPDF":
-                case "Btn_SelectDIROutputCompressPDF":
-                    button.Text = "📁\r\n" + Strings.TxtOutputDirBtn + " PDF";
-                    break;
-                case "Btn_SelectDIROutputConvertPDF":
-                    button.Text = "📁 " + Strings.TxtOutputDirBtn;
-                    break;
-                case "Btn_Abort":
-                    button.Text = "⏹ " + Strings.TxtAbortBtn;
-                    break;
-                case "Btn_Compress":
-                    button.Text = "🗜 " + Strings.TxtCompressBtn;
-                    break;
-                case "Btn_Convert":
-                    button.Text = "🔄 " + Strings.TxtConvertBtn;
-                    break;
-                case "Btn_Start":
-                    button.Text = "▶ " + Strings.TxtExtractBtn;
-                    break;
-                case "Btn_Merge":
-                    button.Text = "🔗 " + Strings.TxtMergetBtn;
-                    break;
-                case "Btn_Exit":
-                    button.Text = "❌ " + Strings.TxtExitBtn;
-                    break;
+                return;
+            }
+
+            button.Font = ButtonFont;
+
+            if (ButtonTextMap.TryGetValue(button.Name, out Func<string> textFunc))
+            {
+                button.Text = textFunc();
             }
         }
 
-        private static void AssignRadioButtonText(RadioButton radiobutton)
+        #endregion
+
+        #region RadioButton Assignments
+
+        private static readonly Dictionary<string, Func<string>> RadioButtonTextMap = new Dictionary<string, Func<string>>
         {
-            // Imposta font che supporta emoji
-            radiobutton.Font = new Font("Segoe UI Emoji", 9F, FontStyle.Regular);
-            
-            switch (radiobutton.Name)
+            { "rBOutputFormat_0", () => "📝 " + Strings.RdBtnOutFormat_0 },
+            { "rBOutputFormat_1", () => "📝 " + Strings.RdBtnOutFormat_1 },
+            { "rBOutputFormat_2", () => "📝 " + Strings.RdBtnOutFormat_2 }
+        };
+
+        private static void AssignRadioButtonText(RadioButton radioButton)
+        {
+            if (radioButton == null)
             {
-                case "rBOutputFormat_0":
-                    radiobutton.Text = "📝 " + Strings.RdBtnOutFormat_0;
-                    break;
+                return;
+            }
 
-                case "rBOutputFormat_1":
-                    radiobutton.Text = "📝 " + Strings.RdBtnOutFormat_1;
-                    break;
+            radioButton.Font = RadioButtonFont;
 
-                case "rBOutputFormat_2":
-                    radiobutton.Text = "📝 " + Strings.RdBtnOutFormat_2;
-                    break;
+            if (RadioButtonTextMap.TryGetValue(radioButton.Name, out Func<string> textFunc))
+            {
+                radioButton.Text = textFunc();
             }
         }
+
+        #endregion
     }
 }

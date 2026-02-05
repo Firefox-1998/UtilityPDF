@@ -124,7 +124,7 @@
     <value>Si un fichier PDF portant le même nom existe déjà (le fichier PDFMERGED aura le MÊME NAMEMERGED que le premier fichier PDF sélectionné) dans le dossier que vous sélectionnez, il sera écrasé !!!</value>
   </data>
   <data name="WarnSelectOutDirCOMP" xml:space="preserve">
-    <value>Si un fichier PDF portant le même nom existe déjà (le fichier OUTPUT aura le MÊME NOMCOMPRESSÉ que le fichier PDF sélectionné) dans le dossier que vous sélectionnez, il sera écrasé !!!</value>
+    <value>Si un fichier PDF portant le même nom existe déjà (le fichier OUTPUT aura le MÊME NOMCOMPRESSÉ que le fichier PDF sélectionné) dans le dossier que vous sélectionnez, il sera écrasé!!!</value>
   </data>
   <data name="WarnSelectOutDirDOCX" xml:space="preserve">
     <value>Si un fichier DOCX/RTF du même nom existe déjà (le fichier DOCX/RTF aura le MÊME NAMECONVERT.DOCX/RTF que le fichier PDF sélectionné) dans le dossier que vous sélectionnez, il sera écrasé !!!</value>
@@ -175,10 +175,10 @@
     <value>Sortie de répertoire DOCX/RTF</value>
   </data>
   <data name="LblMsgSelLang" xml:space="preserve">
-    <value>Sélectionnez la langue utilisée par l'OCR</value>
+    <value>Sélectionnez la langue utilisée par l'OCR:</value>
   </data>
   <data name="LblCompressionLvl" xml:space="preserve">
-    <value>NIVEAU DE COMPRESSION</value>
+    <value>NIVEAU DE COMPRESSION:</value>
   </data>
   <data name="LblPanelExtract" xml:space="preserve">
     <value>Extraire le texte d'un PDF à l'aide de l'OCR</value>
@@ -241,10 +241,10 @@
     <value>Avertissement</value>
   </data>
   <data name="PDFFileToCOMPRESS" xml:space="preserve">
-    <value>Fichier PDF à COMPRESSER.</value>
+    <value>Fichier PDF à COMPRESSER...</value>
   </data>
   <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
-    <value>Sortie du répertoire PDF compressé</value>
+    <value>Sortie du répertoire PDF compressé...</value>
   </data>
   <data name="LblLanguage" xml:space="preserve">
     <value>Langue UI</value>

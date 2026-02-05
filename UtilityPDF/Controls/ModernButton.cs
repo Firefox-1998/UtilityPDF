@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace UtilityPDF.Controls
 {
     /// <summary>
-    /// Bottone moderno con effetti hover e animazioni fluide
+    /// Modern button with hover effects and smooth animations
     /// </summary>
     public class ModernButton : Button
     {
@@ -20,6 +20,10 @@ namespace UtilityPDF.Controls
         private bool isPressed = false;
         private Timer animationTimer;
         private float animationProgress = 0f;
+
+        private const float AnimationStep = 0.1f;
+        private const int ColorDarkenAmount = 20;
+        private const int BorderDarkenAmount = 40;
 
         public ModernButton()
         {
@@ -38,30 +42,51 @@ namespace UtilityPDF.Controls
             FlatAppearance.MouseOverBackColor = Color.Transparent;
             Font = new Font("Segoe UI Emoji", 8.5F, FontStyle.Regular);
             Cursor = Cursors.Hand;
-            
-            this.AutoSize = false;
-            this.UseCompatibleTextRendering = false;
+
+            AutoSize = false;
+            UseCompatibleTextRendering = false;
 
             animationTimer = new Timer { Interval = 20 };
             animationTimer.Tick += AnimationTimer_Tick;
         }
 
+        /// <summary>
+        /// Gets or sets the normal state color
+        /// </summary>
         public Color NormalColor
         {
             get { return normalColor; }
-            set { normalColor = value; Invalidate(); }
+            set
+            {
+                normalColor = value;
+                Invalidate();
+            }
         }
 
+        /// <summary>
+        /// Gets or sets the hover state color
+        /// </summary>
         public Color HoverColor
         {
             get { return hoverColor; }
-            set { hoverColor = value; Invalidate(); }
+            set
+            {
+                hoverColor = value;
+                Invalidate();
+            }
         }
 
+        /// <summary>
+        /// Gets or sets the border radius
+        /// </summary>
         public int BorderRadius
         {
             get { return borderRadius; }
-            set { borderRadius = value; Invalidate(); }
+            set
+            {
+                borderRadius = value;
+                Invalidate();
+            }
         }
 
         protected override void OnMouseEnter(EventArgs e)
@@ -96,11 +121,11 @@ namespace UtilityPDF.Controls
         {
             if (isHovered && animationProgress < 1f)
             {
-                animationProgress += 0.1f;
+                animationProgress += AnimationStep;
             }
             else if (!isHovered && animationProgress > 0f)
             {
-                animationProgress -= 0.1f;
+                animationProgress -= AnimationStep;
             }
             else
             {
@@ -114,55 +139,69 @@ namespace UtilityPDF.Controls
         protected override void OnPaint(PaintEventArgs pevent)
         {
             Graphics g = pevent.Graphics;
-            g.Clear(Parent.BackColor); // Pulisce completamente il background
-            
+            g.Clear(Parent.BackColor); // Clear background completely
+
             g.SmoothingMode = SmoothingMode.HighQuality;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
             g.CompositingQuality = CompositingQuality.HighQuality;
 
-            // Rettangolo del bottone con padding per evitare clip sui bordi
+            // Button rectangle with padding to avoid edge clipping
             Rectangle rect = new Rectangle(2, 2, Width - 4, Height - 4);
-            
-            // Determina il colore basandosi sullo stato
-            Color currentColor;
-            if (!Enabled)
-            {
-                currentColor = disabledColor;
-            }
-            else if (isPressed)
-            {
-                currentColor = pressedColor;
-            }
-            else
-            {
-                currentColor = InterpolateColor(normalColor, hoverColor, animationProgress);
-            }
 
-            // Disegna ombra leggera
+            // Determine color based on state
+            Color currentColor = GetCurrentColor();
+
+            // Draw light shadow
             if (Enabled)
             {
-                Rectangle shadowRect = new Rectangle(rect.X + 2, rect.Y + 2, rect.Width, rect.Height);
-                using (GraphicsPath shadowPath = GetRoundedRectPath(shadowRect, borderRadius))
-                {
-                    using (PathGradientBrush shadowBrush = new PathGradientBrush(shadowPath))
-                    {
-                        shadowBrush.CenterColor = Color.FromArgb(30, 0, 0, 0);
-                        shadowBrush.SurroundColors = new[] { Color.Transparent };
-                        g.FillPath(shadowBrush, shadowPath);
-                    }
-                }
+                DrawShadow(g, rect);
             }
 
-            // Disegna il bottone con gradient
+            // Draw button with gradient
+            DrawButton(g, rect, currentColor);
+
+            // Draw text with word wrap
+            DrawText(g, rect);
+        }
+
+        private Color GetCurrentColor()
+        {
+            if (!Enabled)
+            {
+                return disabledColor;
+            }
+
+            if (isPressed)
+            {
+                return pressedColor;
+            }
+
+            return InterpolateColor(normalColor, hoverColor, animationProgress);
+        }
+
+        private void DrawShadow(Graphics g, Rectangle rect)
+        {
+            Rectangle shadowRect = new Rectangle(rect.X + 2, rect.Y + 2, rect.Width, rect.Height);
+
+            using (GraphicsPath shadowPath = GetRoundedRectPath(shadowRect, borderRadius))
+            {
+                using (PathGradientBrush shadowBrush = new PathGradientBrush(shadowPath))
+                {
+                    shadowBrush.CenterColor = Color.FromArgb(30, 0, 0, 0);
+                    shadowBrush.SurroundColors = new[] { Color.Transparent };
+                    g.FillPath(shadowBrush, shadowPath);
+                }
+            }
+        }
+
+        private void DrawButton(Graphics g, Rectangle rect, Color currentColor)
+        {
             using (GraphicsPath path = GetRoundedRectPath(rect, borderRadius))
             {
-                // Background principale
-                Color gradientEnd = Color.FromArgb(
-                    Math.Max(0, currentColor.R - 20),
-                    Math.Max(0, currentColor.G - 20),
-                    Math.Max(0, currentColor.B - 20));
+                // Main background
+                Color gradientEnd = DarkenColor(currentColor, ColorDarkenAmount);
 
                 using (LinearGradientBrush brush = new LinearGradientBrush(
                     rect, currentColor, gradientEnd, LinearGradientMode.Vertical))
@@ -170,28 +209,14 @@ namespace UtilityPDF.Controls
                     g.FillPath(brush, path);
                 }
 
-                // Effetto brillantezza nella parte superiore
+                // Gloss effect on top half
                 if (Enabled && !isPressed)
                 {
-                    Rectangle glossRect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height / 2);
-                    using (GraphicsPath glossPath = GetRoundedRectPath(glossRect, borderRadius))
-                    {
-                        using (LinearGradientBrush glossBrush = new LinearGradientBrush(
-                            glossRect,
-                            Color.FromArgb(30, 255, 255, 255),
-                            Color.FromArgb(0, 255, 255, 255),
-                            LinearGradientMode.Vertical))
-                        {
-                            g.FillPath(glossBrush, glossPath);
-                        }
-                    }
+                    DrawGlossEffect(g, rect);
                 }
 
-                // Bordo sottile per definizione
-                Color borderColor = Color.FromArgb(
-                    Math.Max(0, currentColor.R - 40),
-                    Math.Max(0, currentColor.G - 40),
-                    Math.Max(0, currentColor.B - 40));
+                // Thin border for definition
+                Color borderColor = DarkenColor(currentColor, BorderDarkenAmount);
 
                 using (Pen borderPen = new Pen(borderColor, 1f))
                 {
@@ -199,24 +224,51 @@ namespace UtilityPDF.Controls
                     g.DrawPath(borderPen, path);
                 }
             }
+        }
 
-            // Disegna il testo con word wrap
+        private void DrawGlossEffect(Graphics g, Rectangle rect)
+        {
+            Rectangle glossRect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height / 2);
+
+            using (GraphicsPath glossPath = GetRoundedRectPath(glossRect, borderRadius))
+            {
+                using (LinearGradientBrush glossBrush = new LinearGradientBrush(
+                    glossRect,
+                    Color.FromArgb(30, 255, 255, 255),
+                    Color.FromArgb(0, 255, 255, 255),
+                    LinearGradientMode.Vertical))
+                {
+                    g.FillPath(glossBrush, glossPath);
+                }
+            }
+        }
+
+        private void DrawText(Graphics g, Rectangle rect)
+        {
             Rectangle textRect = new Rectangle(rect.X + 5, rect.Y + 3, rect.Width - 10, rect.Height - 6);
-            
-            TextFormatFlags flags = TextFormatFlags.HorizontalCenter | 
-                                   TextFormatFlags.VerticalCenter | 
-                                   TextFormatFlags.WordBreak |
-                                   TextFormatFlags.EndEllipsis;
-            
-            // Ombra del testo per leggibilità
+
+            TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
+                                    TextFormatFlags.VerticalCenter |
+                                    TextFormatFlags.WordBreak |
+                                    TextFormatFlags.EndEllipsis;
+
+            // Text shadow for readability
             if (Enabled)
             {
                 Rectangle shadowTextRect = new Rectangle(textRect.X, textRect.Y + 1, textRect.Width, textRect.Height);
-                TextRenderer.DrawText(g, Text, Font, shadowTextRect, 
+                TextRenderer.DrawText(g, Text, Font, shadowTextRect,
                     Color.FromArgb(80, 0, 0, 0), flags);
             }
 
             TextRenderer.DrawText(g, Text, Font, textRect, ForeColor, flags);
+        }
+
+        private static Color DarkenColor(Color color, int amount)
+        {
+            return Color.FromArgb(
+                Math.Max(0, color.R - amount),
+                Math.Max(0, color.G - amount),
+                Math.Max(0, color.B - amount));
         }
 
         private GraphicsPath GetRoundedRectPath(Rectangle rect, int radius)
@@ -224,9 +276,9 @@ namespace UtilityPDF.Controls
             GraphicsPath path = new GraphicsPath();
             int diameter = radius * 2;
 
-            // Assicura che il raggio non sia troppo grande
+            // Ensure radius is not too large
             diameter = Math.Min(diameter, Math.Min(rect.Width, rect.Height));
-            
+
             if (diameter <= 0)
             {
                 path.AddRectangle(rect);
@@ -243,7 +295,7 @@ namespace UtilityPDF.Controls
             return path;
         }
 
-        private Color InterpolateColor(Color color1, Color color2, float progress)
+        private static Color InterpolateColor(Color color1, Color color2, float progress)
         {
             int r = (int)(color1.R + (color2.R - color1.R) * progress);
             int g = (int)(color1.G + (color2.G - color1.G) * progress);

@@ -1,102 +1,158 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using UtilityPDF.Resources;
 using UtilityPDF.Controls;
+using UtilityPDF.Resources;
+using UtilityPDF.UI;
 
 namespace UtilityPDF
 {
+    /// <summary>
+    /// Main application form for PDF utility operations
+    /// </summary>
     internal partial class FrmUtiPDF_Main : Form
     {
-        private bool bConvert = false;
-        private string LevelCompress = "/printer";
-        private bool abortFlag = false;
-        private readonly Dictionary<string, string> cmbLangItems = new Dictionary<string, string>();
+        #region Fields and Constants
+
+        private bool isOperationInProgress;
+        private string levelCompress = CompressionLevels.Default;
+        private bool abortFlag;
+        private readonly Dictionary<string, string> languageMapping = new Dictionary<string, string>();
+
+        private const int MinFilesForMerge = 2;
+        private const string DefaultOcrLanguage = "eng";
+        private const int SpinnerVerticalOffset = 80;
+
+        #endregion
+
+        #region Compression Levels
+
+        /// <summary>
+        /// Contains compression level constants
+        /// </summary>
+        private static class CompressionLevels
+        {
+            public const string Prepress = "/prepress";
+            public const string Printer = "/printer";
+            public const string Ebook = "/ebook";
+            public const string Screen = "/screen";
+            public const string Default = Printer;
+        }
+
+        #endregion
+
+        #region Constructor
 
         public FrmUtiPDF_Main()
         {
             InitializeComponent();
-            PopulateComboLang(); // Popola la combo box OCR lingue
+            PopulateOcrLanguages();
         }
+
+        #endregion
+
+        #region Extract Text Operations
 
         private void Btn_SelectPDF_Click(object sender, EventArgs e)
         {
-            if (oFD_PDF.ShowDialog() == DialogResult.OK)
+            if (ShowOpenFileDialog())
             {
                 lbl_PDF.Text = oFD_PDF.FileName;
-                Btn_SelectDIROutputTXT.Enabled = true;
-                Btn_Reset.Enabled = true;
-                Btn_SelectPDF.Enabled = false;
+                SetExtractControlsAfterFileSelection();
             }
         }
 
-        private void Btn_Start_Click(object sender, EventArgs e)
+        private async void Btn_Start_Click(object sender, EventArgs e)
         {
             ToggleControlsExtract(false);
 
             string pdfPath = lbl_PDF.Text;
             string txtPath = lbl_TXT.Text;
             Btn_Reset.Enabled = false;
+            string selectedLanguage = GetSelectedOcrLanguage();
 
-            string selectedText = cmbLangConv.SelectedItem.ToString();
-            string selectedLanguage = cmbLangItems[selectedText];
+            await Task.Run(() => ExtractText.Execute(pdfPath, txtPath, selectedLanguage, UpdateProgress, () => abortFlag));
 
-            if (string.IsNullOrEmpty(selectedLanguage))
+            ToggleControlsExtract(true);
+        }
+
+        private string GetSelectedOcrLanguage()
+        {
+            if (cmbLangConv.SelectedItem == null)
             {
-                selectedLanguage = "eng";
+                return DefaultOcrLanguage;
             }
 
-            ExtractText.Execute(pdfPath, txtPath, selectedLanguage, UpdateProgress, () => abortFlag);
-            ToggleControlsExtract(true);
+            string selectedText = cmbLangConv.SelectedItem.ToString();
+            return languageMapping.TryGetValue(selectedText, out string languageCode)
+                ? languageCode
+                : DefaultOcrLanguage;
         }
 
         private void Btn_Reset_Click(object sender, EventArgs e)
         {
+            ResetExtractPanel();
+        }
+
+        private void ResetExtractPanel()
+        {
             lbl_PDF.Text = Strings.LblMsgInputPDF_Extr;
             lbl_TXT.Text = Strings.LblMsgOutputDIR_Extr;
-            Btn_SelectDIROutputTXT.Enabled = false;
-            Btn_SelectPDF.Enabled = true;
-            Btn_Start.Enabled = false;
-            Btn_Reset.Enabled = false;
-            Btn_Abort.Enabled = false;
-            
-            // Imposta la prima lingua disponibile, se presente
-            if (cmbLangConv.Items.Count > 0)
-            {
-                cmbLangConv.SelectedIndex = 0;
-            }
-            
+            SetControlStates(
+                (Btn_SelectDIROutputTXT, false),
+                (Btn_SelectPDF, true),
+                (Btn_Start, false),
+                (Btn_Reset, false),
+                (Btn_Abort, false));
+
+            SelectFirstComboBoxItem(cmbLangConv);
             UpdateProgress(0);
         }
 
-        private void FrmUtiPDF_Main_FormClosing(object sender, FormClosingEventArgs e)
+        private void SetExtractControlsAfterFileSelection()
         {
-            if (bConvert)
+            SetControlStates(
+                (Btn_SelectDIROutputTXT, true),
+                (Btn_Reset, true),
+                (Btn_SelectPDF, false));
+        }
+
+        private void Btn_SelectDIROutputTXT_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmAndSelectOutputDirectory(Strings.WarnSelectOutDirTXT, lbl_PDF.Text, ".txt", lbl_TXT))
             {
-                e.Cancel = true;
+                ResetExtractPanel();
+                return;
+            }
+
+            SetControlStates(
+                (Btn_Start, true),
+                (Btn_SelectDIROutputTXT, false));
+        }
+
+        private void Btn_Abort_Click(object sender, EventArgs e)
+        {
+            if (ConfirmAction(Strings.WarnConfirmAbort))
+            {
+                abortFlag = true;
             }
         }
 
-        private void FrmUtiPDF_Main_Load(object sender, EventArgs e)
-        {
-            InitializeLanguageSelector(); // Popola la combo box UI lingue
-            ControlTextImgAssigner.AssignControlTextxImg(this);
-            AssignTextPosLblProgress();
-        }
+        #endregion
+
+        #region Merge Operations
 
         private void Btn_SelectPDFToMerge_Click(object sender, EventArgs e)
         {
-            if (oFD_PDF.ShowDialog() == DialogResult.OK)
+            if (ShowOpenFileDialog())
             {
-                if (!Btn_ResetMerge.Enabled)
-                {
-                    Btn_ResetMerge.Enabled = true;
-                }
-
+                Btn_ResetMerge.Enabled = true;
                 Lstb_FileMerge.Items.Add(oFD_PDF.FileName);
 
-                if (Lstb_FileMerge.Items.Count == 2)
+                if (Lstb_FileMerge.Items.Count >= MinFilesForMerge)
                 {
                     Btn_SelectDIROutputMergedPDF.Enabled = true;
                 }
@@ -105,172 +161,222 @@ namespace UtilityPDF
 
         private void Btn_ResetMerge_Click(object sender, EventArgs e)
         {
+            ResetMergePanel();
+        }
+
+        private void ResetMergePanel()
+        {
             Lstb_FileMerge.Items.Clear();
             lbl_DIROutputMergePDF.Text = Strings.LblMsgOutputDIR_Merge;
-            Btn_SelectDIROutputMergedPDF.Enabled = false;
-            Btn_Merge.Enabled = false;
-            Btn_ResetMerge.Enabled = false;
-            Btn_SelectPDFToMerge.Enabled = true;
+            SetControlStates(
+                (Btn_SelectDIROutputMergedPDF, false),
+                (Btn_Merge, false),
+                (Btn_ResetMerge, false),
+                (Btn_SelectPDFToMerge, true));
         }
 
         private async void Btn_Merge_Click(object sender, EventArgs e)
         {
-            ToggleControlMerge(false);
-            lbl_MergeInProgress.BringToFront();
-            spinnerMerge.BringToFront();
-            Application.DoEvents();
-            
-            string pdfPath = lbl_DIROutputMergePDF.Text;
-
-            await Merge.Execute(pdfPath, Lstb_FileMerge.Items, lbl_MergeInProgress, spinnerMerge);
-
-            lbl_MergeInProgress.SendToBack();
-            spinnerMerge.SendToBack();
-            ToggleControlMerge(true);
-            Application.DoEvents();
-            Btn_ResetMerge_Click(null, EventArgs.Empty);
+            await ExecuteOperationAsync(
+                ToggleControlMerge,
+                spinnerMerge,
+                lbl_MergeInProgress,
+                () => Merge.Execute(lbl_DIROutputMergePDF.Text, Lstb_FileMerge.Items, lbl_MergeInProgress, spinnerMerge),
+                ResetMergePanel);
         }
 
         private void Btn_SelectDIROutputMergedPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirMERGE,
-                                                        "Warning",
-                                                        MessageBoxButtons.OKCancel,
-                                                        MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.OK)
+            if (!ConfirmOutputDirectorySelection(Strings.WarnSelectOutDirMERGE))
             {
-                if (fBD_TXT.ShowDialog() == DialogResult.OK)
-                {
-                    lbl_DIROutputMergePDF.Text = fBD_TXT.SelectedPath
-                                                 + @"\"
-                                                 + Path.GetFileNameWithoutExtension(Lstb_FileMerge.Items[0].ToString())
-                                                 + "_Merged.pdf";
-                    Btn_SelectDIROutputMergedPDF.Enabled = false;
-                    Btn_Merge.Enabled = true;
-                    Btn_SelectPDFToMerge.Enabled = false;
-                }
+                return;
+            }
+
+            if (ShowFolderBrowserDialog())
+            {
+                string firstFileName = Lstb_FileMerge.Items[0].ToString();
+                lbl_DIROutputMergePDF.Text = BuildOutputPath(fBD_TXT.SelectedPath, firstFileName, "_Merged.pdf");
+                SetControlStates(
+                    (Btn_SelectDIROutputMergedPDF, false),
+                    (Btn_Merge, true),
+                    (Btn_SelectPDFToMerge, false));
             }
         }
 
+        #endregion
+
+        #region Compress Operations
+
         private async void Btn_Compress_Click(object sender, EventArgs e)
         {
-            ToggleControlCompress(false);
-            lbl_CompressInProgress.BringToFront();
-            spinnerCompress.BringToFront();
-            Application.DoEvents();
-            
-            string pdfPath = lbl_PDFToCompress.Text;
-            string outputPath = lbl_DIROutputCompressPDF.Text;
-
-            await Compress.Execute(pdfPath, LevelCompress, outputPath, lbl_CompressInProgress, spinnerCompress);
-
-            lbl_CompressInProgress.SendToBack();
-            spinnerCompress.SendToBack();
-
-            ToggleControlCompress(true);
-            Application.DoEvents();
-            Btn_ResetCompres_Click(null, EventArgs.Empty);
+            await ExecuteOperationAsync(
+                ToggleControlCompress,
+                spinnerCompress,
+                lbl_CompressInProgress,
+                () => Compress.Execute(lbl_PDFToCompress.Text, levelCompress, lbl_DIROutputCompressPDF.Text, lbl_CompressInProgress, spinnerCompress),
+                ResetCompressPanel);
         }
 
         private void Btn_ResetCompres_Click(object sender, EventArgs e)
+        {
+            ResetCompressPanel();
+        }
+
+        private void ResetCompressPanel()
         {
             lbl_PDFToCompress.Text = Strings.PDFFileToCOMPRESS;
             lbl_DIROutputCompressPDF.Text = Strings.DirectoryOutputCompressedPDF;
             lbl_ViewLvlCompres.Text = Strings.CompressLvl_1;
             Tb_Compress.Value = 1;
-            Tb_Compress.Enabled = false;
-            Btn_Compress.Enabled = false;
-            Btn_ResetCompres.Enabled = false;
-            Btn_SelectPDFToCompress.Enabled = true;
-            Btn_SelectDIROutputCompressPDF.Enabled = false;
+            SetControlStates(
+                (Tb_Compress, false),
+                (Btn_Compress, false),
+                (Btn_ResetCompres, false),
+                (Btn_SelectPDFToCompress, true),
+                (Btn_SelectDIROutputCompressPDF, false));
         }
 
         private void Btn_SelectDIROutputCompressPDF_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirCOMP,
-                                                        Strings.MsgBoxWarningTitle,
-                                                        MessageBoxButtons.OKCancel,
-                                                        MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.OK)
+            if (!ConfirmAndSelectOutputDirectory(Strings.WarnSelectOutDirCOMP, lbl_PDFToCompress.Text, "_Compressed.pdf", lbl_DIROutputCompressPDF))
             {
-                if (fBD_TXT.ShowDialog() == DialogResult.OK)
-                {
-                    lbl_DIROutputCompressPDF.Text = fBD_TXT.SelectedPath
-                                                    + @"\"
-                                                    + Path.GetFileNameWithoutExtension(lbl_PDFToCompress.Text)
-                                                    + "_Compressed.pdf";
-                    Btn_SelectDIROutputCompressPDF.Enabled = false;
-                    Tb_Compress.Enabled = true;
-                    Btn_Compress.Enabled = true;
-                    Btn_SelectPDFToCompress.Enabled = false;
-                }
+                return;
             }
+
+            SetControlStates(
+                (Btn_SelectDIROutputCompressPDF, false),
+                (Tb_Compress, true),
+                (Btn_Compress, true),
+                (Btn_SelectPDFToCompress, false));
         }
 
         private void Btn_SelectPDFToCompress_Click(object sender, EventArgs e)
         {
-            if (oFD_PDF.ShowDialog() == DialogResult.OK)
+            if (ShowOpenFileDialog())
             {
                 lbl_PDFToCompress.Text = oFD_PDF.FileName;
-                Btn_SelectDIROutputCompressPDF.Enabled = true;
-                Btn_ResetCompres.Enabled = true;
-                Btn_SelectPDFToCompress.Enabled = false;
+                SetControlStates(
+                    (Btn_SelectDIROutputCompressPDF, true),
+                    (Btn_ResetCompres, true),
+                    (Btn_SelectPDFToCompress, false));
             }
         }
 
         private void Tb_Compress_ValueChanged(object sender, EventArgs e)
         {
-            switch (Tb_Compress.Value)
+            (levelCompress, lbl_ViewLvlCompres.Text) = GetCompressionLevel(Tb_Compress.Value);
+        }
+
+        private static (string level, string display) GetCompressionLevel(int value)
+        {
+            switch (value)
             {
                 case 0:
-                    LevelCompress = "/prepress";
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_0;
-                    break;
-
-                case 1:
-                    LevelCompress = "/printer";
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_1;
-                    break;
-
+                    return (CompressionLevels.Prepress, Strings.CompressLvl_0);
                 case 2:
-                    LevelCompress = "/ebook";
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_2;
-                    break;
-
+                    return (CompressionLevels.Ebook, Strings.CompressLvl_2);
                 case 3:
-                    LevelCompress = "/screen";
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_3;
-                    break;
+                    return (CompressionLevels.Screen, Strings.CompressLvl_3);
+                default:
+                    return (CompressionLevels.Printer, Strings.CompressLvl_1);
             }
         }
 
-        /// <summary>
-        /// Aggiorna la progress bar moderna con la percentuale
-        /// </summary>
-        private void UpdateProgress(int percentage)
+        #endregion
+
+        #region Convert Operations
+
+        private async void Btn_Convert_Click(object sender, EventArgs e)
         {
-            if (modernProgressExtract.InvokeRequired)
+            int formatOutput = GetSelectedOutputFormat();
+
+            await ExecuteOperationAsync(
+                ToggleControlConvert,
+                spinnerConvert,
+                lbl_ConvertInProgress,
+                () => ConvertDOCX.Execute(lbl_PDFToConvert.Text, lbl_DIROutputConvertPDF.Text, lbl_ConvertInProgress, spinnerConvert, formatOutput),
+                ResetConvertPanel);
+        }
+
+        private int GetSelectedOutputFormat()
+        {
+            if (rBOutputFormat_2.Checked)
             {
-                modernProgressExtract.Invoke(new Action<int>(UpdateProgress), percentage);
+                return 2;
             }
-            else
+
+            return rBOutputFormat_1.Checked ? 1 : 0;
+        }
+
+        private void Btn_SelectPDFToConvert_Click(object sender, EventArgs e)
+        {
+            if (ShowOpenFileDialog())
             {
-                modernProgressExtract.Value = percentage;
-                Application.DoEvents();
+                lbl_PDFToConvert.Text = oFD_PDF.FileName;
+                SetControlStates(
+                    (Btn_SelectDIROutputConvertPDF, true),
+                    (Btn_ResetConvert, true),
+                    (rBOutputFormat_0, true),
+                    (rBOutputFormat_1, true),
+                    (rBOutputFormat_2, true),
+                    (Btn_SelectPDFToConvert, false));
             }
+        }
+
+        private void Btn_SelectDIROutputConvertPDF_Click(object sender, EventArgs e)
+        {
+            if (!ConfirmAndSelectOutputDirectory(Strings.WarnSelectOutDirDOCX, lbl_PDFToConvert.Text, "_Convert.docx", lbl_DIROutputConvertPDF))
+            {
+                return;
+            }
+
+            SetControlStates(
+                (Btn_SelectDIROutputConvertPDF, false),
+                (Btn_Convert, true),
+                (Btn_SelectPDFToConvert, false));
+        }
+
+        private void Btn_ResetConvert_Click(object sender, EventArgs e)
+        {
+            ResetConvertPanel();
+        }
+
+        private void ResetConvertPanel()
+        {
+            lbl_PDFToConvert.Text = Strings.LblMsgInputPDF_Conv;
+            lbl_DIROutputConvertPDF.Text = Strings.LblMsgOutputDIR_Conv;
+            rBOutputFormat_0.Checked = true;
+            SetControlStates(
+                (rBOutputFormat_0, false),
+                (rBOutputFormat_1, false),
+                (rBOutputFormat_2, false),
+                (Btn_Convert, false),
+                (Btn_ResetConvert, false),
+                (Btn_SelectPDFToConvert, true),
+                (Btn_SelectDIROutputConvertPDF, false));
+        }
+
+        #endregion
+
+        #region Form Events
+
+        private void FrmUtiPDF_Main_Load(object sender, EventArgs e)
+        {
+            InitializeLanguageSelector();
+            ControlTextImgAssigner.AssignControlTextxImg(this);
+            CenterProgressLabelsOnPanels();
         }
 
         private void FrmUtiPDF_Main_Shown(object sender, EventArgs e)
         {
-            Btn_ResetMerge_Click(null, EventArgs.Empty);
-            Btn_ResetCompres_Click(null, EventArgs.Empty);
-            Btn_ResetConvert_Click(null, EventArgs.Empty);
-            Btn_Reset_Click(null, EventArgs.Empty);
+            ResetAllPanels();
             UpdateProgress(0);
+            CenterAllSpinners();
+        }
 
-            CenterSpinnerOnLabel(spinnerCompress, lbl_CompressInProgress);
-            CenterSpinnerOnLabel(spinnerMerge, lbl_MergeInProgress);
-            CenterSpinnerOnLabel(spinnerConvert, lbl_ConvertInProgress);
+        private void FrmUtiPDF_Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = isOperationInProgress;
         }
 
         private void Btn_Exit_Click(object sender, EventArgs e)
@@ -278,309 +384,300 @@ namespace UtilityPDF
             Close();
         }
 
-        private void Btn_Abort_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Language Selection
+
+        private void InitializeLanguageSelector()
         {
-            DialogResult dialogResult = MessageBox.Show(Strings.WarnConfirmAbort,
-                                                        Strings.MsgBoxWarningTitle,
-                                                        MessageBoxButtons.OKCancel,
-                                                        MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.OK)
+            cmb_Language.Items.Clear();
+
+            string[] supportedLanguages = LocalizationManager.GetSupportedLanguages();
+            string currentCulture = LocalizationManager.GetCurrentLanguageCode();
+            int selectedIndex = 0;
+
+            for (int i = 0; i < supportedLanguages.Length; i++)
             {
-                abortFlag = true;
+                cmb_Language.Items.Add(new LanguageItem(supportedLanguages[i]));
+
+                if (supportedLanguages[i] == currentCulture)
+                {
+                    selectedIndex = i;
+                }
+            }
+
+            if (cmb_Language.Items.Count > 0)
+            {
+                cmb_Language.SelectedIndex = selectedIndex;
             }
         }
+
+        private void Cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmb_Language.SelectedItem is LanguageItem selectedLanguage)
+            {
+                LocalizationManager.SetCulture(selectedLanguage.CultureCode);
+                RefreshUILanguage();
+            }
+        }
+
+        private void RefreshUILanguage()
+        {
+            ControlTextImgAssigner.AssignControlTextxImg(this);
+            (_, lbl_ViewLvlCompres.Text) = GetCompressionLevel(Tb_Compress.Value);
+        }
+
+        #endregion
+
+        #region OCR Language Population
+
+        private void PopulateOcrLanguages()
+        {
+            if (cmbLangConv == null)
+            {
+                return;
+            }
+
+            cmbLangConv.Items.Clear();
+            languageMapping.Clear();
+
+            DataLangLoader dataLoader = new DataLangLoader();
+            ReadOnlyCollection<DataLang> languageData = dataLoader.LoadData(SettingsString.LangCsvPath);
+            string[] trainedDataFiles = dataLoader.GetFiles(
+                SettingsString.BinPath,
+                SettingsString.TrainerDataFolder,
+                SettingsString.CsvLangFilename);
+
+            foreach (string file in trainedDataFiles)
+            {
+                AddLanguageIfValid(dataLoader, languageData, file);
+            }
+
+            SelectFirstComboBoxItem(cmbLangConv);
+        }
+
+        private void AddLanguageIfValid(DataLangLoader loader, ReadOnlyCollection<DataLang> languageData, string file)
+        {
+            string fileName = Path.GetFileName(file);
+            DataLang langInfo = loader.FindByParam3(languageData, fileName);
+
+            if (langInfo != null && !languageMapping.ContainsKey(langInfo.LangParam2))
+            {
+                cmbLangConv.Items.Add(langInfo.LangParam2);
+                languageMapping.Add(langInfo.LangParam2, langInfo.LangParam1);
+            }
+        }
+
+        #endregion
+
+        #region UI Toggle Methods
 
         private void ToggleControlsExtract(bool isEnabled)
         {
             if (isEnabled)
             {
-                Btn_Reset_Click(null, EventArgs.Empty);
+                ResetExtractPanel();
             }
 
             abortFlag = false;
-            Btn_Abort.Enabled = !isEnabled;
-            Btn_Exit.Enabled = isEnabled;
-            EnabledDisabledPanel(isEnabled);
-            Btn_Start.Enabled = false;
-            cmbLangConv.Enabled = isEnabled;
-            cmb_Language.Enabled = isEnabled;
-            bConvert = !isEnabled;
+            isOperationInProgress = !isEnabled;
+
+            SetControlStates(
+                (Btn_Abort, !isEnabled),
+                (Btn_Exit, isEnabled),
+                (Btn_Start, false),
+                (cmbLangConv, isEnabled),
+                (cmb_Language, isEnabled));
+
+            EnablePanels(isEnabled);
         }
 
-        private void EnabledDisabledPanel(bool isEnabled)
+        private void ToggleControlMerge(bool isEnabled)
+        {
+            ToggleOperationControls(isEnabled, lbl_MergeInProgress);
+        }
+
+        private void ToggleControlCompress(bool isEnabled)
+        {
+            ToggleOperationControls(isEnabled, lbl_CompressInProgress);
+        }
+
+        private void ToggleControlConvert(bool isEnabled)
+        {
+            ToggleOperationControls(isEnabled, lbl_ConvertInProgress);
+        }
+
+        private void ToggleOperationControls(bool isEnabled, Label progressLabel)
+        {
+            isOperationInProgress = !isEnabled;
+            progressLabel.Visible = !isEnabled;
+
+            SetControlStates(
+                (cmb_Language, isEnabled),
+                (Btn_Exit, isEnabled));
+
+            EnablePanels(isEnabled);
+        }
+
+        private void EnablePanels(bool isEnabled)
         {
             PnlMerge.Enabled = isEnabled;
             PnlCompress.Enabled = isEnabled;
             PnlConvert.Enabled = isEnabled;
         }
 
-        private void ToggleControlMerge(bool isEnabled)
+        #endregion
+
+        #region Generic Operation Executor
+
+        private async Task ExecuteOperationAsync(
+            Action<bool> toggleControls,
+            LoadingSpinner spinner,
+            Label progressLabel,
+            Func<Task> operation,
+            Action resetPanel)
         {
-            bConvert = !isEnabled;
-            cmb_Language.Enabled = isEnabled;
-            lbl_MergeInProgress.Visible = !isEnabled;
-            Btn_Exit.Enabled = isEnabled;
-            EnabledDisabledPanel(isEnabled);
+            toggleControls(false);
+            BringSpinnerToFront(spinner, progressLabel);
+
+            await operation();
+
+            SendSpinnerToBack(spinner, progressLabel);
+            toggleControls(true);
+            resetPanel();
         }
 
-        private void ToggleControlCompress(bool isEnabled)
+        #endregion
+
+        #region Helper Methods
+
+        private void UpdateProgress(int percentage)
         {
-            bConvert = !isEnabled;
-            cmb_Language.Enabled = isEnabled;
-            lbl_CompressInProgress.Visible = !isEnabled;
-            Btn_Exit.Enabled = isEnabled;
-            EnabledDisabledPanel(isEnabled);
+            ProgressHelper.UpdateProgress(modernProgressExtract, percentage);
         }
 
-        private void ToggleControlConvert(bool isEnabled)
+        private bool ShowOpenFileDialog()
         {
-            bConvert = !isEnabled;
-            cmb_Language.Enabled = isEnabled;
-            lbl_ConvertInProgress.Visible = !isEnabled;
-            Btn_Exit.Enabled = isEnabled;
-            EnabledDisabledPanel(isEnabled);
+            return oFD_PDF.ShowDialog() == DialogResult.OK;
         }
 
-        private void Btn_SelectDIROutputTXT_Click(object sender, EventArgs e)
+        private bool ShowFolderBrowserDialog()
         {
-            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirTXT,
-                                                        Strings.MsgBoxWarningTitle,
-                                                        MessageBoxButtons.OKCancel,
-                                                        MessageBoxIcon.Warning);
+            return fBD_TXT.ShowDialog() == DialogResult.OK;
+        }
 
-            if (dialogResult == DialogResult.OK)
+        private static bool ConfirmOutputDirectorySelection(string message)
+        {
+            return MessageBox.Show(
+                message,
+                Strings.MsgBoxWarningTitle,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning) == DialogResult.OK;
+        }
+
+        private bool ConfirmAndSelectOutputDirectory(string warningMessage, string sourceFile, string suffix, Label outputLabel)
+        {
+            if (!ConfirmOutputDirectorySelection(warningMessage))
             {
-                if (fBD_TXT.ShowDialog() == DialogResult.OK)
+                return false;
+            }
+
+            if (ShowFolderBrowserDialog())
+            {
+                outputLabel.Text = BuildOutputPath(fBD_TXT.SelectedPath, sourceFile, suffix);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool ConfirmAction(string message)
+        {
+            return MessageBox.Show(
+                message,
+                Strings.MsgBoxWarningTitle,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning) == DialogResult.OK;
+        }
+
+        private static string BuildOutputPath(string directory, string sourceFile, string suffix)
+        {
+            string fileNameWithoutExt = Path.GetFileNameWithoutExtension(sourceFile);
+            return Path.Combine(directory, fileNameWithoutExt + suffix);
+        }
+
+        private static void SelectFirstComboBoxItem(ComboBox comboBox)
+        {
+            if (comboBox?.Items.Count > 0)
+            {
+                comboBox.SelectedIndex = 0;
+            }
+        }
+
+        private static void SetControlStates(params (Control control, bool enabled)[] controlStates)
+        {
+            foreach ((Control control, bool enabled) in controlStates)
+            {
+                if (control != null)
                 {
-                    lbl_TXT.Text = fBD_TXT.SelectedPath
-                                   + @"\"
-                                   + Path.GetFileNameWithoutExtension(lbl_PDF.Text)
-                                   + ".txt";
-                    Btn_Start.Enabled = true;
-                    Btn_SelectDIROutputTXT.Enabled = false;
+                    control.Enabled = enabled;
                 }
             }
-            else
-            {
-                lbl_PDF.Text = Strings.LblMsgInputPDF_Extr;
-                lbl_TXT.Text = Strings.LblMsgOutputDIR_Extr;
-                Btn_SelectDIROutputTXT.Enabled = false;
-                Btn_SelectPDF.Enabled = true;
-            }
         }
 
-        private void AssignTextPosLblProgress()
+        private void ResetAllPanels()
         {
-            CalculatingCenter(lbl_CompressInProgress, PnlCompress);
-            CalculatingCenter(lbl_MergeInProgress, PnlMerge);
-            CalculatingCenter(lbl_ConvertInProgress, PnlConvert);
+            ResetMergePanel();
+            ResetCompressPanel();
+            ResetConvertPanel();
+            ResetExtractPanel();
         }
 
-        private void CalculatingCenter(Label lblName, Control pnlName)
+        private void CenterAllSpinners()
         {
-            int centerX = pnlName.Width / 2;
-            int centerY = pnlName.Height / 2;
-
-            lblName.Left = pnlName.Location.X + (centerX - (lblName.Width / 2));
-            lblName.Top = pnlName.Location.Y + (centerY - (lblName.Height / 2));
+            CenterSpinnerOnLabel(spinnerCompress, lbl_CompressInProgress);
+            CenterSpinnerOnLabel(spinnerMerge, lbl_MergeInProgress);
+            CenterSpinnerOnLabel(spinnerConvert, lbl_ConvertInProgress);
         }
 
-        private void PopulateComboLang()
+        private static void BringSpinnerToFront(LoadingSpinner spinner, Label label)
         {
-            // Verifica che il controllo esista prima di usarlo
-            if (cmbLangConv == null)
-            {
-                return;
-            }
-            
-            cmbLangConv.Items.Clear(); // Pulisce eventuali elementi esistenti
-            
-            string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string csvFilePath = Path.Combine(exeDirectory, SettingsString.trainerDataFolder, SettingsString.csvLangFilename);
-
-            DataLangLoader dataLoader = new DataLangLoader();
-            System.Collections.ObjectModel.ReadOnlyCollection<DataLang> readOnlyDataList = dataLoader.LoadData(csvFilePath);
-
-            string[] files = dataLoader.GetFiles(exeDirectory, SettingsString.trainerDataFolder, SettingsString.csvLangFilename);
-
-            foreach (string file in files)
-            {
-                string fileName = Path.GetFileName(file);
-
-                DataLang result = dataLoader.FindByParam3(readOnlyDataList, fileName);
-
-                if (result != null)
-                {
-                    cmbLangConv.Items.Add(result.LangParam2);
-                    
-                    // Controlla se la chiave esiste già
-                    if (!cmbLangItems.ContainsKey(result.LangParam2))
-                    {
-                        cmbLangItems.Add(result.LangParam2, result.LangParam1);
-                    }
-                }
-            }
-            
-            // Seleziona automaticamente il primo elemento se disponibile
-            if (cmbLangConv.Items.Count > 0)
-            {
-                cmbLangConv.SelectedIndex = 0;
-            }
-        }
-
-        private async void Btn_Convert_Click(object sender, EventArgs e)
-        {
-            ToggleControlConvert(false);            
-            lbl_ConvertInProgress.BringToFront();
-            spinnerConvert.BringToFront();
+            label.BringToFront();
+            spinner.BringToFront();
             Application.DoEvents();
-            
-            string pdfPath = lbl_PDFToConvert.Text;
-            string outputPath = lbl_DIROutputConvertPDF.Text;
-            int formatOutput = 0;
+        }
 
-            if (rBOutputFormat_2.Checked)
-            {
-                formatOutput = 2;
-            }
-            else if (rBOutputFormat_1.Checked)
-            {
-                formatOutput = 1;
-            }
-
-            await ConvertDOCX.Execute(pdfPath, outputPath, lbl_ConvertInProgress, spinnerConvert, formatOutput);
-
-            lbl_ConvertInProgress.SendToBack();
-            spinnerConvert.SendToBack();
-            ToggleControlConvert(true);
+        private static void SendSpinnerToBack(LoadingSpinner spinner, Label label)
+        {
+            label.SendToBack();
+            spinner.SendToBack();
             Application.DoEvents();
-            Btn_ResetConvert_Click(null, EventArgs.Empty);
         }
 
-        private void Btn_SelectPDFToConvert_Click(object sender, EventArgs e)
+        private void CenterProgressLabelsOnPanels()
         {
-            if (oFD_PDF.ShowDialog() == DialogResult.OK)
-            {
-                lbl_PDFToConvert.Text = oFD_PDF.FileName;
-                Btn_SelectDIROutputConvertPDF.Enabled = true;
-                Btn_ResetConvert.Enabled = true;
-                rBOutputFormat_0.Enabled = true;
-                rBOutputFormat_1.Enabled = true;
-                rBOutputFormat_2.Enabled = true;
-                Btn_SelectPDFToConvert.Enabled = false;
-            }
+            CenterLabelOnPanel(lbl_CompressInProgress, PnlCompress);
+            CenterLabelOnPanel(lbl_MergeInProgress, PnlMerge);
+            CenterLabelOnPanel(lbl_ConvertInProgress, PnlConvert);
         }
 
-        private void Btn_SelectDIROutputConvertPDF_Click(object sender, EventArgs e)
+        private static void CenterLabelOnPanel(Label label, Control panel)
         {
-            DialogResult dialogResult = MessageBox.Show(Strings.WarnSelectOutDirDOCX,
-                                            "Warning",
-                                            MessageBoxButtons.OKCancel,
-                                            MessageBoxIcon.Warning);
-            if (dialogResult == DialogResult.OK)
-            {
-                if (fBD_TXT.ShowDialog() == DialogResult.OK)
-                {
-                    lbl_DIROutputConvertPDF.Text = fBD_TXT.SelectedPath
-                                                    + @"\"
-                                                    + Path.GetFileNameWithoutExtension(lbl_PDFToConvert.Text)
-                                                    + "_Convert.docx";
-                    Btn_SelectDIROutputConvertPDF.Enabled = false;
-                    Btn_Convert.Enabled = true;
-                    Btn_SelectPDFToConvert.Enabled = false;
-                }
-            }
+            label.Left = panel.Location.X + (panel.Width - label.Width) / 2;
+            label.Top = panel.Location.Y + (panel.Height - label.Height) / 2;
         }
 
-        private void Btn_ResetConvert_Click(object sender, EventArgs e)
-        {
-            lbl_PDFToConvert.Text = Strings.LblMsgInputPDF_Conv;
-            lbl_DIROutputConvertPDF.Text = Strings.LblMsgOutputDIR_Conv;
-
-            rBOutputFormat_0.Checked = true;
-            rBOutputFormat_0.Enabled = false;
-            rBOutputFormat_1.Enabled = false;
-            rBOutputFormat_2.Enabled = false;
-            Btn_Convert.Enabled = false;
-            Btn_ResetConvert.Enabled = false;
-            Btn_SelectPDFToConvert.Enabled = true;
-            Btn_SelectDIROutputConvertPDF.Enabled = false;
-        }
-
-        private void InitializeLanguageSelector()
-        {
-            cmb_Language.Items.Clear();
-
-            foreach (string culture in LocalizationManager.GetSupportedLanguages())
-            {
-                cmb_Language.Items.Add(new LanguageItem(culture));
-            }
-
-            string currentCulture = LocalizationManager.GetCurrentLanguageCode();
-            for (int i = 0; i < cmb_Language.Items.Count; i++)
-            {
-                LanguageItem item = (LanguageItem)cmb_Language.Items[i];
-                if (item.CultureCode == currentCulture)
-                {
-                    cmb_Language.SelectedIndex = i;
-                    return;
-                }
-            }
-
-            if (cmb_Language.Items.Count > 0)
-            {
-                cmb_Language.SelectedIndex = 0;
-            }
-        }
-
-        private void Cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmb_Language.SelectedItem == null)
-            {
-                return;
-            }
-            LanguageItem selectedLanguage = (LanguageItem)cmb_Language.SelectedItem;
-            LocalizationManager.SetCulture(selectedLanguage.CultureCode);
-            RefreshUILanguage();
-        }
-
-        private void RefreshUILanguage()
-        {
-            ControlTextImgAssigner.AssignControlTextxImg(this);
-            UpdateLabelTexts();
-        }
-
-        private void UpdateLabelTexts()
-        {
-            switch (Tb_Compress.Value)
-            {
-                case 0:
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_0;
-                    break;
-                case 1:
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_1;
-                    break;
-                case 2:
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_2;
-                    break;
-                case 3:
-                    lbl_ViewLvlCompres.Text = Strings.CompressLvl_3;
-                    break;
-            }
-        }
-
-        private void CenterSpinnerOnLabel(LoadingSpinner spinner, Label label)
+        private static void CenterSpinnerOnLabel(LoadingSpinner spinner, Label label)
         {
             if (spinner == null || label == null)
             {
                 return;
             }
 
-            int centerX = label.Left + (label.Width / 2) - (spinner.Width / 2);
-            int centerY = label.Top + (label.Height / 2) - (spinner.Height / 2) - 80; // 80px sopra il centro
-
-            spinner.Left = centerX;
-            spinner.Top = centerY;
+            spinner.Left = label.Left + (label.Width - spinner.Width) / 2;
+            spinner.Top = label.Top + (label.Height - spinner.Height) / 2 - SpinnerVerticalOffset;
         }
+
+        #endregion
     }
 }

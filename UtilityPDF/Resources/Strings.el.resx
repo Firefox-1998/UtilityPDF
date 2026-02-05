@@ -130,7 +130,7 @@
     <value>Εάν υπάρχει ήδη ένα αρχείο DOCX/RTF με το ίδιο όνομα (το αρχείο DOCX/RTF θα έχει το SAME NAMECONVERT.DOCX/RTF με το επιλεγμένο αρχείο PDF) στον φάκελο που επιλέγετε, θα αντικατασταθεί!!!</value>
   </data>
   <data name="WarnConfirmAbort" xml:space="preserve">
-    <value>Επιβεβαιώνετε την εξαγωγή &gt;&gt;&gt; ΑΠΟΚΤΩ &lt;&lt;&lt; ;</value>
+    <value>Επιβεβαιώνετε την εξαγωγή &gt;&gt;&gt; ΑΠΟΚΤΩ &lt;&lt;&lt; ?</value>
   </data>
   <data name="WarnAbortedExtraction" xml:space="preserve">
     <value>Εξαγωγή &gt;&gt;&gt; ΜΑΤΩΡΗΘΗΚΕ &lt;&lt;&lt; !!!</value>
@@ -175,10 +175,10 @@
     <value>Έξοδος καταλόγου DOCX/RTF</value>
   </data>
   <data name="LblMsgSelLang" xml:space="preserve">
-    <value>Επιλέξτε τη γλώσσα που χρησιμοποιεί το OCR</value>
+    <value>Επιλέξτε τη γλώσσα που χρησιμοποιεί το OCR:</value>
   </data>
   <data name="LblCompressionLvl" xml:space="preserve">
-    <value>ΕΠΙΠΕΔΟ ΣΥΜΠΙΕΣΗΣ</value>
+    <value>ΕΠΙΠΕΔΟ ΣΥΜΠΙΕΣΗΣ:</value>
   </data>
   <data name="LblPanelExtract" xml:space="preserve">
     <value>Εξαγωγή κειμένου από PDF χρησιμοποιώντας OCR</value>
@@ -241,10 +241,10 @@
     <value>Προειδοποίηση</value>
   </data>
   <data name="PDFFileToCOMPRESS" xml:space="preserve">
-    <value>αρχείο PDF για ΣΥΜΠΙΕΣΗ.</value>
+    <value>αρχείο PDF για ΣΥΜΠΙΕΣΗ...</value>
   </data>
   <data name="DirectoryOutputCompressedPDF" xml:space="preserve">
-    <value>Έξοδος καταλόγου Συμπιεσμένο PDF</value>
+    <value>Έξοδος καταλόγου Συμπιεσμένο PDF...</value>
   </data>
   <data name="LblLanguage" xml:space="preserve">
     <value>Γλώσσα UI</value>

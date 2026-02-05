@@ -6,13 +6,17 @@ using System.Windows.Forms;
 namespace UtilityPDF.Controls
 {
     /// <summary>
-    /// Spinner di caricamento animato
+    /// Animated loading spinner control
     /// </summary>
     public class LoadingSpinner : Control
     {
         private Timer animationTimer;
         private int currentAngle = 0;
         private Color spinnerColor = Color.FromArgb(52, 152, 219);
+
+        private const int SpinnerLines = 8;
+        private const int AngleIncrement = 30;
+        private const float RadiusMultiplier = 0.5f;
 
         public LoadingSpinner()
         {
@@ -29,17 +33,30 @@ namespace UtilityPDF.Controls
             animationTimer.Tick += AnimationTimer_Tick;
         }
 
+        /// <summary>
+        /// Gets or sets the spinner color
+        /// </summary>
         public Color SpinnerColor
         {
             get { return spinnerColor; }
-            set { spinnerColor = value; Invalidate(); }
+            set
+            {
+                spinnerColor = value;
+                Invalidate();
+            }
         }
 
+        /// <summary>
+        /// Starts the spinner animation
+        /// </summary>
         public void Start()
         {
             animationTimer.Start();
         }
 
+        /// <summary>
+        /// Stops the spinner animation
+        /// </summary>
         public void Stop()
         {
             animationTimer.Stop();
@@ -47,7 +64,7 @@ namespace UtilityPDF.Controls
 
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            currentAngle = (currentAngle + 30) % 360;
+            currentAngle = (currentAngle + AngleIncrement) % 360;
             Invalidate();
         }
 
@@ -60,17 +77,18 @@ namespace UtilityPDF.Controls
             int centerY = Height / 2;
             int radius = Math.Min(Width, Height) / 2 - 4;
 
-            // Disegna 8 linee rotanti
-            for (int i = 0; i < 8; i++)
+            // Draw 8 rotating lines with fading opacity
+            for (int i = 0; i < SpinnerLines; i++)
             {
                 float angle = (currentAngle + i * 45) * (float)Math.PI / 180f;
-                float opacity = 1.0f - (i / 8.0f);
-                
+                float opacity = 1.0f - (i / (float)SpinnerLines);
+
                 int alpha = (int)(255 * opacity);
                 Color lineColor = Color.FromArgb(alpha, spinnerColor);
 
-                float startX = centerX + (float)Math.Cos(angle) * (radius * 0.5f);
-                float startY = centerY + (float)Math.Sin(angle) * (radius * 0.5f);
+                float innerRadius = radius * RadiusMultiplier;
+                float startX = centerX + (float)Math.Cos(angle) * innerRadius;
+                float startY = centerY + (float)Math.Sin(angle) * innerRadius;
                 float endX = centerX + (float)Math.Cos(angle) * radius;
                 float endY = centerY + (float)Math.Sin(angle) * radius;
 

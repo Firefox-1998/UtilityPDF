@@ -61,7 +61,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Compression completed successfully!.
+        ///   Cerca una stringa localizzata simile a Compress &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
         /// </summary>
         internal static string CompressCompleted {
             get {
@@ -463,7 +463,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select the output directory for the compressed PDF file..
+        ///   Cerca una stringa localizzata simile a If a PDF file with the same name already exists (OUTPUT file will have the SAME NAME_COMPRESSED as the selected PDF file) in the folder you select, it will be overwritten!!!.
         /// </summary>
         internal static string WarnSelectOutDirCOMP {
             get {
@@ -472,7 +472,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select the output directory for the DOCX/RTF file..
+        ///   Cerca una stringa localizzata simile a If a DOCX/RTF file with the same name already exists (DOCX/RTF file will have the SAME NAME_CONVERT.DOCX/RTF as the selected PDF file) in the folder you select, it will be overwritten!!!.
         /// </summary>
         internal static string WarnSelectOutDirDOCX {
             get {
@@ -481,7 +481,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select the output directory for the merged PDF file..
+        ///   Cerca una stringa localizzata simile a If a PDF file with the same name already exists (PDF_MERGED file will have the SAME NAME_MERGED as the first selected PDF file) in the folder you select, it will be overwritten!!!.
         /// </summary>
         internal static string WarnSelectOutDirMERGE {
             get {
@@ -490,7 +490,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Select the output directory for the TXT file..
+        ///   Cerca una stringa localizzata simile a If a TXT file with the same name already exists (TXT file will have the SAME NAME.TXT as the selected PDF file) in the folder you select, it will be overwritten!!!.
         /// </summary>
         internal static string WarnSelectOutDirTXT {
             get {
