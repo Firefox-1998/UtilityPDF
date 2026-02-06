@@ -21,6 +21,26 @@ namespace UtilityPDF.UI
 
             if (control.InvokeRequired)
             {
+                control.BeginInvoke(action); // Use BeginInvoke for async (non-blocking)
+            }
+            else
+            {
+                action();
+            }
+        }
+
+        /// <summary>
+        /// Executes an action synchronously on the UI thread
+        /// </summary>
+        public static void InvokeSync(Control control, Action action)
+        {
+            if (control == null || control.IsDisposed)
+            {
+                return;
+            }
+
+            if (control.InvokeRequired)
+            {
                 control.Invoke(action);
             }
             else
@@ -49,17 +69,21 @@ namespace UtilityPDF.UI
             MessageBoxButtons buttons = MessageBoxButtons.OK,
             MessageBoxIcon icon = MessageBoxIcon.Information)
         {
-            if (control == null)
+            Action showMessage = () =>
             {
-                MessageBox.Show(message, title, buttons, icon);
-                return;
-            }
-
-            InvokeIfRequired(control, () =>
-            {
-                Form parentForm = control.FindForm();
+                Form parentForm = control?.FindForm();
                 MessageBox.Show(parentForm, message, title, buttons, icon);
-            });
+            };
+
+            if (control != null && !control.IsDisposed)
+            {
+                InvokeSync(control, showMessage);
+            }
+            else
+            {
+                // No control context, show directly
+                MessageBox.Show(message, title, buttons, icon);
+            }
         }
 
         /// <summary>
@@ -78,10 +102,7 @@ namespace UtilityPDF.UI
         /// </summary>
         public static void StopSpinner(ColorFader colorFader)
         {
-            if (colorFader != null)
-            {
-                colorFader.StopFader();
-            }
+            colorFader?.StopFader();
         }
     }
 }

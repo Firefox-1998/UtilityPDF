@@ -4,9 +4,11 @@ using PdfSharp.Pdf.IO;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
+using System.Text;
+using System.Threading;
 using Tesseract;
 using UtilityPDF.Resources;
+using UtilityPDF.UI;
 
 namespace UtilityPDF
 {
@@ -17,13 +19,16 @@ namespace UtilityPDF
     {
         private readonly Action<int> updateProgressBar;
         private readonly Func<bool> shouldAbort;
+        private readonly SynchronizationContext syncContext;
 
         private const int DefaultDpi = 300;
+        private const int PagesPerFlush = 5; // Flush to disk every N pages
 
         private ExtractText(Action<int> updateProgressBar, Func<bool> shouldAbort)
         {
             this.updateProgressBar = updateProgressBar;
             this.shouldAbort = shouldAbort;
+            this.syncContext = SynchronizationContext.Current;
         }
 
         /// <summary>
@@ -47,8 +52,10 @@ namespace UtilityPDF
                 using (TesseractEngine engine = new TesseractEngine(
                     $@"./{SettingsString.TrainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
                 {
-                    using Stream pdfStream = File.OpenRead(pdfPath);
-                    ProcessAllPages(pdfStream, pageCount, engine, txtPath);
+                    using (FileStream pdfStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        ProcessAllPages(pdfStream, pageCount, engine, txtPath);
+                    }
                 }
 
                 ShowCompletionMessage();
@@ -73,73 +80,102 @@ namespace UtilityPDF
 
         private static int GetPageCount(string pdfPath)
         {
-            using PdfDocument document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import);
-            return document.PageCount;
+            using (PdfDocument document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import))
+            {
+                return document.PageCount;
+            }
         }
 
         private void ProcessAllPages(Stream pdfStream, int pageCount, TesseractEngine engine, string txtPath)
         {
+            StringBuilder textBuffer = new StringBuilder();
+
             for (int pageIndex = 0; pageIndex < pageCount; pageIndex++)
             {
                 if (shouldAbort())
                 {
+                    // Flush remaining text before aborting
+                    FlushTextToFile(txtPath, textBuffer);
                     break;
                 }
 
-                ProcessSinglePage(pdfStream, pageIndex, engine, txtPath);
+                string pageText = ProcessSinglePage(pdfStream, pageIndex, engine);
+                textBuffer.Append(pageText);
+
+                // Flush to disk periodically to avoid memory buildup
+                if ((pageIndex + 1) % PagesPerFlush == 0)
+                {
+                    FlushTextToFile(txtPath, textBuffer);
+                }
+
                 ReportProgress(pageIndex + 1, pageCount);
+            }
+
+            // Flush any remaining text
+            FlushTextToFile(txtPath, textBuffer);
+        }
+
+        private static void FlushTextToFile(string txtPath, StringBuilder buffer)
+        {
+            if (buffer.Length > 0)
+            {
+                File.AppendAllText(txtPath, buffer.ToString());
+                buffer.Clear();
             }
         }
 
-        private void ProcessSinglePage(Stream pdfStream, int pageIndex, TesseractEngine engine, string txtPath)
+        private string ProcessSinglePage(Stream pdfStream, int pageIndex, TesseractEngine engine)
         {
             // Convert PDF page to PNG (1-based index for Pdf2Png)
             byte[] pageImage = Pdf2Png.Convert(pdfStream, pageIndex + 1, DefaultDpi);
-            Application.DoEvents();
 
-            using MemoryStream imageStream = new MemoryStream(pageImage);
-            using Image image = Image.FromStream(imageStream);
-            Application.DoEvents();
-            string extractedText = ExtractTextFromImage((Bitmap)image, engine);
-            File.AppendAllText(txtPath, extractedText);
-            Application.DoEvents();
+            using (MemoryStream imageStream = new MemoryStream(pageImage))
+            {
+                using (Image image = Image.FromStream(imageStream))
+                {
+                    return ExtractTextFromImage((Bitmap)image, engine);
+                }
+            }
         }
 
         private static string ExtractTextFromImage(Bitmap bitmap, TesseractEngine engine)
         {
-            using Pix pixImage = PixConverter.ToPix(bitmap);
-            using Pix grayImage = pixImage.ConvertRGBToGray();
-            Application.DoEvents();
-
-            using Page ocrPage = engine.Process(grayImage);
-            Application.DoEvents();
-            return ocrPage.GetText();
+            using (Pix pixImage = PixConverter.ToPix(bitmap))
+            {
+                using (Pix grayImage = pixImage.ConvertRGBToGray())
+                {
+                    using (Page ocrPage = engine.Process(grayImage))
+                    {
+                        return ocrPage.GetText();
+                    }
+                }
+            }
         }
 
         private void ReportProgress(int currentPage, int totalPages)
         {
             int percentage = currentPage * 100 / totalPages;
-            updateProgressBar(percentage);
+
+            // Use SynchronizationContext if available, otherwise invoke directly
+            if (syncContext != null)
+            {
+                syncContext.Post(_ => updateProgressBar(percentage), null);
+            }
+            else
+            {
+                updateProgressBar(percentage);
+            }
         }
 
         private void ShowCompletionMessage()
         {
-            if (shouldAbort())
-            {
-                MessageBox.Show(
-                    Strings.WarnAbortedExtraction,
-                    Strings.MsgBoxWarningTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
-            else
-            {
-                MessageBox.Show(
-                    Strings.InfoCompleteExtraction,
-                    Strings.MsgBoxInformationTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-            }
+            string message = shouldAbort() ? Strings.WarnAbortedExtraction : Strings.InfoCompleteExtraction;
+            string title = shouldAbort() ? Strings.MsgBoxWarningTitle : Strings.MsgBoxInformationTitle;
+            System.Windows.Forms.MessageBoxIcon icon = shouldAbort()
+                ? System.Windows.Forms.MessageBoxIcon.Warning
+                : System.Windows.Forms.MessageBoxIcon.Information;
+
+            UIHelper.ShowMessageBox(null, message, title, System.Windows.Forms.MessageBoxButtons.OK, icon);
         }
     }
 }

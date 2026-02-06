@@ -11,9 +11,12 @@ namespace UtilityPDF
     /// </summary>
     internal static class ControlTextImgAssigner
     {
-        private static readonly Font LabelFont = new Font("Segoe UI Emoji", 9F, FontStyle.Regular);
+        // Cache fonts to avoid repeated creation (fonts are expensive to create)
+        private static readonly Dictionary<float, Font> LabelFontCache = new Dictionary<float, Font>();
         private static readonly Font ButtonFont = new Font("Segoe UI Emoji", 8.5F, FontStyle.Regular);
         private static readonly Font RadioButtonFont = new Font("Segoe UI Emoji", 9F, FontStyle.Regular);
+
+        private const string EmojiFontFamily = "Segoe UI Emoji";
 
         /// <summary>
         /// Assigns text and images to all supported controls in the form
@@ -25,7 +28,16 @@ namespace UtilityPDF
                 return;
             }
 
-            AssignControlsRecursively(form.Controls);
+            // Suspend layout during batch updates for better performance
+            form.SuspendLayout();
+            try
+            {
+                AssignControlsRecursively(form.Controls);
+            }
+            finally
+            {
+                form.ResumeLayout(true);
+            }
         }
 
         private static void AssignControlsRecursively(Control.ControlCollection controls)
@@ -83,12 +95,27 @@ namespace UtilityPDF
                 return;
             }
 
-            label.Font = new Font(LabelFont.FontFamily, label.Font.Size, label.Font.Style);
+            // Use cached font to avoid creating new Font objects
+            label.Font = GetOrCreateLabelFont(label.Font.Size, label.Font.Style);
 
             if (LabelTextMap.TryGetValue(label.Name, out Func<string> textFunc))
             {
                 label.Text = textFunc();
             }
+        }
+
+        private static Font GetOrCreateLabelFont(float size, FontStyle style)
+        {
+            // Create a unique key combining size and style
+            float key = size + (int)style * 100;
+
+            if (!LabelFontCache.TryGetValue(key, out Font cachedFont))
+            {
+                cachedFont = new Font(EmojiFontFamily, size, style);
+                LabelFontCache[key] = cachedFont;
+            }
+
+            return cachedFont;
         }
 
         #endregion

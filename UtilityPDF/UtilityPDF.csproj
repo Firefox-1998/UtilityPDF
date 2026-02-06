@@ -103,6 +103,10 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>  
   <ItemGroup>
     <Reference Include="Freeware.Pdf2Docx, Version=1.1.0.0, Culture=neutral, PublicKeyToken=0b93ff91d4be458d, processorArchitecture=MSIL">
       <HintPath>..\packages\Freeware.Pdf2Docx.1.1.0\lib\net45\Freeware.Pdf2Docx.dll</HintPath>
@@ -373,6 +377,7 @@
     <Content Include="x86\leptonica-1.82.0.dll" />
     <Content Include="x86\tesseract50.dll" />
   </ItemGroup>
+ 
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

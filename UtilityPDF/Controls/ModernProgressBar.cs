@@ -20,6 +20,12 @@ namespace UtilityPDF.Controls
         private float currentWidth = 0f;
         private float targetWidth = 0f;
 
+        // Cached resources for performance
+        private GraphicsPath cachedBackgroundPath;
+        private Font cachedFont;
+        private int lastWidth = 0;
+        private int lastHeight = 0;
+
         private const float AnimationSpeed = 0.2f;
         private const float AnimationThreshold = 0.5f;
         private const int ColorDarkenAmount = 30;
@@ -37,6 +43,8 @@ namespace UtilityPDF.Controls
 
             animationTimer = new Timer { Interval = 16 }; // ~60 FPS
             animationTimer.Tick += AnimationTimer_Tick;
+
+            cachedFont = new Font("Segoe UI", 10F, FontStyle.Bold);
         }
 
         /// <summary>
@@ -47,17 +55,16 @@ namespace UtilityPDF.Controls
             get { return value; }
             set
             {
-                this.value = Math.Max(0, Math.Min(maximum, value));
-                targetWidth = (float)Width * this.value / maximum;
+                int newValue = Math.Max(0, Math.Min(maximum, value));
+                if (this.value != newValue)
+                {
+                    this.value = newValue;
+                    targetWidth = (float)Width * this.value / maximum;
 
-                if (!animationTimer.Enabled && Width > 0)
-                {
-                    animationTimer.Start();
-                }
-                else if (Width <= 0)
-                {
-                    // If control is not yet sized, update directly
-                    currentWidth = 0;
+                    if (!animationTimer.Enabled && Width > 0)
+                    {
+                        animationTimer.Start();
+                    }
                 }
             }
         }
@@ -70,8 +77,13 @@ namespace UtilityPDF.Controls
             get { return maximum; }
             set
             {
-                maximum = Math.Max(1, value);
-                Invalidate();
+                int newMax = Math.Max(1, value);
+                if (maximum != newMax)
+                {
+                    maximum = newMax;
+                    InvalidateCache();
+                    Invalidate();
+                }
             }
         }
 
@@ -83,8 +95,11 @@ namespace UtilityPDF.Controls
             get { return progressColor; }
             set
             {
-                progressColor = value;
-                Invalidate();
+                if (progressColor != value)
+                {
+                    progressColor = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -96,8 +111,11 @@ namespace UtilityPDF.Controls
             get { return backgroundColor; }
             set
             {
-                backgroundColor = value;
-                Invalidate();
+                if (backgroundColor != value)
+                {
+                    backgroundColor = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -109,8 +127,11 @@ namespace UtilityPDF.Controls
             get { return showPercentage; }
             set
             {
-                showPercentage = value;
-                Invalidate();
+                if (showPercentage != value)
+                {
+                    showPercentage = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -125,7 +146,7 @@ namespace UtilityPDF.Controls
             }
             else
             {
-                currentWidth += difference * AnimationSpeed; // Smooth easing
+                currentWidth += difference * AnimationSpeed;
             }
 
             Invalidate();
@@ -135,27 +156,49 @@ namespace UtilityPDF.Controls
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 
+            EnsureCachedResources();
             DrawBackground(g);
             DrawProgress(g);
             DrawPercentageText(g);
         }
 
+        private void EnsureCachedResources()
+        {
+            if (lastWidth != Width || lastHeight != Height)
+            {
+                InvalidateCache();
+                lastWidth = Width;
+                lastHeight = Height;
+            }
+
+            if (cachedBackgroundPath == null && Width > 0 && Height > 0)
+            {
+                cachedBackgroundPath = CreateRoundedRectPath(ClientRectangle, borderRadius);
+            }
+        }
+
+        private void InvalidateCache()
+        {
+            cachedBackgroundPath?.Dispose();
+            cachedBackgroundPath = null;
+        }
+
         private void DrawBackground(Graphics g)
         {
-            using (GraphicsPath bgPath = GetRoundedRectPath(ClientRectangle, borderRadius))
+            if (cachedBackgroundPath == null)
             {
-                using (SolidBrush bgBrush = new SolidBrush(backgroundColor))
-                {
-                    g.FillPath(bgBrush, bgPath);
-                }
+                return;
+            }
+
+            using (SolidBrush bgBrush = new SolidBrush(backgroundColor))
+            {
+                g.FillPath(bgBrush, cachedBackgroundPath);
             }
         }
 
         private void DrawProgress(Graphics g)
         {
-            // Draw progress only if width is greater than 2 pixels
             if (currentWidth <= 2)
             {
                 return;
@@ -164,20 +207,12 @@ namespace UtilityPDF.Controls
             int progressWidth = Math.Max(1, (int)currentWidth);
             Rectangle progressRect = new Rectangle(0, 0, progressWidth, Height);
 
-            using (GraphicsPath progressPath = GetRoundedRectPath(progressRect, borderRadius))
+            using (GraphicsPath progressPath = CreateRoundedRectPath(progressRect, borderRadius))
             {
                 if (progressRect.Width > 0 && progressRect.Height > 0)
                 {
                     DrawProgressGradient(g, progressPath, progressRect);
                     DrawGlossEffect(g, progressPath, progressWidth);
-                }
-                else
-                {
-                    // Fallback: use solid color if rectangle is too small
-                    using (SolidBrush solidBrush = new SolidBrush(progressColor))
-                    {
-                        g.FillPath(solidBrush, progressPath);
-                    }
                 }
             }
         }
@@ -212,31 +247,25 @@ namespace UtilityPDF.Controls
 
         private void DrawPercentageText(Graphics g)
         {
-            if (!showPercentage)
+            if (!showPercentage || maximum == 0)
             {
                 return;
             }
 
             string percentText = $"{(value * 100 / maximum)}%";
+            SizeF textSize = g.MeasureString(percentText, cachedFont);
+            float x = (Width - textSize.Width) / 2;
+            float y = (Height - textSize.Height) / 2;
 
-            using (Font font = new Font("Segoe UI", 10F, FontStyle.Bold))
+            // Text shadow for readability
+            using (SolidBrush shadowBrush = new SolidBrush(Color.FromArgb(100, 0, 0, 0)))
             {
-                SizeF textSize = g.MeasureString(percentText, font);
-                PointF textLocation = new PointF(
-                    (Width - textSize.Width) / 2,
-                    (Height - textSize.Height) / 2);
+                g.DrawString(percentText, cachedFont, shadowBrush, x + 1, y + 1);
+            }
 
-                // Text shadow for readability
-                using (SolidBrush shadowBrush = new SolidBrush(Color.FromArgb(100, 0, 0, 0)))
-                {
-                    g.DrawString(percentText, font, shadowBrush,
-                        textLocation.X + 1, textLocation.Y + 1);
-                }
-
-                using (SolidBrush textBrush = new SolidBrush(Color.White))
-                {
-                    g.DrawString(percentText, font, textBrush, textLocation);
-                }
+            using (SolidBrush textBrush = new SolidBrush(Color.White))
+            {
+                g.DrawString(percentText, cachedFont, textBrush, x, y);
             }
         }
 
@@ -248,14 +277,13 @@ namespace UtilityPDF.Controls
                 Math.Max(0, color.B - amount));
         }
 
-        private GraphicsPath GetRoundedRectPath(Rectangle rect, int radius)
+        private static GraphicsPath CreateRoundedRectPath(Rectangle rect, int radius)
         {
             GraphicsPath path = new GraphicsPath();
             int diameter = radius * 2;
 
             if (rect.Width < diameter || rect.Height < diameter || rect.Width <= 0 || rect.Height <= 0)
             {
-                // If rectangle is too small, return a normal rectangle
                 if (rect.Width > 0 && rect.Height > 0)
                 {
                     path.AddRectangle(rect);
@@ -276,13 +304,13 @@ namespace UtilityPDF.Controls
         {
             base.OnResize(e);
 
-            // Recalculate target width when control is resized
             if (Width > 0 && maximum > 0)
             {
                 targetWidth = (float)Width * value / maximum;
-                currentWidth = targetWidth; // Update immediately without animation
+                currentWidth = targetWidth;
             }
 
+            InvalidateCache();
             Invalidate();
         }
 
@@ -290,12 +318,15 @@ namespace UtilityPDF.Controls
         {
             if (disposing)
             {
-                if (animationTimer != null)
-                {
-                    animationTimer.Stop();
-                    animationTimer.Dispose();
-                    animationTimer = null;
-                }
+                animationTimer?.Stop();
+                animationTimer?.Dispose();
+                animationTimer = null;
+
+                cachedBackgroundPath?.Dispose();
+                cachedBackgroundPath = null;
+
+                cachedFont?.Dispose();
+                cachedFont = null;
             }
             base.Dispose(disposing);
         }
