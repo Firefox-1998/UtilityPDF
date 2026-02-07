@@ -78,7 +78,7 @@ Copyright © [2026] [G.L. Develop aka Firefox_1998]
 
 ## Version
 
-Current Version: **1.7.0.0**
+Current Version: **1.7.5.0**
 
 ---
 
