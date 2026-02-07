@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using UtilityPDF.Controls;
 using UtilityPDF.Resources;
+using UtilityPDF.Controls;
 using UtilityPDF.UI;
 
 namespace UtilityPDF

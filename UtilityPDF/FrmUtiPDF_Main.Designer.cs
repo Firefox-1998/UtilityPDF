@@ -1,4 +1,4 @@
-﻿namespace UtilityPDF
+namespace UtilityPDF
 {
     internal partial class FrmUtiPDF_Main
     {
@@ -86,28 +86,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.Tb_Compress)).BeginInit();
             this.PnlConvert.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // Btn_Exit
-            // 
-            this.Btn_Exit.BackColor = System.Drawing.Color.Transparent;
-            this.Btn_Exit.BorderRadius = 8;
-            this.Btn_Exit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Btn_Exit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.Btn_Exit.FlatAppearance.BorderSize = 0;
-            this.Btn_Exit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.Btn_Exit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.Btn_Exit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.Btn_Exit.Font = new System.Drawing.Font("Segoe UI Emoji", 9F);
-            this.Btn_Exit.ForeColor = System.Drawing.Color.White;
-            this.Btn_Exit.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
-            this.Btn_Exit.Location = new System.Drawing.Point(903, 470);
-            this.Btn_Exit.Name = "Btn_Exit";
-            this.Btn_Exit.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(76)))), ((int)(((byte)(60)))));
-            this.Btn_Exit.Size = new System.Drawing.Size(130, 55);
-            this.Btn_Exit.TabIndex = 21;
-            this.Btn_Exit.Text = "❌ Exit";
-            this.Btn_Exit.UseVisualStyleBackColor = false;
-            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
             // 
             // oFD_PDF
             // 
@@ -645,7 +623,6 @@
             this.lbl_CompressInProgress.Name = "lbl_CompressInProgress";
             this.lbl_CompressInProgress.Size = new System.Drawing.Size(500, 300);
             this.lbl_CompressInProgress.TabIndex = 15;
-            this.lbl_CompressInProgress.Text = "⏳ Compression in progress...\r\n\r\nPlease wait...";
             this.lbl_CompressInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbl_CompressInProgress.Visible = false;
             // 
@@ -659,7 +636,6 @@
             this.lbl_MergeInProgress.Name = "lbl_MergeInProgress";
             this.lbl_MergeInProgress.Size = new System.Drawing.Size(480, 360);
             this.lbl_MergeInProgress.TabIndex = 16;
-            this.lbl_MergeInProgress.Text = "⏳ Merge in progress...\r\n\r\nPlease wait...";
             this.lbl_MergeInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lbl_MergeInProgress.Visible = false;
             // 
@@ -834,6 +810,41 @@
             this.Btn_Convert.UseVisualStyleBackColor = false;
             this.Btn_Convert.Click += new System.EventHandler(this.Btn_Convert_Click);
             // 
+            // lbl_ConvertInProgress
+            // 
+            this.lbl_ConvertInProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.lbl_ConvertInProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbl_ConvertInProgress.Font = new System.Drawing.Font("Segoe UI Emoji", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_ConvertInProgress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(188)))), ((int)(((byte)(156)))));
+            this.lbl_ConvertInProgress.Location = new System.Drawing.Point(15, 390);
+            this.lbl_ConvertInProgress.Name = "lbl_ConvertInProgress";
+            this.lbl_ConvertInProgress.Size = new System.Drawing.Size(360, 300);
+            this.lbl_ConvertInProgress.TabIndex = 18;
+            this.lbl_ConvertInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl_ConvertInProgress.Visible = false;
+            // 
+            // Btn_Exit
+            // 
+            this.Btn_Exit.BackColor = System.Drawing.Color.Transparent;
+            this.Btn_Exit.BorderRadius = 8;
+            this.Btn_Exit.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Btn_Exit.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.Btn_Exit.FlatAppearance.BorderSize = 0;
+            this.Btn_Exit.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.Btn_Exit.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.Btn_Exit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Btn_Exit.Font = new System.Drawing.Font("Segoe UI Emoji", 9F);
+            this.Btn_Exit.ForeColor = System.Drawing.Color.White;
+            this.Btn_Exit.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(57)))), ((int)(((byte)(43)))));
+            this.Btn_Exit.Location = new System.Drawing.Point(903, 470);
+            this.Btn_Exit.Name = "Btn_Exit";
+            this.Btn_Exit.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(76)))), ((int)(((byte)(60)))));
+            this.Btn_Exit.Size = new System.Drawing.Size(130, 55);
+            this.Btn_Exit.TabIndex = 21;
+            this.Btn_Exit.Text = "❌ Exit";
+            this.Btn_Exit.UseVisualStyleBackColor = false;
+            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
+            // 
             // spinnerCompress
             // 
             this.spinnerCompress.BackColor = System.Drawing.Color.Transparent;
@@ -864,48 +875,6 @@
             this.spinnerConvert.TabIndex = 23;
             this.spinnerConvert.Visible = false;
             // 
-            // lbl_CompressInProgress
-            // 
-            this.lbl_CompressInProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lbl_CompressInProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbl_CompressInProgress.Font = new System.Drawing.Font("Segoe UI Emoji", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_CompressInProgress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(126)))), ((int)(((byte)(34)))));
-            this.lbl_CompressInProgress.Location = new System.Drawing.Point(390, 390);
-            this.lbl_CompressInProgress.Name = "lbl_CompressInProgress";
-            this.lbl_CompressInProgress.Size = new System.Drawing.Size(500, 300);
-            this.lbl_CompressInProgress.TabIndex = 15;
-            this.lbl_CompressInProgress.Text = "";
-            this.lbl_CompressInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lbl_CompressInProgress.Visible = false;
-            // 
-            // lbl_MergeInProgress
-            // 
-            this.lbl_MergeInProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lbl_MergeInProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbl_MergeInProgress.Font = new System.Drawing.Font("Segoe UI Emoji", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_MergeInProgress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(89)))), ((int)(((byte)(182)))));
-            this.lbl_MergeInProgress.Location = new System.Drawing.Point(550, 15);
-            this.lbl_MergeInProgress.Name = "lbl_MergeInProgress";
-            this.lbl_MergeInProgress.Size = new System.Drawing.Size(480, 360);
-            this.lbl_MergeInProgress.TabIndex = 16;
-            this.lbl_MergeInProgress.Text = "";
-            this.lbl_MergeInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lbl_MergeInProgress.Visible = false;
-            // 
-            // lbl_ConvertInProgress
-            // 
-            this.lbl_ConvertInProgress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.lbl_ConvertInProgress.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lbl_ConvertInProgress.Font = new System.Drawing.Font("Segoe UI Emoji", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_ConvertInProgress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(188)))), ((int)(((byte)(156)))));
-            this.lbl_ConvertInProgress.Location = new System.Drawing.Point(15, 390);
-            this.lbl_ConvertInProgress.Name = "lbl_ConvertInProgress";
-            this.lbl_ConvertInProgress.Size = new System.Drawing.Size(360, 300);
-            this.lbl_ConvertInProgress.TabIndex = 18;
-            this.lbl_ConvertInProgress.Text = "";
-            this.lbl_ConvertInProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lbl_ConvertInProgress.Visible = false;
-            // 
             // FrmUtiPDF_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -932,7 +901,7 @@
             this.MaximizeBox = false;
             this.Name = "FrmUtiPDF_Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "📄 PDF Utility - Modern UI";
+            this.Text = "Utility PDF - Modern UI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmUtiPDF_Main_FormClosing);
             this.Load += new System.EventHandler(this.FrmUtiPDF_Main_Load);
             this.Shown += new System.EventHandler(this.FrmUtiPDF_Main_Shown);

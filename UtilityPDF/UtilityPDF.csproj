@@ -33,7 +33,7 @@
     <SuiteName>Utility</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.7.0.%2a</ApplicationVersion>
+    <ApplicationVersion>1.7.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -106,7 +106,7 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Freeware.Pdf2Docx, Version=1.1.0.0, Culture=neutral, PublicKeyToken=0b93ff91d4be458d, processorArchitecture=MSIL">
       <HintPath>..\packages\Freeware.Pdf2Docx.1.1.0\lib\net45\Freeware.Pdf2Docx.dll</HintPath>
@@ -326,7 +326,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Properties\app.manifest" />
-    <None Include="README.md" />
+    <None Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\PDFUti.png" />
     <Content Include="tessdata\deu.traineddata">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -377,7 +379,6 @@
     <Content Include="x86\leptonica-1.82.0.dll" />
     <Content Include="x86\tesseract50.dll" />
   </ItemGroup>
- 
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

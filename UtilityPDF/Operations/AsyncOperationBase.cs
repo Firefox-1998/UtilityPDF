@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UtilityPDF.Controls;
@@ -8,56 +9,83 @@ using UtilityPDF.UI;
 namespace UtilityPDF.Operations
 {
     /// <summary>
-    /// Classe base per operazioni asincrone con gestione UI comune
+    /// Base class for asynchronous operations with common UI handling
     /// </summary>
     internal abstract class AsyncOperationBase
     {
-        protected Label LblProgress { get; private set; }
+        protected Label ProgressLabel { get; private set; }
         protected LoadingSpinner Spinner { get; private set; }
         protected ColorFader ColorFader { get; private set; }
 
-        protected async Task ExecuteWithSpinnerAsync(Label lblProgress, LoadingSpinner spinner, Func<Task> operation)
+        /// <summary>
+        /// Executes the operation with spinner and progress label management
+        /// </summary>
+        protected async Task ExecuteWithSpinnerAsync(Label progressLabel, LoadingSpinner spinner, Func<Task> operation)
         {
-            LblProgress = lblProgress;
+            ProgressLabel = progressLabel;
             Spinner = spinner;
 
             using (ColorFader = new ColorFader())
             {
-                StartSpinner();
-                ShowProgressLabel();
+                StartOperation();
 
                 try
                 {
-                    await operation();
+                    await Task.Run(async () => await operation());
+                }
+                catch (IOException ex)
+                {
+                    DisplayError.ErrorIO(ex);
+                }
+                catch (Exception ex)
+                {
+                    DisplayError.ErrorGeneric(ex);
                 }
                 finally
                 {
-                    StopSpinner();
+                    StopOperation();
                 }
             }
         }
 
-        private void StartSpinner()
+        /// <summary>
+        /// Executes a synchronous operation with spinner management
+        /// </summary>
+        protected async Task ExecuteWithSpinnerAsync(Label progressLabel, LoadingSpinner spinner, Action operation)
         {
-            if (Spinner != null)
+            await ExecuteWithSpinnerAsync(progressLabel, spinner, () =>
             {
-                ColorFader.StartFader(Spinner);
-            }
+                operation();
+                return Task.CompletedTask;
+            });
         }
 
-        private void StopSpinner()
+        private void StartOperation()
         {
-            ColorFader?.StopFader();
+            UIHelper.StartSpinner(Spinner, ColorFader);
+            UIHelper.SetLabelVisibility(ProgressLabel, true);
         }
 
-        private void ShowProgressLabel()
+        private void StopOperation()
         {
-            UIHelper.SetLabelVisibility(LblProgress, true);
+            UIHelper.StopSpinner(ColorFader);
         }
 
+        /// <summary>
+        /// Shows a completion message on the UI thread
+        /// </summary>
         protected void ShowCompletionMessage(string message)
         {
-            UIHelper.ShowMessageBox(LblProgress, message, Strings.MsgBoxInformationTitle);
+            UIHelper.ShowMessageBox(ProgressLabel, message, Strings.MsgBoxInformationTitle);
+        }
+
+        /// <summary>
+        /// Shows an error message on the UI thread
+        /// </summary>
+        protected void ShowErrorMessage(string message)
+        {
+            UIHelper.ShowMessageBox(ProgressLabel, message, Strings.MsgBoxErrorTitle, 
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

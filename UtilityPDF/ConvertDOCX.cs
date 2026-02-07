@@ -1,56 +1,45 @@
 using Freeware;
 using Spire.Doc;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UtilityPDF.Controls;
+using UtilityPDF.Operations;
 using UtilityPDF.Resources;
-using UtilityPDF.UI;
 
 namespace UtilityPDF
 {
     /// <summary>
+    /// Specifies the output format for PDF conversion
+    /// </summary>
+    internal enum OutputFormat
+    {
+        Docx = 0,
+        RtfOnly = 1,
+        DocxAndRtf = 2
+    }
+
+    /// <summary>
     /// Handles PDF to DOCX/RTF conversion operations
     /// </summary>
-    internal static class ConvertDOCX
+    internal sealed class ConvertOperation : AsyncOperationBase
     {
         /// <summary>
         /// Executes the PDF to DOCX conversion operation
         /// </summary>
-        public static async Task Execute(string pdfPath, string outputPath, Label lblProgress, LoadingSpinner spinner, int formatOutput)
+        public async Task ExecuteAsync(string pdfPath, string outputPath, Label lblProgress, LoadingSpinner spinner, OutputFormat format)
         {
-            OutputFormat format = (OutputFormat)formatOutput;
-
-            using (ColorFader colorFader = new ColorFader())
+            await ExecuteWithSpinnerAsync(lblProgress, spinner, () =>
             {
-                UIHelper.StartSpinner(spinner, colorFader);
-                UIHelper.SetLabelVisibility(lblProgress, true);
-
-                await Task.Run(() => PerformConversion(pdfPath, outputPath, colorFader, format, lblProgress));
-            }
+                PerformConversion(pdfPath, outputPath, format);
+                ShowCompletionMessage(Strings.ConvertCompleted);
+            });
         }
 
-        private static void PerformConversion(string pdfPath, string outputPath, ColorFader colorFader, OutputFormat format, Label lblProgress)
+        private static void PerformConversion(string pdfPath, string outputPath, OutputFormat format)
         {
-            try
-            {
-                ConvertPdfToDocx(pdfPath, outputPath);
-                ProcessOutputFormat(outputPath, format);
-
-                UIHelper.StopSpinner(colorFader);
-                UIHelper.ShowMessageBox(lblProgress, Strings.ConvertCompleted, Strings.MsgBoxInformationTitle);
-            }
-            catch (IOException ex)
-            {
-                UIHelper.StopSpinner(colorFader);
-                DisplayError.ErrorIO(ex);
-            }
-            catch (Exception ex)
-            {
-                UIHelper.StopSpinner(colorFader);
-                DisplayError.ErrorGeneric(ex);
-            }
+            ConvertPdfToDocx(pdfPath, outputPath);
+            ProcessOutputFormat(outputPath, format);
         }
 
         private static void ConvertPdfToDocx(string pdfPath, string outputPath)
@@ -89,6 +78,19 @@ namespace UtilityPDF
                 document.LoadFromFile(filePath);
                 document.SaveToFile(filePath, FileFormat.Rtf);
             }
+        }
+    }
+
+    /// <summary>
+    /// Static entry point for backward compatibility
+    /// </summary>
+    internal static class ConvertDOCX
+    {
+        public static async Task Execute(string pdfPath, string outputPath, Label lblProgress, LoadingSpinner spinner, int formatOutput)
+        {
+            ConvertOperation operation = new ConvertOperation();
+            OutputFormat format = (OutputFormat)formatOutput;
+            await operation.ExecuteAsync(pdfPath, outputPath, lblProgress, spinner, format);
         }
     }
 }

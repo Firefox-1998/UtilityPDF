@@ -4,7 +4,6 @@
 
 ### Language Requirements
 - **All code comments must be written in English (US)**
-- Translate any existing Italian comments to English when modifying files
 
 ### Code Style
 - **Use explicit types**: Do not use `var`, always declare the explicit type

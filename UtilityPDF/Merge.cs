@@ -1,57 +1,37 @@
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UtilityPDF.Controls;
+using UtilityPDF.Operations;
 using UtilityPDF.Resources;
-using UtilityPDF.UI;
 
 namespace UtilityPDF
 {
     /// <summary>
     /// Handles PDF merge operations
     /// </summary>
-    internal class Merge
+    internal sealed class MergeOperation : AsyncOperationBase
     {
         /// <summary>
         /// Executes the PDF merge operation
         /// </summary>
-        public static async Task Execute(string outputPath, ListBox.ObjectCollection items, Label lblProgress, LoadingSpinner spinner)
+        public async Task ExecuteAsync(string outputPath, ListBox.ObjectCollection items, Label lblProgress, LoadingSpinner spinner)
         {
-            using (ColorFader colorFader = new ColorFader())
+            await ExecuteWithSpinnerAsync(lblProgress, spinner, () =>
             {
-                UIHelper.StartSpinner(spinner, colorFader);
-                UIHelper.SetLabelVisibility(lblProgress, true);
-
-                await Task.Run(() => MergePdfFiles(outputPath, items, colorFader, lblProgress));
-            }
+                PerformMerge(outputPath, items);
+                ShowCompletionMessage(Strings.MergeCompleted);
+            });
         }
 
-        private static void MergePdfFiles(string outputPath, ListBox.ObjectCollection filePaths, ColorFader colorFader, Label lblProgress)
+        private static void PerformMerge(string outputPath, ListBox.ObjectCollection filePaths)
         {
-            try
+            using (PdfDocument outputDocument = new PdfDocument())
             {
-                using (PdfDocument outputDocument = new PdfDocument())
-                {
-                    ConfigureOutputDocument(outputDocument);
-                    AddPagesFromFiles(outputDocument, filePaths);
-                    outputDocument.Save(outputPath);
-                }
-
-                UIHelper.StopSpinner(colorFader);
-                UIHelper.ShowMessageBox(lblProgress, Strings.MergeCompleted, Strings.MsgBoxInformationTitle);
-            }
-            catch (IOException ex)
-            {
-                UIHelper.StopSpinner(colorFader);
-                DisplayError.ErrorIO(ex);
-            }
-            catch (Exception ex)
-            {
-                UIHelper.StopSpinner(colorFader);
-                DisplayError.ErrorGeneric(ex);
+                ConfigureOutputDocument(outputDocument);
+                AddPagesFromFiles(outputDocument, filePaths);
+                outputDocument.Save(outputPath);
             }
         }
 
@@ -75,6 +55,18 @@ namespace UtilityPDF
                     }
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// Static entry point for backward compatibility
+    /// </summary>
+    internal static class Merge
+    {
+        public static async Task Execute(string outputPath, ListBox.ObjectCollection items, Label lblProgress, LoadingSpinner spinner)
+        {
+            MergeOperation operation = new MergeOperation();
+            await operation.ExecuteAsync(outputPath, items, lblProgress, spinner);
         }
     }
 }
