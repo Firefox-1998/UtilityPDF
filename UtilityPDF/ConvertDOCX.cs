@@ -10,16 +10,6 @@ using UtilityPDF.Resources;
 namespace UtilityPDF
 {
     /// <summary>
-    /// Specifies the output format for PDF conversion
-    /// </summary>
-    internal enum OutputFormat
-    {
-        Docx = 0,
-        RtfOnly = 1,
-        DocxAndRtf = 2
-    }
-
-    /// <summary>
     /// Handles PDF to DOCX/RTF conversion operations
     /// </summary>
     internal sealed class ConvertOperation : AsyncOperationBase
