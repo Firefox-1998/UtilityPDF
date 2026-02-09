@@ -115,34 +115,26 @@ namespace UtilityPDF.Controls
         {
             Rectangle shadowRect = new Rectangle(shadowSize, shadowSize, Width - shadowSize, Height - shadowSize);
 
-            using (GraphicsPath shadowPath = CreateRoundedRectPath(shadowRect, borderRadius))
-            {
-                using (PathGradientBrush shadowBrush = new PathGradientBrush(shadowPath))
-                {
-                    shadowBrush.CenterColor = shadowColor;
-                    shadowBrush.SurroundColors = new[] { Color.Transparent };
-                    shadowBrush.FocusScales = new PointF(0.9f, 0.9f);
-                    g.FillPath(shadowBrush, shadowPath);
-                }
-            }
+            using GraphicsPath shadowPath = CreateRoundedRectPath(shadowRect, borderRadius);
+            using PathGradientBrush shadowBrush = new PathGradientBrush(shadowPath);
+            shadowBrush.CenterColor = shadowColor;
+            shadowBrush.SurroundColors = new[] { Color.Transparent };
+            shadowBrush.FocusScales = new PointF(0.9f, 0.9f);
+            g.FillPath(shadowBrush, shadowPath);
         }
 
         private void DrawCardBody(Graphics g)
         {
             Rectangle cardRect = new Rectangle(0, 0, Width - shadowSize - 2, Height - shadowSize - 2);
 
-            using (GraphicsPath cardPath = CreateRoundedRectPath(cardRect, borderRadius))
+            using GraphicsPath cardPath = CreateRoundedRectPath(cardRect, borderRadius);
+            using (SolidBrush backBrush = new SolidBrush(BackColor))
             {
-                using (SolidBrush backBrush = new SolidBrush(BackColor))
-                {
-                    g.FillPath(backBrush, cardPath);
-                }
-
-                using (Pen borderPen = new Pen(BorderColor, 1))
-                {
-                    g.DrawPath(borderPen, cardPath);
-                }
+                g.FillPath(backBrush, cardPath);
             }
+
+            using Pen borderPen = new Pen(BorderColor, 1);
+            g.DrawPath(borderPen, cardPath);
         }
 
         private void DrawHeader(Graphics g)
@@ -154,22 +146,18 @@ namespace UtilityPDF.Controls
 
             Rectangle headerRect = new Rectangle(0, 0, Width - shadowSize - 2, HeaderHeight);
 
-            using (GraphicsPath headerPath = CreateRoundedRectPath(headerRect, borderRadius, topOnly: true))
-            {
-                DrawHeaderBackground(g, headerPath, headerRect);
-                DrawHeaderText(g, headerRect);
-            }
+            using GraphicsPath headerPath = CreateRoundedRectPath(headerRect, borderRadius, topOnly: true);
+            DrawHeaderBackground(g, headerPath, headerRect);
+            DrawHeaderText(g, headerRect);
         }
 
         private void DrawHeaderBackground(Graphics g, GraphicsPath path, Rectangle rect)
         {
             Color lighterColor = LightenColor(headerColor, ColorLightenAmount);
 
-            using (LinearGradientBrush headerBrush = new LinearGradientBrush(
-                rect, headerColor, lighterColor, LinearGradientMode.Horizontal))
-            {
-                g.FillPath(headerBrush, path);
-            }
+            using LinearGradientBrush headerBrush = new LinearGradientBrush(
+                rect, headerColor, lighterColor, LinearGradientMode.Horizontal);
+            g.FillPath(headerBrush, path);
         }
 
         private void DrawHeaderText(Graphics g, Rectangle headerRect)
@@ -181,19 +169,13 @@ namespace UtilityPDF.Controls
             float fontSize = headerFont?.Size ?? 11F;
             FontStyle fontStyle = headerFont?.Style ?? FontStyle.Bold;
 
-            using (Font emojiFont = new Font(EmojiFontFamily, fontSize, fontStyle))
-            {
-                using (StringFormat sf = new StringFormat())
-                {
-                    sf.Alignment = StringAlignment.Near;
-                    sf.LineAlignment = StringAlignment.Center;
+            using Font emojiFont = new Font(EmojiFontFamily, fontSize, fontStyle);
+            using StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Near;
+            sf.LineAlignment = StringAlignment.Center;
 
-                    using (SolidBrush textBrush = new SolidBrush(Color.White))
-                    {
-                        g.DrawString(headerText, emojiFont, textBrush, textRect, sf);
-                    }
-                }
-            }
+            using SolidBrush textBrush = new SolidBrush(Color.White);
+            g.DrawString(headerText, emojiFont, textBrush, textRect, sf);
         }
 
         #endregion
