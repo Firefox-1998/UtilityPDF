@@ -133,6 +133,42 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Compress PDF.
+        /// </summary>
+        internal static string HeaderCompressPDF {
+            get {
+                return ResourceManager.GetString("HeaderCompressPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Convert to DOCX/RTF.
+        /// </summary>
+        internal static string HeaderConvertPDF {
+            get {
+                return ResourceManager.GetString("HeaderConvertPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Extract Text (OCR).
+        /// </summary>
+        internal static string HeaderExtractText {
+            get {
+                return ResourceManager.GetString("HeaderExtractText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Merge PDFs.
+        /// </summary>
+        internal static string HeaderMergePDFs {
+            get {
+                return ResourceManager.GetString("HeaderMergePDFs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a Extraction &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
         /// </summary>
         internal static string InfoCompleteExtraction {

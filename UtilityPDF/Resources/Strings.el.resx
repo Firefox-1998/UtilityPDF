@@ -255,17 +255,35 @@
   <data name="MsgBoxErrorTitle" xml:space="preserve">
     <value>Σφάλμα</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="GenericMessageError" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SpecificMessageErrorIO" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="GenericMessageError" xml:space="preserve">
     <value>Παρουσιάστηκε σφάλμα:</value>
   </data>
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>Παρουσιάστηκε σφάλμα IO:</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="HeaderExtractText" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HeaderMergePDFs" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HeaderCompressPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HeaderConvertPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HeaderExtractText" xml:space="preserve">
+    <value>Εξαγωγή κειμένου από PDF χρησιμοποιώντας OCR</value>
+  </data>
+  <data name="HeaderMergePDFs" xml:space="preserve">
+    <value>Συγχώνευση PDF</value>
+  </data>
+  <data name="HeaderCompressPDF" xml:space="preserve">
+    <value>Συμπίεση PDF</value>
+  </data>
+  <data name="HeaderConvertPDF" xml:space="preserve">
+    <value>Μετατροπή PDF σε DOCX/RTF</value>
   </data>
 </root>

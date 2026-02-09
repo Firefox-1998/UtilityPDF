@@ -376,12 +376,18 @@ namespace UtilityPDF
 
         private void FrmUtiPDF_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                return;
+            }
+
             e.Cancel = isOperationInProgress;
         }
 
         private void Btn_Exit_Click(object sender, EventArgs e)
         {
-            Close();
+            Application.Exit();
         }
 
         #endregion

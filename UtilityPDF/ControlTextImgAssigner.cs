@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using UtilityPDF.Resources;
+using UtilityPDF.Controls;
 
 namespace UtilityPDF
 {
@@ -57,6 +58,9 @@ namespace UtilityPDF
         {
             switch (control)
             {
+                case ModernCard modernCard:
+                    AssignModernCardText(modernCard);
+                    break;
                 case Label label:
                     AssignLabelText(label);
                     break;
@@ -68,6 +72,31 @@ namespace UtilityPDF
                     break;
             }
         }
+
+        #region ModernCard Assignments
+
+        private static readonly Dictionary<string, Func<string>> ModernCardTextMap = new Dictionary<string, Func<string>>
+        {
+            { "PnlOCR", () => "📄 " + Strings.HeaderExtractText },
+            { "PnlMerge", () => "🔗 " + Strings.HeaderMergePDFs },
+            { "PnlCompress", () => "🗜 " + Strings.HeaderCompressPDF },
+            { "PnlConvert", () => "🔄 " + Strings.HeaderConvertPDF }
+        };
+
+        private static void AssignModernCardText(ModernCard modernCard)
+        {
+            if (modernCard == null)
+            {
+                return;
+            }
+
+            if (ModernCardTextMap.TryGetValue(modernCard.Name, out Func<string> textFunc))
+            {
+                modernCard.HeaderText = textFunc();
+            }
+        }
+
+        #endregion
 
         #region Label Assignments
 

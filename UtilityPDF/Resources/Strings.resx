@@ -267,4 +267,16 @@ Please wait...</value>
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>An IO error occurred:</value>
   </data>
+  <data name="HeaderExtractText" xml:space="preserve">
+    <value>Extract Text (OCR)</value>
+  </data>
+  <data name="HeaderMergePDFs" xml:space="preserve">
+    <value>Merge PDFs</value>
+  </data>
+  <data name="HeaderCompressPDF" xml:space="preserve">
+    <value>Compress PDF</value>
+  </data>
+  <data name="HeaderConvertPDF" xml:space="preserve">
+    <value>Convert to DOCX/RTF</value>
+  </data>
 </root>
