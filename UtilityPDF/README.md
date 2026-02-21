@@ -1,4 +1,4 @@
-﻿# UtilityPDF
+# UtilityPDF
 
 This software was created, totally free, to facilitate and collect in one place, some operations that are normally done on PDF files.
 
@@ -56,8 +56,8 @@ Users can change the interface language at runtime using the language selector w
   Free Spire.Doc for .NET is a Community Edition of the Spire.Doc for .NET, which is a totally free word API for commercial and personal use.
 * Freeware.Pdf2Png v. 1.0.1 - MIT License
 * Freeware.Pdf2Docx v. 1.1.0 - MIT License
-* Ghostscript.NET v. 1.2.3.1 - AGPL (GNU Affero General Public License)
-* PDFsharp v. 6.1.1 - MIT License	
+* Ghostscript.NET v. 1.3.2 - AGPL (GNU Affero General Public License)
+* PDFsharp v. 6.2.4 - MIT License	
 * Tesseract v. 5.2.0 - Apache License
 
 All library dependencies, mentioned above, are **MIT LICENSED**/**AGPL LICENSED**/**APACHE LICENSED**
@@ -78,7 +78,7 @@ Copyright © [2026] [G.L. Develop aka Firefox_1998]
 
 ## Version
 
-Current Version: **1.7.0.0**
+Current Version: **1.7.5.2**
 
 ---
 
