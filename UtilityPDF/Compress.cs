@@ -20,34 +20,48 @@ namespace UtilityPDF
         {
             await ExecuteWithSpinnerAsync(lblProgress, spinner, () =>
             {
-                PerformCompression(pdfPath, levelCompress, outputPath);
+                PerformGhostscriptCompression(pdfPath, levelCompress, outputPath);
                 ShowCompletionMessage(Strings.CompressCompleted);
+
             });
         }
 
-        private static void PerformCompression(string pdfPath, string levelCompress, string outputPath)
+        private static void PerformGhostscriptCompression(string pdfPath, string levelCompress, string outputPath)
         {
             using (GhostscriptProcessor processor = new GhostscriptProcessor(SettingsString.Gvi))
             {
                 List<string> switches = new List<string>
-                {
-                    "gs",
-                    "-sDEVICE=pdfwrite",
-                    $"-dPDFSETTINGS={levelCompress}",
-                    "-dNOPAUSE",
-                    "-dQUIET",
-                    "-dCompressFonts=true",
-                    "-dCompressStreams=true",
-                    "-dDetectDuplicateImages=true",
-                    $"-sOutputFile={outputPath}",
-                    "-dColorImageDownsampleType=/Bicubic",
-                    "-dColorImageResolution=150",
-                    "-dGrayImageDownsampleType=/Bicubic",
-                    "-dGrayImageResolution=150",
-                    "-dMonoImageDownsampleType=/Bicubic",
-                    "-dMonoImageResolution=150",
-                    pdfPath
-                };
+                    {
+                        "gs",
+                        "-sDEVICE=pdfwrite",
+                        $"-dPDFSETTINGS={levelCompress}",
+                        "-dNOPAUSE",
+                        "-dQUIET",
+                        "-dBATCH",
+                        "-dCompatibilityLevel=1.5",
+                        "-dAutoRotatePages=/None",
+                        "-dCompressFonts=true",
+                        "-dCompressStreams=true",
+                        "-dDetectDuplicateImages=true",
+                        "-dDownsampleColorImages=true",
+                        "-dDownsampleGrayImages=true",
+                        "-dDownsampleMonoImages=true",
+                        "-dColorImageDownsampleType=/Bicubic",
+                        "-dColorImageResolution=72",
+                        "-dGrayImageDownsampleType=/Bicubic",
+                        "-dGrayImageResolution=72",
+                        "-dMonoImageDownsampleType=/Subsample",
+                        "-dMonoImageResolution=72",
+                        "-dPassThroughJPEGImages=false",
+                        "-dAutoFilterColorImages=false",
+                        "-dColorImageFilter=/DCTEncode",
+                        "-dAutoFilterGrayImages=false",
+                        "-dGrayImageFilter=/DCTEncode",
+                        "-dSubsetFonts=true",
+                        "-dEmbedAllFonts=false",
+                        $"-sOutputFile={outputPath}",
+                        pdfPath
+                    };
                 processor.StartProcessing(switches.ToArray(), null);
             }
         }
