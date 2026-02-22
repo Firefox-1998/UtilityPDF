@@ -1,3 +1,5 @@
+using UtilityPDF.Localization;
+
 namespace UtilityPDF
 {
     /// <summary>

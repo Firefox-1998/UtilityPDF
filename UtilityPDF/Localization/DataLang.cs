@@ -1,6 +1,6 @@
 using System;
 
-namespace UtilityPDF
+namespace UtilityPDF.Localization
 {
     /// <summary>
     /// Represents OCR language data

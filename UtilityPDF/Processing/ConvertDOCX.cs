@@ -6,8 +6,9 @@ using System.Windows.Forms;
 using UtilityPDF.Controls;
 using UtilityPDF.Operations;
 using UtilityPDF.Resources;
+using UtilityPDF.UI;
 
-namespace UtilityPDF
+namespace UtilityPDF.Processing
 {
     /// <summary>
     /// Handles PDF to DOCX/RTF conversion operations

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using UtilityPDF.Controls;
 
-namespace UtilityPDF
+namespace UtilityPDF.UI
 {
     /// <summary>
     /// Manages the animated loading spinner
@@ -19,24 +19,11 @@ namespace UtilityPDF
         {
             if (loadingSpinner == null)
             {
-                return;
+                throw new ArgumentNullException(nameof(loadingSpinner));
             }
 
             spinner = loadingSpinner;
-
-            if (spinner.InvokeRequired)
-            {
-                spinner.Invoke(new Action(() =>
-                {
-                    spinner.Visible = true;
-                    spinner.Start();
-                }));
-            }
-            else
-            {
-                spinner.Visible = true;
-                spinner.Start();
-            }
+            spinner.Start();
         }
 
         /// <summary>
@@ -44,26 +31,14 @@ namespace UtilityPDF
         /// </summary>
         public void StopFader()
         {
-            if (spinner != null && !spinner.IsDisposed)
+            if (spinner != null)
             {
-                if (spinner.InvokeRequired)
-                {
-                    spinner.Invoke(new Action(() =>
-                    {
-                        spinner.Stop();
-                        spinner.Visible = false;
-                    }));
-                }
-                else
-                {
-                    spinner.Stop();
-                    spinner.Visible = false;
-                }
+                spinner.Stop();
             }
         }
 
         /// <summary>
-        /// Releases all resources used by the ColorFader
+        /// Disposes the ColorFader and stops the spinner
         /// </summary>
         public void Dispose()
         {
@@ -72,7 +47,7 @@ namespace UtilityPDF
         }
 
         /// <summary>
-        /// Releases the unmanaged resources and optionally releases the managed resources
+        /// Protected implementation of Dispose pattern
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -80,19 +55,11 @@ namespace UtilityPDF
             {
                 if (disposing)
                 {
+                    StopFader();
                     spinner = null;
                 }
-
                 disposed = true;
             }
-        }
-
-        /// <summary>
-        /// Finalizer
-        /// </summary>
-        ~ColorFader()
-        {
-            Dispose(false);
         }
     }
 }

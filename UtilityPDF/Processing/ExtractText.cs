@@ -9,8 +9,9 @@ using System.Threading;
 using Tesseract;
 using UtilityPDF.Resources;
 using UtilityPDF.UI;
+using UtilityPDF.Configuration;
 
-namespace UtilityPDF
+namespace UtilityPDF.Processing
 {
     /// <summary>
     /// Handles PDF text extraction using OCR
@@ -52,10 +53,8 @@ namespace UtilityPDF
                 using (TesseractEngine engine = new TesseractEngine(
                     $@"./{SettingsString.TrainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
                 {
-                    using (FileStream pdfStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        ProcessAllPages(pdfStream, pageCount, engine, txtPath);
-                    }
+                    using FileStream pdfStream = new FileStream(pdfPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    ProcessAllPages(pdfStream, pageCount, engine, txtPath);
                 }
 
                 ShowCompletionMessage();
@@ -80,10 +79,8 @@ namespace UtilityPDF
 
         private static int GetPageCount(string pdfPath)
         {
-            using (PdfDocument document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import))
-            {
-                return document.PageCount;
-            }
+            using PdfDocument document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import);
+            return document.PageCount;
         }
 
         private void ProcessAllPages(Stream pdfStream, int pageCount, TesseractEngine engine, string txtPath)
@@ -129,27 +126,17 @@ namespace UtilityPDF
             // Convert PDF page to PNG (1-based index for Pdf2Png)
             byte[] pageImage = Pdf2Png.Convert(pdfStream, pageIndex + 1, DefaultDpi);
 
-            using (MemoryStream imageStream = new MemoryStream(pageImage))
-            {
-                using (Image image = Image.FromStream(imageStream))
-                {
-                    return ExtractTextFromImage((Bitmap)image, engine);
-                }
-            }
+            using MemoryStream imageStream = new MemoryStream(pageImage);
+            using Image image = Image.FromStream(imageStream);
+            return ExtractTextFromImage((Bitmap)image, engine);
         }
 
         private static string ExtractTextFromImage(Bitmap bitmap, TesseractEngine engine)
         {
-            using (Pix pixImage = PixConverter.ToPix(bitmap))
-            {
-                using (Pix grayImage = pixImage.ConvertRGBToGray())
-                {
-                    using (Page ocrPage = engine.Process(grayImage))
-                    {
-                        return ocrPage.GetText();
-                    }
-                }
-            }
+            using Pix pixImage = PixConverter.ToPix(bitmap);
+            using Pix grayImage = pixImage.ConvertRGBToGray();
+            using Page ocrPage = engine.Process(grayImage);
+            return ocrPage.GetText();
         }
 
         private void ReportProgress(int currentPage, int totalPages)

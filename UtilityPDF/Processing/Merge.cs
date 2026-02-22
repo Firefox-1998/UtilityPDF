@@ -6,7 +6,7 @@ using UtilityPDF.Controls;
 using UtilityPDF.Operations;
 using UtilityPDF.Resources;
 
-namespace UtilityPDF
+namespace UtilityPDF.Processing
 {
     /// <summary>
     /// Handles PDF merge operations

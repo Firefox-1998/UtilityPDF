@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 
-namespace UtilityPDF
+namespace UtilityPDF.Localization
 {
     /// <summary>
     /// Manages application localization and culture settings
@@ -24,6 +24,18 @@ namespace UtilityPDF
             };
 
         private const string DefaultCulture = "en-US";
+
+        /// <summary>
+        /// Gets the current culture
+        /// </summary>
+        public static CultureInfo CurrentCulture
+        {
+            get
+            {
+                currentCulture ??= Thread.CurrentThread.CurrentUICulture;
+                return currentCulture;
+            }
+        }
 
         /// <summary>
         /// Sets the application culture
@@ -53,7 +65,11 @@ namespace UtilityPDF
         /// </summary>
         public static CultureInfo GetCurrentCulture()
         {
-            return currentCulture ?? CultureInfo.CurrentUICulture;
+            if (currentCulture == null)
+            {
+                return CultureInfo.CurrentUICulture;
+            }
+            return currentCulture;
         }
 
         /// <summary>
@@ -72,6 +88,14 @@ namespace UtilityPDF
             string[] languages = new string[SupportedLanguages.Count];
             SupportedLanguages.Keys.CopyTo(languages, 0);
             return languages;
+        }
+
+        /// <summary>
+        /// Gets all supported languages with details
+        /// </summary>
+        public static IReadOnlyDictionary<string, (string DisplayName, string Flag)> GetSupportedLanguagesWithDetails()
+        {
+            return SupportedLanguages;
         }
 
         /// <summary>

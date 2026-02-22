@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using UtilityPDF.UI;
 
-namespace UtilityPDF
+namespace UtilityPDF.Localization
 {
     /// <summary>
     /// Loads available OCR language data from a CSV file

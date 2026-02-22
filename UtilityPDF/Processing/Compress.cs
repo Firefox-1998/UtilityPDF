@@ -5,8 +5,9 @@ using System.Windows.Forms;
 using UtilityPDF.Controls;
 using UtilityPDF.Operations;
 using UtilityPDF.Resources;
+using UtilityPDF.Configuration;
 
-namespace UtilityPDF
+namespace UtilityPDF.Processing
 {
     /// <summary>
     /// Handles PDF compression operations

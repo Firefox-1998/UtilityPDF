@@ -1,4 +1,4 @@
-namespace UtilityPDF
+namespace UtilityPDF.UI
 {
     /// <summary>
     /// Specifies the output format for PDF conversion

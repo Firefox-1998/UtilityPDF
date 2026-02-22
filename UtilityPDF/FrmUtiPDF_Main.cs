@@ -7,6 +7,10 @@ using System.Windows.Forms;
 using UtilityPDF.Resources;
 using UtilityPDF.Controls;
 using UtilityPDF.UI;
+using UtilityPDF.Configuration;
+using UtilityPDF.Localization;
+using UtilityPDF.Processing;
+
 
 namespace UtilityPDF
 {
@@ -399,14 +403,18 @@ namespace UtilityPDF
             cmb_Language.Items.Clear();
 
             string[] supportedLanguages = LocalizationManager.GetSupportedLanguages();
-            string currentCulture = LocalizationManager.GetCurrentLanguageCode();
+            string configuredLanguage = ConfigurationManager.Settings.Application.LanguageUI;
+            
+            // Mappa il codice abbreviato dalla configurazione al codice completo della lingua
+            string languageCodeToSet = MapConfigLanguageToSystemLanguage(configuredLanguage, supportedLanguages);
+            
             int selectedIndex = 0;
 
             for (int i = 0; i < supportedLanguages.Length; i++)
             {
                 cmb_Language.Items.Add(new LanguageItem(supportedLanguages[i]));
 
-                if (supportedLanguages[i] == currentCulture)
+                if (supportedLanguages[i] == languageCodeToSet)
                 {
                     selectedIndex = i;
                 }
@@ -415,7 +423,37 @@ namespace UtilityPDF
             if (cmb_Language.Items.Count > 0)
             {
                 cmb_Language.SelectedIndex = selectedIndex;
+                
+                // Applica la lingua configurata
+                LanguageItem selectedLanguage = (LanguageItem)cmb_Language.SelectedItem;
+                LocalizationManager.SetCulture(selectedLanguage.CultureCode);
             }
+        }
+
+        private string MapConfigLanguageToSystemLanguage(string configLanguage, string[] supportedLanguages)
+        {
+            if (string.IsNullOrEmpty(configLanguage))
+            {
+                return "en-US";
+            }
+
+            // Se il codice configurato corrisponde esattamente a uno supportato, usalo
+            foreach (string supportedLanguage in supportedLanguages)
+            {
+                if (supportedLanguage == configLanguage)
+                {
+                    return configLanguage;
+                }
+
+                // Mappa abbreviazioni (e.g., "En" -> "en-US", "It" -> "it-IT")
+                if (supportedLanguage.StartsWith(configLanguage, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    return supportedLanguage;
+                }
+            }
+
+            // Fallback a inglese se non trova corrispondenza
+            return "en-US";
         }
 
         private void Cmb_Language_SelectedIndexChanged(object sender, EventArgs e)
@@ -423,6 +461,15 @@ namespace UtilityPDF
             if (cmb_Language.SelectedItem is LanguageItem selectedLanguage)
             {
                 LocalizationManager.SetCulture(selectedLanguage.CultureCode);
+                
+                // Estrai il codice abbreviato (e.g., "en-US" -> "En")
+                string abbreviatedCode = selectedLanguage.CultureCode.Substring(0, 2);
+                abbreviatedCode = char.ToUpperInvariant(abbreviatedCode[0]) + abbreviatedCode.Substring(1);
+                
+                // Salva la lingua selezionata nella configurazione
+                ConfigurationManager.Settings.Application.LanguageUI = abbreviatedCode;
+                ConfigurationManager.SaveSettings();
+                
                 RefreshUILanguage();
             }
         }
@@ -574,11 +621,14 @@ namespace UtilityPDF
 
         private static bool ConfirmOutputDirectorySelection(string message)
         {
-            return MessageBox.Show(
-                message,
-                Strings.MsgBoxWarningTitle,
-                MessageBoxButtons.OKCancel,
-                MessageBoxIcon.Warning) == DialogResult.OK;
+            return DisplayError.Confirm(message, Strings.MsgBoxWarningTitle, 
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+        }
+
+        private static bool ConfirmAction(string message)
+        {
+            return DisplayError.Confirm(message, Strings.MsgBoxWarningTitle, 
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
         }
 
         private bool ConfirmAndSelectOutputDirectory(string warningMessage, string sourceFile, string suffix, Label outputLabel)
@@ -595,15 +645,6 @@ namespace UtilityPDF
             }
 
             return false;
-        }
-
-        private static bool ConfirmAction(string message)
-        {
-            return MessageBox.Show(
-                message,
-                Strings.MsgBoxWarningTitle,
-                MessageBoxButtons.OKCancel,
-                MessageBoxIcon.Warning) == DialogResult.OK;
         }
 
         private static string BuildOutputPath(string directory, string sourceFile, string suffix)

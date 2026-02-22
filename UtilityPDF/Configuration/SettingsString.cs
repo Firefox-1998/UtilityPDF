@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace UtilityPDF
+namespace UtilityPDF.Configuration
 {
     /// <summary>
     /// Application configuration settings and paths
@@ -30,7 +30,7 @@ namespace UtilityPDF
         /// Ghostscript DLL path (lazy initialized)
         /// </summary>
         private static readonly Lazy<string> lazyGsDllPath = new Lazy<string>(() =>
-            Path.Combine(BinPath, Environment.Is64BitProcess ? "gsdll64.dll" : "gsdll32.dll"));
+            Path.Combine(BinPath, "Interop", Environment.Is64BitProcess ? "gsdll64.dll" : "gsdll32.dll"));
 
         /// <summary>
         /// Ghostscript version info (lazy initialized)

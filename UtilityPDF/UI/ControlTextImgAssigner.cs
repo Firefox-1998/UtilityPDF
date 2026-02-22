@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using UtilityPDF.Resources;
 using UtilityPDF.Controls;
 
-namespace UtilityPDF
+namespace UtilityPDF.UI
 {
     /// <summary>
     /// Assigns localized text and emoji icons to form controls
