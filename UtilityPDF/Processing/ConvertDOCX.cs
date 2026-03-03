@@ -1,5 +1,6 @@
 using Freeware;
 using Spire.Doc;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,9 +21,22 @@ namespace UtilityPDF.Processing
         /// </summary>
         public async Task ExecuteAsync(string pdfPath, string outputPath, Label lblProgress, LoadingSpinner spinner, OutputFormat format)
         {
+            DisplayError.LogOperation(Strings.Log_PdfConvert, Strings.Log_Started, new Dictionary<string, string>
+            {
+                { Strings.Log_PdfPath, pdfPath },
+                { Strings.Log_OutputPath, outputPath },
+                { Strings.Log_OutputFormat, format.ToString() }
+            });
+
             await ExecuteWithSpinnerAsync(lblProgress, spinner, () =>
             {
                 PerformConversion(pdfPath, outputPath, format);
+                DisplayError.LogOperation(Strings.Log_PdfConvert, Strings.Log_Completed, new Dictionary<string, string>
+                {
+                    { Strings.Log_PdfPath, pdfPath },
+                    { Strings.Log_OutputPath, outputPath },
+                    { Strings.Log_OutputFormat, format.ToString() }
+                });
                 ShowCompletionMessage(Strings.ConvertCompleted);
             });
         }

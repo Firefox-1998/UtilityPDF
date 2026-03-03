@@ -106,6 +106,15 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Configuration not initialized. Call Initialize() first..
+        /// </summary>
+        internal static string ConfigNotInit {
+            get {
+                return ResourceManager.GetString("ConfigNotInit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a Convert &gt;&gt;&gt; COMPLETED &lt;&lt;&lt;.
         /// </summary>
         internal static string ConvertCompleted {
@@ -120,6 +129,51 @@ namespace UtilityPDF.Resources {
         internal static string DirectoryOutputCompressedPDF {
             get {
                 return ResourceManager.GetString("DirectoryOutputCompressedPDF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Unable to create log directory due to insufficient permissions.\nLogging will be disabled.\n\nAttempted locations:\n1. {0}\n2. {1}.
+        /// </summary>
+        internal static string ErrorCreateLogDir {
+            get {
+                return ResourceManager.GetString("ErrorCreateLogDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Logging Error.
+        /// </summary>
+        internal static string ErrorCreateLogDirTitle {
+            get {
+                return ResourceManager.GetString("ErrorCreateLogDirTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a No settings to save..
+        /// </summary>
+        internal static string ErrorSettingsSave {
+            get {
+                return ResourceManager.GetString("ErrorSettingsSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Unable to create log directory in application folder.\nLogs will be saved to:\n{0}.
+        /// </summary>
+        internal static string FallbackLogDir {
+            get {
+                return ResourceManager.GetString("FallbackLogDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Log Directory Notification.
+        /// </summary>
+        internal static string FallbackLogDirTitle {
+            get {
+                return ResourceManager.GetString("FallbackLogDirTitle", resourceCulture);
             }
         }
         
@@ -315,6 +369,402 @@ namespace UtilityPDF.Resources {
         internal static string LblPanelMerge {
             get {
                 return ResourceManager.GetString("LblPanelMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a ApplicationShutdown.
+        /// </summary>
+        internal static string Log_ApplicationShutdown {
+            get {
+                return ResourceManager.GetString("Log_ApplicationShutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a ApplicationStartup.
+        /// </summary>
+        internal static string Log_ApplicationStartup {
+            get {
+                return ResourceManager.GetString("Log_ApplicationStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a CloseReason.
+        /// </summary>
+        internal static string Log_CloseReason {
+            get {
+                return ResourceManager.GetString("Log_CloseReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Completed.
+        /// </summary>
+        internal static string Log_Completed {
+            get {
+                return ResourceManager.GetString("Log_Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a CompressionLevel.
+        /// </summary>
+        internal static string Log_CompressionLevel {
+            get {
+                return ResourceManager.GetString("Log_CompressionLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Configuration Error.
+        /// </summary>
+        internal static string Log_ConfigError {
+            get {
+                return ResourceManager.GetString("Log_ConfigError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Error during configuration initialization:\n{0}.
+        /// </summary>
+        internal static string Log_ConfigErrorTitle {
+            get {
+                return ResourceManager.GetString("Log_ConfigErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Language CSV file not found: {0}.
+        /// </summary>
+        internal static string Log_CsvNotFound {
+            get {
+                return ResourceManager.GetString("Log_CsvNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Directory.
+        /// </summary>
+        internal static string Log_Dir {
+            get {
+                return ResourceManager.GetString("Log_Dir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a ErrorType.
+        /// </summary>
+        internal static string Log_ErrorType {
+            get {
+                return ResourceManager.GetString("Log_ErrorType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Failed to enumerate traineddata files: {0}.
+        /// </summary>
+        internal static string Log_FailedTessData {
+            get {
+                return ResourceManager.GetString("Log_FailedTessData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a FileCount.
+        /// </summary>
+        internal static string Log_FileCount {
+            get {
+                return ResourceManager.GetString("Log_FileCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a FilePath.
+        /// </summary>
+        internal static string Log_FilePath {
+            get {
+                return ResourceManager.GetString("Log_FilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Main form loading - initializing UI components.
+        /// </summary>
+        internal static string Log_InitializingUI {
+            get {
+                return ResourceManager.GetString("Log_InitializingUI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a IO error in async operation: {0}.
+        /// </summary>
+        internal static string Log_IOErrorAsyncOp {
+            get {
+                return ResourceManager.GetString("Log_IOErrorAsyncOp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a IO error during text extraction: {0}.
+        /// </summary>
+        internal static string Log_IOErrorTextExtr {
+            get {
+                return ResourceManager.GetString("Log_IOErrorTextExtr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Logging disabled: No valid log directory available..
+        /// </summary>
+        internal static string Log_LogDisabled {
+            get {
+                return ResourceManager.GetString("Log_LogDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Error initializing logging system: {0}.
+        /// </summary>
+        internal static string Log_LogErrInit {
+            get {
+                return ResourceManager.GetString("Log_LogErrInit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Critical: Failed to write error log - {0}.
+        /// </summary>
+        internal static string Log_LogErrWrite {
+            get {
+                return ResourceManager.GetString("Log_LogErrWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a MainFormClosing.
+        /// </summary>
+        internal static string Log_MainFormClosing {
+            get {
+                return ResourceManager.GetString("Log_MainFormClosing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a MainFormLoad.
+        /// </summary>
+        internal static string Log_MainFormLoad {
+            get {
+                return ResourceManager.GetString("Log_MainFormLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Main form displayed and ready.
+        /// </summary>
+        internal static string Log_MainFormReady {
+            get {
+                return ResourceManager.GetString("Log_MainFormReady", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Found {0} traineddata files in {1}.
+        /// </summary>
+        internal static string Log_NumTessData {
+            get {
+                return ResourceManager.GetString("Log_NumTessData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a OcrLanguage.
+        /// </summary>
+        internal static string Log_OcrLanguage {
+            get {
+                return ResourceManager.GetString("Log_OcrLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a OutputFormat.
+        /// </summary>
+        internal static string Log_OutputFormat {
+            get {
+                return ResourceManager.GetString("Log_OutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a OutputPath.
+        /// </summary>
+        internal static string Log_OutputPath {
+            get {
+                return ResourceManager.GetString("Log_OutputPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Text extraction: {0} pages to process.
+        /// </summary>
+        internal static string Log_PageProcess {
+            get {
+                return ResourceManager.GetString("Log_PageProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a PdfCompress.
+        /// </summary>
+        internal static string Log_PdfCompress {
+            get {
+                return ResourceManager.GetString("Log_PdfCompress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a PdfConvert.
+        /// </summary>
+        internal static string Log_PdfConvert {
+            get {
+                return ResourceManager.GetString("Log_PdfConvert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a PdfMerge.
+        /// </summary>
+        internal static string Log_PdfMerge {
+            get {
+                return ResourceManager.GetString("Log_PdfMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a PdfPath.
+        /// </summary>
+        internal static string Log_PdfPath {
+            get {
+                return ResourceManager.GetString("Log_PdfPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Runtime.
+        /// </summary>
+        internal static string Log_Runtime {
+            get {
+                return ResourceManager.GetString("Log_Runtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Shutdown blocked: an operation is still in progress.
+        /// </summary>
+        internal static string Log_ShutdownBlocked {
+            get {
+                return ResourceManager.GetString("Log_ShutdownBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Source.
+        /// </summary>
+        internal static string Log_Source {
+            get {
+                return ResourceManager.GetString("Log_Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Started.
+        /// </summary>
+        internal static string Log_Started {
+            get {
+                return ResourceManager.GetString("Log_Started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Tesseract data directory not found: {0}.
+        /// </summary>
+        internal static string Log_TessDataDir {
+            get {
+                return ResourceManager.GetString("Log_TessDataDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a TextExtraction.
+        /// </summary>
+        internal static string Log_TextExtraction {
+            get {
+                return ResourceManager.GetString("Log_TextExtraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a TotalPages.
+        /// </summary>
+        internal static string Log_TotalPages {
+            get {
+                return ResourceManager.GetString("Log_TotalPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Unexpected error in async operation: {0}.
+        /// </summary>
+        internal static string Log_UnexErrAsyncOp {
+            get {
+                return ResourceManager.GetString("Log_UnexErrAsyncOp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Unexpected error during text extraction: {0}.
+        /// </summary>
+        internal static string Log_UnexErrTextExt {
+            get {
+                return ResourceManager.GetString("Log_UnexErrTextExt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Unknown.
+        /// </summary>
+        internal static string Log_Unknown {
+            get {
+                return ResourceManager.GetString("Log_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Version.
+        /// </summary>
+        internal static string Log_Version {
+            get {
+                return ResourceManager.GetString("Log_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Failed to load language data: {0}.
+        /// </summary>
+        internal static string LogFailedLoadLang {
+            get {
+                return ResourceManager.GetString("LogFailedLoadLang", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a Loaded {0} language entries from CSV.
+        /// </summary>
+        internal static string LogNumLangCsv {
+            get {
+                return ResourceManager.GetString("LogNumLangCsv", resourceCulture);
             }
         }
         

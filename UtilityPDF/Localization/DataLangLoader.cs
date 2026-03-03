@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using UtilityPDF.UI;
+using UtilityPDF.Resources;
 
 namespace UtilityPDF.Localization
 {
@@ -22,6 +23,7 @@ namespace UtilityPDF.Localization
         {
             if (!File.Exists(filePath))
             {
+                DisplayError.LogWarning(string.Format(Strings.Log_CsvNotFound, filePath));
                 return EmptyCollection;
             }
 
@@ -40,10 +42,16 @@ namespace UtilityPDF.Localization
                     })
                     .ToList();
 
+                DisplayError.LogInfo(string.Format(Strings.LogNumLangCsv, dataList.Count));
                 return new ReadOnlyCollection<DataLang>(dataList);
             }
             catch (Exception ex)
             {
+                DisplayError.LogCustomError(string.Format(Strings.LogFailedLoadLang, ex.Message), new Dictionary<string, string>
+                {
+                    { Strings.Log_FilePath, filePath },
+                    { Strings.Log_ErrorType, ex.GetType().Name }
+                });
                 DisplayError.ErrorGeneric(ex);
                 return EmptyCollection;
             }
@@ -58,16 +66,23 @@ namespace UtilityPDF.Localization
 
             if (!Directory.Exists(tessDataPath))
             {
+                DisplayError.LogWarning(string.Format(Strings.Log_TessDataDir, tessDataPath));
                 return Array.Empty<string>();
             }
 
             try
             {
                 string[] allFiles = Directory.GetFiles(tessDataPath, "*.traineddata");
+                DisplayError.LogInfo(string.Format(Strings.Log_NumTessData, allFiles.Length, tessDataPath));
                 return allFiles;
             }
             catch (Exception ex)
             {
+                DisplayError.LogCustomError(string.Format(Strings.Log_FailedTessData, ex.Message), new Dictionary<string, string>
+                {
+                    { Strings.Log_Dir, tessDataPath },
+                    { Strings.Log_ErrorType, ex.GetType().Name }
+                });
                 DisplayError.ErrorGeneric(ex);
                 return Array.Empty<string>();
             }

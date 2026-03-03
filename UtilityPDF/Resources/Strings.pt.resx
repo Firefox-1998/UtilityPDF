@@ -261,19 +261,6 @@
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>Ocorreu um erro de E/S:</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="HeaderExtractText" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderMergePDFs" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderCompressPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderConvertPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="HeaderExtractText" xml:space="preserve">
     <value>Extraia texto de PDF usando OCR</value>
   </data>
@@ -285,5 +272,174 @@
   </data>
   <data name="HeaderConvertPDF" xml:space="preserve">
     <value>Converter PDF em DOCX/RTF</value>
+  </data>
+  <data name="Log_ShutdownBlocked" xml:space="preserve">
+    <value>Desligamento bloqueado: uma operação ainda está em andamento</value>
+  </data>
+  <data name="Log_InitializingUI" xml:space="preserve">
+    <value>Carregamento do formulário principal - inicializando componentes da UI</value>
+  </data>
+  <data name="Log_MainFormReady" xml:space="preserve">
+    <value>Formulário principal exibido e pronto</value>
+  </data>
+  <data name="Log_MainFormLoad" xml:space="preserve">
+    <value>MainFormLoad</value>
+  </data>
+  <data name="Log_Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="Log_MainFormClosing" xml:space="preserve">
+    <value>MainFormClosing</value>
+  </data>
+  <data name="Log_CloseReason" xml:space="preserve">
+    <value>Motivo de fechamento</value>
+  </data>
+  <data name="Log_ConfigError" xml:space="preserve">
+    <value>Erro de configuração</value>
+  </data>
+  <data name="Log_ConfigErrorTitle" xml:space="preserve">
+    <value>Erro durante a inicialização da configuração:\n{0}</value>
+  </data>
+  <data name="Log_Started" xml:space="preserve">
+    <value>Iniciado</value>
+  </data>
+  <data name="Log_ApplicationStartup" xml:space="preserve">
+    <value>Inicialização do aplicativo</value>
+  </data>
+  <data name="Log_Version" xml:space="preserve">
+    <value>Versão</value>
+  </data>
+  <data name="Log_Runtime" xml:space="preserve">
+    <value>Tempo de execução</value>
+  </data>
+  <data name="Log_ApplicationShutdown" xml:space="preserve">
+    <value>Desligamento do aplicativo</value>
+  </data>
+  <data name="Log_TextExtraction" xml:space="preserve">
+    <value>Extração de texto</value>
+  </data>
+  <data name="Log_PdfPath" xml:space="preserve">
+    <value>CaminhoPDF</value>
+  </data>
+  <data name="Log_OutputPath" xml:space="preserve">
+    <value>Caminho de saída</value>
+  </data>
+  <data name="Log_OcrLanguage" xml:space="preserve">
+    <value>OcrLanguage</value>
+  </data>
+  <data name="Log_PageProcess" xml:space="preserve">
+    <value>Extração de texto: {0} páginas para processar</value>
+  </data>
+  <data name="Log_TotalPages" xml:space="preserve">
+    <value>Total de páginas</value>
+  </data>
+  <data name="Log_ErrorType" xml:space="preserve">
+    <value>Tipo de erro</value>
+  </data>
+  <data name="Log_IOErrorTextExtr" xml:space="preserve">
+    <value>Erro de E/S durante a extração de texto: {0}</value>
+  </data>
+  <data name="Log_UnexErrTextExt" xml:space="preserve">
+    <value>Erro inesperado durante a extração de texto: {0}</value>
+  </data>
+  <data name="Log_PdfCompress" xml:space="preserve">
+    <value>PDFComprimir</value>
+  </data>
+  <data name="Log_CompressionLevel" xml:space="preserve">
+    <value>Nível de compressão</value>
+  </data>
+  <data name="Log_PdfMerge" xml:space="preserve">
+    <value>Mesclar PDF</value>
+  </data>
+  <data name="Log_FileCount" xml:space="preserve">
+    <value>Contagem de arquivos</value>
+  </data>
+  <data name="Log_PdfConvert" xml:space="preserve">
+    <value>Converter PDF</value>
+  </data>
+  <data name="Log_OutputFormat" xml:space="preserve">
+    <value>Formato de saída</value>
+  </data>
+  <data name="Log_IOErrorAsyncOp" xml:space="preserve">
+    <value>Erro de E/S na operação assíncrona: {0}</value>
+  </data>
+  <data name="Log_Source" xml:space="preserve">
+    <value>Fonte</value>
+  </data>
+  <data name="Log_UnexErrAsyncOp" xml:space="preserve">
+    <value>Erro inesperado na operação assíncrona: {0}</value>
+  </data>
+  <data name="Log_Unknown" xml:space="preserve">
+    <value>Desconhecido</value>
+  </data>
+  <data name="Log_CsvNotFound" xml:space="preserve">
+    <value>Arquivo CSV de idioma não encontrado: {0}</value>
+  </data>
+  <data name="LogNumLangCsv" xml:space="preserve">
+    <value>Carregou {0} entradas de idioma do CSV</value>
+  </data>
+  <data name="LogFailedLoadLang" xml:space="preserve">
+    <value>Falha ao carregar dados de idioma: {0}</value>
+  </data>
+  <data name="Log_FilePath" xml:space="preserve">
+    <value>Caminho do arquivo</value>
+  </data>
+  <data name="Log_TessDataDir" xml:space="preserve">
+    <value>Diretório de dados do Tesseract não encontrado: {0}</value>
+  </data>
+  <data name="Log_NumTessData" xml:space="preserve">
+    <value>Foram encontrados {0} arquivos de dados treinados em {1}</value>
+  </data>
+  <data name="Log_FailedTessData" xml:space="preserve">
+    <value>Falha ao enumerar arquivos de dados treinados: {0}</value>
+  </data>
+  <data name="Log_Dir" xml:space="preserve">
+    <value>Diretório</value>
+  </data>
+  <data name="Log_LogDisabled" xml:space="preserve">
+    <value>Registro desativado: nenhum diretório de registro válido disponível.</value>
+  </data>
+  <data name="Log_LogErrInit" xml:space="preserve">
+    <value>Erro ao inicializar o sistema de registro: {0}</value>
+  </data>
+  <data name="Log_LogErrWrite" xml:space="preserve">
+    <value>Crítico: Falha ao gravar o log de erros - {0}</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ConfigNotInit" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="FallbackLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="FallbackLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorCreateLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorCreateLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorSettingsSave" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ConfigNotInit" xml:space="preserve">
+    <value>Configuração não inicializada. Chame Initialize() primeiro.</value>
+  </data>
+  <data name="FallbackLogDir" xml:space="preserve">
+    <value>Não foi possível criar o diretório de registros na pasta do aplicativo.\nOs registros serão salvos em:\n{0}</value>
+  </data>
+  <data name="FallbackLogDirTitle" xml:space="preserve">
+    <value>Notificação do diretório de registros</value>
+  </data>
+  <data name="ErrorCreateLogDir" xml:space="preserve">
+    <value>Não foi possível criar o diretório de log devido a permissões insuficientes.\nO registro será desativado.\n\nLocais tentados:\n1. {0}\n2. {1}</value>
+  </data>
+  <data name="ErrorCreateLogDirTitle" xml:space="preserve">
+    <value>Erro de registro</value>
+  </data>
+  <data name="ErrorSettingsSave" xml:space="preserve">
+    <value>Nenhuma configuração para salvar.</value>
   </data>
 </root>

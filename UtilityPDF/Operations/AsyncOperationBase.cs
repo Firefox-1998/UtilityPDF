@@ -35,10 +35,19 @@ namespace UtilityPDF.Operations
                 }
                 catch (IOException ex)
                 {
+                    DisplayError.LogCustomError(string.Format(Strings.Log_IOErrorAsyncOp, ex.Message), new System.Collections.Generic.Dictionary<string, string>
+                    {
+                        { Strings.Log_ErrorType, "IOException" },
+                        { Strings.Log_Source, ex.Source ?? Strings.Log_Unknown }
+                    });
                     DisplayError.ErrorIO(ex);
                 }
                 catch (Exception ex)
                 {
+                    DisplayError.LogCustomError(string.Format(Strings.Log_UnexErrAsyncOp, ex.Message), new System.Collections.Generic.Dictionary<string, string>
+                    {
+                        { Strings.Log_ErrorType, ex.GetType().Name }
+                    });
                     DisplayError.ErrorGeneric(ex);
                 }
                 finally
@@ -77,15 +86,6 @@ namespace UtilityPDF.Operations
         protected void ShowCompletionMessage(string message)
         {
             UIHelper.ShowMessageBox(ProgressLabel, message, Strings.MsgBoxInformationTitle);
-        }
-
-        /// <summary>
-        /// Shows an error message on the UI thread
-        /// </summary>
-        protected void ShowErrorMessage(string message)
-        {
-            UIHelper.ShowMessageBox(ProgressLabel, message, Strings.MsgBoxErrorTitle, 
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

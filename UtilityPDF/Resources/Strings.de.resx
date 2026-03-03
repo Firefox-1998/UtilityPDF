@@ -261,19 +261,6 @@
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>Ein IO-Fehler ist aufgetreten:</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="HeaderExtractText" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderMergePDFs" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderCompressPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderConvertPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="HeaderExtractText" xml:space="preserve">
     <value>Extrahieren Sie Text aus PDF mit OCR</value>
   </data>
@@ -285,5 +272,174 @@
   </data>
   <data name="HeaderConvertPDF" xml:space="preserve">
     <value>Konvertieren Sie PDF in DOCX/RTF</value>
+  </data>
+  <data name="Log_ShutdownBlocked" xml:space="preserve">
+    <value>Herunterfahren blockiert: Ein Vorgang wird noch ausgeführt</value>
+  </data>
+  <data name="Log_InitializingUI" xml:space="preserve">
+    <value>Hauptformular wird geladen – UI-Komponenten werden initialisiert</value>
+  </data>
+  <data name="Log_MainFormReady" xml:space="preserve">
+    <value>Hauptformular angezeigt und bereit</value>
+  </data>
+  <data name="Log_MainFormLoad" xml:space="preserve">
+    <value>MainFormLoad</value>
+  </data>
+  <data name="Log_Completed" xml:space="preserve">
+    <value>Vollendet</value>
+  </data>
+  <data name="Log_MainFormClosing" xml:space="preserve">
+    <value>MainFormClosing</value>
+  </data>
+  <data name="Log_CloseReason" xml:space="preserve">
+    <value>CloseReason</value>
+  </data>
+  <data name="Log_ConfigError" xml:space="preserve">
+    <value>Konfigurationsfehler</value>
+  </data>
+  <data name="Log_ConfigErrorTitle" xml:space="preserve">
+    <value>Fehler bei der Konfigurationsinitialisierung:\n{0}</value>
+  </data>
+  <data name="Log_Started" xml:space="preserve">
+    <value>Begonnen</value>
+  </data>
+  <data name="Log_ApplicationStartup" xml:space="preserve">
+    <value>Anwendungsstart</value>
+  </data>
+  <data name="Log_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Log_Runtime" xml:space="preserve">
+    <value>Laufzeit</value>
+  </data>
+  <data name="Log_ApplicationShutdown" xml:space="preserve">
+    <value>Anwendungsabschaltung</value>
+  </data>
+  <data name="Log_TextExtraction" xml:space="preserve">
+    <value>TextExtraktion</value>
+  </data>
+  <data name="Log_PdfPath" xml:space="preserve">
+    <value>PDFPath</value>
+  </data>
+  <data name="Log_OutputPath" xml:space="preserve">
+    <value>Ausgabepfad</value>
+  </data>
+  <data name="Log_OcrLanguage" xml:space="preserve">
+    <value>OcrLanguage</value>
+  </data>
+  <data name="Log_PageProcess" xml:space="preserve">
+    <value>Textextraktion: {0} Seiten zur Verarbeitung</value>
+  </data>
+  <data name="Log_TotalPages" xml:space="preserve">
+    <value>Gesamtseiten</value>
+  </data>
+  <data name="Log_ErrorType" xml:space="preserve">
+    <value>Fehlertyp</value>
+  </data>
+  <data name="Log_IOErrorTextExtr" xml:space="preserve">
+    <value>E/A-Fehler während der Textextraktion: {0}</value>
+  </data>
+  <data name="Log_UnexErrTextExt" xml:space="preserve">
+    <value>Unerwarteter Fehler während der Textextraktion: {0}</value>
+  </data>
+  <data name="Log_PdfCompress" xml:space="preserve">
+    <value>PDFCompress</value>
+  </data>
+  <data name="Log_CompressionLevel" xml:space="preserve">
+    <value>Komprimierungsstufe</value>
+  </data>
+  <data name="Log_PdfMerge" xml:space="preserve">
+    <value>PDFMerge</value>
+  </data>
+  <data name="Log_FileCount" xml:space="preserve">
+    <value>FileCount</value>
+  </data>
+  <data name="Log_PdfConvert" xml:space="preserve">
+    <value>PDFConvert</value>
+  </data>
+  <data name="Log_OutputFormat" xml:space="preserve">
+    <value>Ausgabeformat</value>
+  </data>
+  <data name="Log_IOErrorAsyncOp" xml:space="preserve">
+    <value>E/A-Fehler im asynchronen Vorgang: {0}</value>
+  </data>
+  <data name="Log_Source" xml:space="preserve">
+    <value>Quelle</value>
+  </data>
+  <data name="Log_UnexErrAsyncOp" xml:space="preserve">
+    <value>Unerwarteter Fehler im asynchronen Vorgang: {0}</value>
+  </data>
+  <data name="Log_Unknown" xml:space="preserve">
+    <value>Unbekannt</value>
+  </data>
+  <data name="Log_CsvNotFound" xml:space="preserve">
+    <value>Sprach-CSV-Datei nicht gefunden: {0}</value>
+  </data>
+  <data name="LogNumLangCsv" xml:space="preserve">
+    <value>{0} Spracheneinträge aus CSV geladen</value>
+  </data>
+  <data name="LogFailedLoadLang" xml:space="preserve">
+    <value>Sprachdaten konnten nicht geladen werden: {0}</value>
+  </data>
+  <data name="Log_FilePath" xml:space="preserve">
+    <value>Dateipfad</value>
+  </data>
+  <data name="Log_TessDataDir" xml:space="preserve">
+    <value>Tesseract-Datenverzeichnis nicht gefunden: {0}</value>
+  </data>
+  <data name="Log_NumTessData" xml:space="preserve">
+    <value>{0} trainierte Datendateien in {1} gefunden</value>
+  </data>
+  <data name="Log_FailedTessData" xml:space="preserve">
+    <value>Die trainierten Datendateien konnten nicht aufgelistet werden: {0}</value>
+  </data>
+  <data name="Log_Dir" xml:space="preserve">
+    <value>Verzeichnis</value>
+  </data>
+  <data name="Log_LogDisabled" xml:space="preserve">
+    <value>Protokollierung deaktiviert: Kein gültiges Protokollverzeichnis verfügbar.</value>
+  </data>
+  <data name="Log_LogErrInit" xml:space="preserve">
+    <value>Fehler beim Initialisieren des Protokollierungssystems: {0}</value>
+  </data>
+  <data name="Log_LogErrWrite" xml:space="preserve">
+    <value>Kritisch: Fehlerprotokoll konnte nicht geschrieben werden – {0}</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ConfigNotInit" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="FallbackLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="FallbackLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorCreateLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorCreateLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorSettingsSave" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ConfigNotInit" xml:space="preserve">
+    <value>Konfiguration nicht initialisiert. Rufen Sie zuerst Initialize() auf.</value>
+  </data>
+  <data name="FallbackLogDir" xml:space="preserve">
+    <value>Das Protokollverzeichnis kann nicht im Anwendungsordner erstellt werden.\nProtokolle werden gespeichert unter:\n{0}</value>
+  </data>
+  <data name="FallbackLogDirTitle" xml:space="preserve">
+    <value>Protokollverzeichnisbenachrichtigung</value>
+  </data>
+  <data name="ErrorCreateLogDir" xml:space="preserve">
+    <value>Das Protokollverzeichnis kann aufgrund unzureichender Berechtigungen nicht erstellt werden.\nDie Protokollierung wird deaktiviert.\n\nVersuchte Speicherorte:\n1. {0}\n2. {1}</value>
+  </data>
+  <data name="ErrorCreateLogDirTitle" xml:space="preserve">
+    <value>Protokollierungsfehler</value>
+  </data>
+  <data name="ErrorSettingsSave" xml:space="preserve">
+    <value>Keine Einstellungen zum Speichern vorhanden.</value>
   </data>
 </root>

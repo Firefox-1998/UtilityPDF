@@ -279,4 +279,154 @@ Please wait...</value>
   <data name="HeaderConvertPDF" xml:space="preserve">
     <value>Convert to DOCX/RTF</value>
   </data>
+  <data name="Log_ShutdownBlocked" xml:space="preserve">
+    <value>Shutdown blocked: an operation is still in progress</value>
+  </data>
+  <data name="Log_InitializingUI" xml:space="preserve">
+    <value>Main form loading - initializing UI components</value>
+  </data>
+  <data name="Log_MainFormReady" xml:space="preserve">
+    <value>Main form displayed and ready</value>
+  </data>
+  <data name="Log_MainFormLoad" xml:space="preserve">
+    <value>MainFormLoad</value>
+  </data>
+  <data name="Log_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Log_MainFormClosing" xml:space="preserve">
+    <value>MainFormClosing</value>
+  </data>
+  <data name="Log_CloseReason" xml:space="preserve">
+    <value>CloseReason</value>
+  </data>
+  <data name="Log_ConfigError" xml:space="preserve">
+    <value>Configuration Error</value>
+  </data>
+  <data name="Log_ConfigErrorTitle" xml:space="preserve">
+    <value>Error during configuration initialization:\n{0}</value>
+  </data>
+  <data name="Log_Started" xml:space="preserve">
+    <value>Started</value>
+  </data>
+  <data name="Log_ApplicationStartup" xml:space="preserve">
+    <value>ApplicationStartup</value>
+  </data>
+  <data name="Log_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Log_Runtime" xml:space="preserve">
+    <value>Runtime</value>
+  </data>
+  <data name="Log_ApplicationShutdown" xml:space="preserve">
+    <value>ApplicationShutdown</value>
+  </data>
+  <data name="Log_TextExtraction" xml:space="preserve">
+    <value>TextExtraction</value>
+  </data>
+  <data name="Log_PdfPath" xml:space="preserve">
+    <value>PdfPath</value>
+  </data>
+  <data name="Log_OutputPath" xml:space="preserve">
+    <value>OutputPath</value>
+  </data>
+  <data name="Log_OcrLanguage" xml:space="preserve">
+    <value>OcrLanguage</value>
+  </data>
+  <data name="Log_PageProcess" xml:space="preserve">
+    <value>Text extraction: {0} pages to process</value>
+  </data>
+  <data name="Log_TotalPages" xml:space="preserve">
+    <value>TotalPages</value>
+  </data>
+  <data name="Log_ErrorType" xml:space="preserve">
+    <value>ErrorType</value>
+  </data>
+  <data name="Log_IOErrorTextExtr" xml:space="preserve">
+    <value>IO error during text extraction: {0}</value>
+  </data>
+  <data name="Log_UnexErrTextExt" xml:space="preserve">
+    <value>Unexpected error during text extraction: {0}</value>
+  </data>
+  <data name="Log_PdfCompress" xml:space="preserve">
+    <value>PdfCompress</value>
+  </data>
+  <data name="Log_CompressionLevel" xml:space="preserve">
+    <value>CompressionLevel</value>
+  </data>
+  <data name="Log_PdfMerge" xml:space="preserve">
+    <value>PdfMerge</value>
+  </data>
+  <data name="Log_FileCount" xml:space="preserve">
+    <value>FileCount</value>
+  </data>
+  <data name="Log_PdfConvert" xml:space="preserve">
+    <value>PdfConvert</value>
+  </data>
+  <data name="Log_OutputFormat" xml:space="preserve">
+    <value>OutputFormat</value>
+  </data>
+  <data name="Log_IOErrorAsyncOp" xml:space="preserve">
+    <value>IO error in async operation: {0}</value>
+  </data>
+  <data name="Log_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Log_UnexErrAsyncOp" xml:space="preserve">
+    <value>Unexpected error in async operation: {0}</value>
+  </data>
+  <data name="Log_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Log_CsvNotFound" xml:space="preserve">
+    <value>Language CSV file not found: {0}</value>
+  </data>
+  <data name="LogNumLangCsv" xml:space="preserve">
+    <value>Loaded {0} language entries from CSV</value>
+  </data>
+  <data name="LogFailedLoadLang" xml:space="preserve">
+    <value>Failed to load language data: {0}</value>
+  </data>
+  <data name="Log_FilePath" xml:space="preserve">
+    <value>FilePath</value>
+  </data>
+  <data name="Log_TessDataDir" xml:space="preserve">
+    <value>Tesseract data directory not found: {0}</value>
+  </data>
+  <data name="Log_NumTessData" xml:space="preserve">
+    <value>Found {0} traineddata files in {1}</value>
+  </data>
+  <data name="Log_FailedTessData" xml:space="preserve">
+    <value>Failed to enumerate traineddata files: {0}</value>
+  </data>
+  <data name="Log_Dir" xml:space="preserve">
+    <value>Directory</value>
+  </data>
+  <data name="Log_LogDisabled" xml:space="preserve">
+    <value>Logging disabled: No valid log directory available.</value>
+  </data>
+  <data name="Log_LogErrInit" xml:space="preserve">
+    <value>Error initializing logging system: {0}</value>
+  </data>
+  <data name="Log_LogErrWrite" xml:space="preserve">
+    <value>Critical: Failed to write error log - {0}</value>
+  </data>
+  <data name="ConfigNotInit" xml:space="preserve">
+    <value>Configuration not initialized. Call Initialize() first.</value>
+  </data>
+  <data name="FallbackLogDir" xml:space="preserve">
+    <value>Unable to create log directory in application folder.\nLogs will be saved to:\n{0}</value>
+  </data>
+  <data name="FallbackLogDirTitle" xml:space="preserve">
+    <value>Log Directory Notification</value>
+  </data>
+  <data name="ErrorCreateLogDir" xml:space="preserve">
+    <value>Unable to create log directory due to insufficient permissions.\nLogging will be disabled.\n\nAttempted locations:\n1. {0}\n2. {1}</value>
+  </data>
+  <data name="ErrorCreateLogDirTitle" xml:space="preserve">
+    <value>Logging Error</value>
+  </data>
+  <data name="ErrorSettingsSave" xml:space="preserve">
+    <value>No settings to save.</value>
+  </data>
 </root>

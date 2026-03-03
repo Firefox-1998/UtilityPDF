@@ -69,11 +69,11 @@ namespace UtilityPDF.UI
             MessageBoxButtons buttons = MessageBoxButtons.OK,
             MessageBoxIcon icon = MessageBoxIcon.Information)
         {
-            Action showMessage = () =>
+            void showMessage()
             {
                 Form parentForm = control?.FindForm();
                 MessageBox.Show(parentForm, message, title, buttons, icon);
-            };
+            }
 
             if (control != null && !control.IsDisposed)
             {

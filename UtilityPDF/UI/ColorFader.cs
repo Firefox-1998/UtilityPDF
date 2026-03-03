@@ -17,12 +17,7 @@ namespace UtilityPDF.UI
         /// </summary>
         public void StartFader(LoadingSpinner loadingSpinner)
         {
-            if (loadingSpinner == null)
-            {
-                throw new ArgumentNullException(nameof(loadingSpinner));
-            }
-
-            spinner = loadingSpinner;
+            spinner = loadingSpinner ?? throw new ArgumentNullException(nameof(loadingSpinner));
             spinner.Start();
         }
 
@@ -31,10 +26,7 @@ namespace UtilityPDF.UI
         /// </summary>
         public void StopFader()
         {
-            if (spinner != null)
-            {
-                spinner.Stop();
-            }
+            spinner?.Stop();
         }
 
         /// <summary>

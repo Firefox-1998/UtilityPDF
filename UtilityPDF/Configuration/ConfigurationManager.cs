@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using UtilityPDF.UI;
+using UtilityPDF.Resources;
 
 namespace UtilityPDF.Configuration
 {
@@ -24,7 +25,7 @@ namespace UtilityPDF.Configuration
             {
                 if (currentSettings == null)
                 {
-                    throw new InvalidOperationException("Configuration not initialized. Call Initialize() first.");
+                    throw new InvalidOperationException(Strings.ConfigNotInit);
                 }
                 return currentSettings;
             }
@@ -129,9 +130,7 @@ namespace UtilityPDF.Configuration
                 if (!userNotifiedOfLogDirectoryFallback)
                 {
                     userNotifiedOfLogDirectoryFallback = true;
-                    DisplayError.ShowInfo(
-                        $"Unable to create log directory in application folder.\nLogs will be saved to:\n{fallbackLogPath}",
-                        "Log Directory Notification");
+                    DisplayError.ShowInfo(string.Format(Strings.FallbackLogDir,fallbackLogPath), Strings.FallbackLogDirTitle);
                 }
 
                 return;
@@ -141,10 +140,7 @@ namespace UtilityPDF.Configuration
             if (!userNotifiedOfLogDirectoryFallback)
             {
                 userNotifiedOfLogDirectoryFallback = true;
-                DisplayError.ShowError(
-                    "Unable to create log directory due to insufficient permissions.\nLogging will be disabled.\n\n" +
-                    $"Attempted locations:\n1. {primaryLogPath}\n2. {fallbackLogPath}",
-                    "Logging Error");
+                DisplayError.ShowError(string.Format(Strings.ErrorCreateLogDir, primaryLogPath, fallbackLogPath), Strings.ErrorCreateLogDirTitle);
             }
 
             currentSettings.Logging.LogDirectory = string.Empty;
@@ -192,7 +188,7 @@ namespace UtilityPDF.Configuration
             {
                 if (currentSettings == null)
                 {
-                    throw new InvalidOperationException("No settings to save.");
+                    throw new InvalidOperationException(Strings.ErrorSettingsSave);
                 }
 
                 JsonSerializerSettings jsonSettings = new JsonSerializerSettings

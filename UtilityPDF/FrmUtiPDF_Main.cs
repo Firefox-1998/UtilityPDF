@@ -78,7 +78,11 @@ namespace UtilityPDF
             Btn_Reset.Enabled = false;
             string selectedLanguage = GetSelectedOcrLanguage();
 
-            await Task.Run(() => ExtractText.Execute(pdfPath, txtPath, selectedLanguage, UpdateProgress, () => abortFlag));
+            await Task.Run(() => ExtractText.Execute(
+                pdfPath, txtPath, selectedLanguage,
+                UpdateProgress, () => abortFlag,
+                () => UIHelper.InvokeIfRequired(Btn_Abort, () => Btn_Abort.Enabled = false),
+                Btn_Abort));
 
             ToggleControlsExtract(true);
         }
@@ -366,9 +370,11 @@ namespace UtilityPDF
 
         private void FrmUtiPDF_Main_Load(object sender, EventArgs e)
         {
+            DisplayError.LogInfo(Strings.Log_InitializingUI);
             InitializeLanguageSelector();
             ControlTextImgAssigner.AssignControlTextxImg(this);
             CenterProgressLabelsOnPanels();
+            DisplayError.LogOperation(Strings.Log_MainFormLoad, Strings.Log_Completed);
         }
 
         private void FrmUtiPDF_Main_Shown(object sender, EventArgs e)
@@ -376,6 +382,7 @@ namespace UtilityPDF
             ResetAllPanels();
             UpdateProgress(0);
             CenterAllSpinners();
+            DisplayError.LogInfo(Strings.Log_MainFormReady);
         }
 
         private void FrmUtiPDF_Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -386,11 +393,22 @@ namespace UtilityPDF
                 return;
             }
 
-            e.Cancel = isOperationInProgress;
+            if (isOperationInProgress)
+            {
+                DisplayError.LogWarning(Strings.Log_ShutdownBlocked);
+                e.Cancel = true;
+                return;
+            }
+
+            DisplayError.LogOperation(Strings.Log_MainFormClosing, Strings.Log_Completed, new Dictionary<string, string>
+            {
+                { Strings.Log_CloseReason, e.CloseReason.ToString() }
+            });
         }
 
         private void Btn_Exit_Click(object sender, EventArgs e)
         {
+            DisplayError.LogInfo(Strings.Log_ApplicationShutdown);
             Application.Exit();
         }
 
@@ -592,6 +610,10 @@ namespace UtilityPDF
         {
             toggleControls(false);
             BringSpinnerToFront(spinner, progressLabel);
+
+            // Ensure spinner and label remain enabled even if their parent panel is disabled
+            spinner.Enabled = true;
+            progressLabel.Enabled = true;
 
             await operation();
 

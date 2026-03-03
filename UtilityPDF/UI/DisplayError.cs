@@ -119,7 +119,7 @@ namespace UtilityPDF.UI
                 return;
             }
 
-            LogHelper.LogMessage(message, "ERROR", additionalData);
+            LogHelper.LogMessage(message, Strings.MsgBoxErrorTitle.ToUpper(), additionalData);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace UtilityPDF.UI
                 return;
             }
 
-            LogHelper.LogMessage(message, "INFO", additionalData);
+            LogHelper.LogMessage(message, Strings.MsgBoxInformationTitle.ToUpper(), additionalData);
         }
     }
 }

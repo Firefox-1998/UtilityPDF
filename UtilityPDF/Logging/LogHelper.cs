@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using UtilityPDF.Configuration;
+using UtilityPDF.Resources;
 
 namespace UtilityPDF.Logging
 {
@@ -15,7 +16,8 @@ namespace UtilityPDF.Logging
     {
         Error,
         Operation,
-        Warning
+        Warning,
+        Info
     }
 
     /// <summary>
@@ -35,7 +37,7 @@ namespace UtilityPDF.Logging
                 string logDirectory = ConfigurationManager.GetLogDirectory();
                 if (string.IsNullOrEmpty(logDirectory))
                 {
-                    Debug.WriteLine("Logging disabled: No valid log directory available.");
+                    Debug.WriteLine(Strings.Log_LogDisabled);
                     return;
                 }
 
@@ -43,6 +45,7 @@ namespace UtilityPDF.Logging
                 EnsureLogDirectoryExists(GetLogTypeDirectory(logDirectory, LogType.Error));
                 EnsureLogDirectoryExists(GetLogTypeDirectory(logDirectory, LogType.Operation));
                 EnsureLogDirectoryExists(GetLogTypeDirectory(logDirectory, LogType.Warning));
+                EnsureLogDirectoryExists(GetLogTypeDirectory(logDirectory, LogType.Info));
 
                 // Cleanup old logs
                 CleanupOldLogs(GetLogTypeDirectory(logDirectory, LogType.Error),
@@ -50,6 +53,9 @@ namespace UtilityPDF.Logging
 
                 CleanupOldLogs(GetLogTypeDirectory(logDirectory, LogType.Warning),
                     ConfigurationManager.Settings.Logging.LogRetentionDays, "warning_*.json");
+
+                CleanupOldLogs(GetLogTypeDirectory(logDirectory, LogType.Info),
+                    ConfigurationManager.Settings.Logging.LogRetentionDays, "info_*.json");
 
                 if (ConfigurationManager.Settings.Logging.EnableOperationLogs)
                 {
@@ -59,7 +65,7 @@ namespace UtilityPDF.Logging
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error initializing logging system: {ex.Message}");
+                Debug.WriteLine(string.Format(Strings.Log_LogErrInit, ex.Message));
             }
         }
 
@@ -93,7 +99,7 @@ namespace UtilityPDF.Logging
             }
             catch (Exception logEx)
             {
-                Debug.WriteLine($"Critical: Failed to write error log - {logEx.Message}");
+                Debug.WriteLine(string.Format(Strings.Log_LogErrWrite, logEx.Message));
             }
         }
 
@@ -122,7 +128,6 @@ namespace UtilityPDF.Logging
                 {
                     Level = "OPERATION",
                     Message = operation,
-                    ExceptionType = "N/A",
                     AdditionalData = data
                 };
 
@@ -150,8 +155,7 @@ namespace UtilityPDF.Logging
                 {
                     Level = "WARNING",
                     Message = message,
-                    ExceptionType = "N/A",
-                    AdditionalData = additionalData ?? new Dictionary<string, string>()
+                    AdditionalData = additionalData != null && additionalData.Count > 0 ? additionalData : null
                 };
 
                 WriteLogEntry(entry, LogType.Warning);
@@ -163,7 +167,7 @@ namespace UtilityPDF.Logging
         }
 
         /// <summary>
-        /// Logs a custom message to the JSON log file (logged as error, always written)
+        /// Logs a custom message to the appropriate log file based on level
         /// </summary>
         public static void LogMessage(string message, string level = "INFO", Dictionary<string, string> additionalData = null)
         {
@@ -178,15 +182,33 @@ namespace UtilityPDF.Logging
                 {
                     Level = level,
                     Message = message,
-                    ExceptionType = "N/A",
-                    AdditionalData = additionalData ?? new Dictionary<string, string>()
+                    AdditionalData = additionalData != null && additionalData.Count > 0 ? additionalData : null
                 };
 
-                WriteLogEntry(entry, LogType.Error);
+                LogType logType = ResolveLogType(level);
+                WriteLogEntry(entry, logType);
             }
             catch (Exception logEx)
             {
                 Debug.WriteLine($"Critical: Failed to write log message - {logEx.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Resolves the LogType based on the string level
+        /// </summary>
+        private static LogType ResolveLogType(string level)
+        {
+            switch (level.ToUpperInvariant())
+            {
+                case "ERROR":
+                    return LogType.Error;
+                case "WARNING":
+                    return LogType.Warning;
+                case "OPERATION":
+                    return LogType.Operation;
+                default:
+                    return LogType.Info;
             }
         }
 

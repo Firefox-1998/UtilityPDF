@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows.Forms;
 using UtilityPDF.Configuration;
 using UtilityPDF.Logging;
 using UtilityPDF.UI;
+using UtilityPDF.Resources;
 
 namespace UtilityPDF
 {
     internal static class Program
     {
         /// <summary>
-        /// Punto di ingresso principale dell'applicazione.
+        /// Main entry point of the application.
         /// </summary>
         [STAThread]
         static void Main()
@@ -17,27 +20,31 @@ namespace UtilityPDF
             try
             {
                 ConfigurationManager.Initialize();
-                
+
                 // Initialize logging system (cleanup old logs and prepare directory)
                 LogHelper.Initialize();
             }
             catch (Exception ex)
             {
-                DisplayError.ShowError(
-                    $"Errore durante l'inizializzazione della configurazione:\n{ex.Message}", 
-                    "Errore di Configurazione");
-                
-                // Log the initialization error
-                DisplayError.LogCustomError("Application initialization failed", new System.Collections.Generic.Dictionary<string, string>
-                {
-                    { "ErrorMessage", ex.Message },
-                    { "StackTrace", ex.StackTrace }
-                });
+                DisplayError.ShowError(string.Format(Strings.Log_ConfigError, ex.Message), Strings.Log_ConfigErrorTitle);
             }
+
+            string appVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            DisplayError.LogOperation(Strings.Log_ApplicationStartup, Strings.Log_Started, new Dictionary<string, string>
+            {
+                { Strings.Log_Version, appVersion },
+                { Strings.Log_Runtime, Environment.Version.ToString() },
+                { "OS", Environment.OSVersion.ToString() }
+            });
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmUtiPDF_Main());
+
+            DisplayError.LogOperation(Strings.Log_ApplicationShutdown, Strings.Log_Completed, new Dictionary<string, string>
+            {
+                { Strings.Log_Version, appVersion }
+            });
         }
     }
 }

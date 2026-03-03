@@ -51,6 +51,7 @@ namespace UtilityPDF.Controls
         /// </summary>
         public void Start()
         {
+            Visible = true;
             animationTimer.Start();
         }
 
@@ -60,6 +61,7 @@ namespace UtilityPDF.Controls
         public void Stop()
         {
             animationTimer.Stop();
+            Visible = false;
         }
 
         private void AnimationTimer_Tick(object sender, EventArgs e)

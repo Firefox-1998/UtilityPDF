@@ -2,14 +2,16 @@ using Freeware;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using Tesseract;
+using UtilityPDF.Configuration;
 using UtilityPDF.Resources;
 using UtilityPDF.UI;
-using UtilityPDF.Configuration;
 
 namespace UtilityPDF.Processing
 {
@@ -20,15 +22,20 @@ namespace UtilityPDF.Processing
     {
         private readonly Action<int> updateProgressBar;
         private readonly Func<bool> shouldAbort;
+        private readonly Action onOperationCompleted;
+        private readonly Control uiControl;
         private readonly SynchronizationContext syncContext;
 
         private const int DefaultDpi = 300;
         private const int PagesPerFlush = 5; // Flush to disk every N pages
 
-        private ExtractText(Action<int> updateProgressBar, Func<bool> shouldAbort)
+        private ExtractText(Action<int> updateProgressBar, Func<bool> shouldAbort,
+                            Action onOperationCompleted, Control uiControl)
         {
             this.updateProgressBar = updateProgressBar;
             this.shouldAbort = shouldAbort;
+            this.onOperationCompleted = onOperationCompleted;
+            this.uiControl = uiControl;
             this.syncContext = SynchronizationContext.Current;
         }
 
@@ -36,9 +43,10 @@ namespace UtilityPDF.Processing
         /// Executes the text extraction operation
         /// </summary>
         public static void Execute(string pdfPath, string txtPath, string selectedLanguage,
-                                   Action<int> updateProgressBar, Func<bool> shouldAbort)
+                                   Action<int> updateProgressBar, Func<bool> shouldAbort,
+                                   Action onOperationCompleted, Control uiControl)
         {
-            ExtractText extractor = new ExtractText(updateProgressBar, shouldAbort);
+            ExtractText extractor = new ExtractText(updateProgressBar, shouldAbort, onOperationCompleted, uiControl);
             extractor.StartExtraction(pdfPath, txtPath, selectedLanguage);
         }
 
@@ -46,9 +54,18 @@ namespace UtilityPDF.Processing
         {
             ClearOutputFile(txtPath);
 
+            DisplayError.LogOperation(Strings.Log_TextExtraction, Strings.Log_Started, new Dictionary<string, string>
+            {
+                { Strings.Log_PdfPath, pdfPath },
+                { Strings.Log_OutputPath, txtPath },
+                { Strings.Log_OcrLanguage, selectedLanguage }
+            });
+
             try
             {
                 int pageCount = GetPageCount(pdfPath);
+
+                DisplayError.LogInfo(string.Format(Strings.Log_PageProcess, pageCount));
 
                 using (TesseractEngine engine = new TesseractEngine(
                     $@"./{SettingsString.TrainerDataFolder}", selectedLanguage, EngineMode.LstmOnly))
@@ -57,15 +74,45 @@ namespace UtilityPDF.Processing
                     ProcessAllPages(pdfStream, pageCount, engine, txtPath);
                 }
 
+                NotifyCompleted();
+                DisplayError.LogOperation(Strings.Log_TextExtraction, Strings.Log_Completed, new Dictionary<string, string>
+                {
+                    { Strings.Log_PdfPath, pdfPath },
+                    { Strings.Log_TotalPages, pageCount.ToString() }
+                });
                 ShowCompletionMessage();
             }
             catch (IOException ex)
             {
+                NotifyCompleted();
+                DisplayError.LogCustomError(string.Format(Strings.Log_IOErrorTextExtr, ex.Message), new Dictionary<string, string>
+                {
+                    { Strings.Log_PdfPath, pdfPath },
+                    { Strings.Log_ErrorType, "IOException" }
+                });
                 DisplayError.ErrorIO(ex);
             }
             catch (Exception ex)
             {
+                NotifyCompleted();
+                DisplayError.LogCustomError(string.Format(Strings.Log_UnexErrTextExt, ex.Message), new Dictionary<string, string>
+                {
+                    { Strings.Log_PdfPath, pdfPath },
+                    { Strings.Log_ErrorType, ex.GetType().Name }
+                });
                 DisplayError.ErrorGeneric(ex);
+            }
+        }
+
+        private void NotifyCompleted()
+        {
+            if (syncContext != null)
+            {
+                syncContext.Post(_ => onOperationCompleted?.Invoke(), null);
+            }
+            else
+            {
+                onOperationCompleted?.Invoke();
             }
         }
 
@@ -158,11 +205,11 @@ namespace UtilityPDF.Processing
         {
             string message = shouldAbort() ? Strings.WarnAbortedExtraction : Strings.InfoCompleteExtraction;
             string title = shouldAbort() ? Strings.MsgBoxWarningTitle : Strings.MsgBoxInformationTitle;
-            System.Windows.Forms.MessageBoxIcon icon = shouldAbort()
-                ? System.Windows.Forms.MessageBoxIcon.Warning
-                : System.Windows.Forms.MessageBoxIcon.Information;
+            MessageBoxIcon icon = shouldAbort()
+                ? MessageBoxIcon.Warning
+                : MessageBoxIcon.Information;
 
-            UIHelper.ShowMessageBox(null, message, title, System.Windows.Forms.MessageBoxButtons.OK, icon);
+            UIHelper.ShowMessageBox(uiControl, message, title, MessageBoxButtons.OK, icon);
         }
     }
 }

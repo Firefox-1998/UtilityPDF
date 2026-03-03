@@ -261,19 +261,6 @@
   <data name="SpecificMessageErrorIO" xml:space="preserve">
     <value>Παρουσιάστηκε σφάλμα IO:</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="HeaderExtractText" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderMergePDFs" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderCompressPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HeaderConvertPDF" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="HeaderExtractText" xml:space="preserve">
     <value>Εξαγωγή κειμένου από PDF χρησιμοποιώντας OCR</value>
   </data>
@@ -285,5 +272,174 @@
   </data>
   <data name="HeaderConvertPDF" xml:space="preserve">
     <value>Μετατροπή PDF σε DOCX/RTF</value>
+  </data>
+  <data name="Log_ShutdownBlocked" xml:space="preserve">
+    <value>Ο τερματισμός λειτουργίας μπλοκαρίστηκε: μια λειτουργία είναι ακόμα σε εξέλιξη</value>
+  </data>
+  <data name="Log_InitializingUI" xml:space="preserve">
+    <value>Φόρτωση κύριας φόρμας - προετοιμασία στοιχείων διεπαφής χρήστη</value>
+  </data>
+  <data name="Log_MainFormReady" xml:space="preserve">
+    <value>Η κύρια φόρμα εμφανίζεται και είναι έτοιμη</value>
+  </data>
+  <data name="Log_MainFormLoad" xml:space="preserve">
+    <value>MainFormLoad</value>
+  </data>
+  <data name="Log_Completed" xml:space="preserve">
+    <value>Ολοκληρώθηκε το</value>
+  </data>
+  <data name="Log_MainFormClosing" xml:space="preserve">
+    <value>MainFormClosing</value>
+  </data>
+  <data name="Log_CloseReason" xml:space="preserve">
+    <value>CloseReason</value>
+  </data>
+  <data name="Log_ConfigError" xml:space="preserve">
+    <value>Σφάλμα διαμόρφωσης</value>
+  </data>
+  <data name="Log_ConfigErrorTitle" xml:space="preserve">
+    <value>Σφάλμα κατά την προετοιμασία της διαμόρφωσης:\n{0}</value>
+  </data>
+  <data name="Log_Started" xml:space="preserve">
+    <value>Ξεκίνησε</value>
+  </data>
+  <data name="Log_ApplicationStartup" xml:space="preserve">
+    <value>Εκκίνηση εφαρμογής</value>
+  </data>
+  <data name="Log_Version" xml:space="preserve">
+    <value>Εκδοχή</value>
+  </data>
+  <data name="Log_Runtime" xml:space="preserve">
+    <value>Χρόνος εκτέλεσης</value>
+  </data>
+  <data name="Log_ApplicationShutdown" xml:space="preserve">
+    <value>ApplicationShutdown</value>
+  </data>
+  <data name="Log_TextExtraction" xml:space="preserve">
+    <value>Εξαγωγή κειμένου</value>
+  </data>
+  <data name="Log_PdfPath" xml:space="preserve">
+    <value>PdfPath</value>
+  </data>
+  <data name="Log_OutputPath" xml:space="preserve">
+    <value>OutputPath</value>
+  </data>
+  <data name="Log_OcrLanguage" xml:space="preserve">
+    <value>OcrLanguage</value>
+  </data>
+  <data name="Log_PageProcess" xml:space="preserve">
+    <value>Εξαγωγή κειμένου: {0} σελίδες προς επεξεργασία</value>
+  </data>
+  <data name="Log_TotalPages" xml:space="preserve">
+    <value>Σύνολο Σελίδων</value>
+  </data>
+  <data name="Log_ErrorType" xml:space="preserve">
+    <value>Τύπος σφάλματος</value>
+  </data>
+  <data name="Log_IOErrorTextExtr" xml:space="preserve">
+    <value>Σφάλμα IO κατά την εξαγωγή κειμένου: {0}</value>
+  </data>
+  <data name="Log_UnexErrTextExt" xml:space="preserve">
+    <value>Μη αναμενόμενο σφάλμα κατά την εξαγωγή κειμένου: {0}</value>
+  </data>
+  <data name="Log_PdfCompress" xml:space="preserve">
+    <value>PdfCompress</value>
+  </data>
+  <data name="Log_CompressionLevel" xml:space="preserve">
+    <value>Επίπεδο Συμπίεσης</value>
+  </data>
+  <data name="Log_PdfMerge" xml:space="preserve">
+    <value>PdfMerge</value>
+  </data>
+  <data name="Log_FileCount" xml:space="preserve">
+    <value>Καταμέτρηση αρχείων</value>
+  </data>
+  <data name="Log_PdfConvert" xml:space="preserve">
+    <value>PdfConvert</value>
+  </data>
+  <data name="Log_OutputFormat" xml:space="preserve">
+    <value>Μορφή εξόδου</value>
+  </data>
+  <data name="Log_IOErrorAsyncOp" xml:space="preserve">
+    <value>Σφάλμα IO στην ασύγχρονη λειτουργία: {0}</value>
+  </data>
+  <data name="Log_Source" xml:space="preserve">
+    <value>Πηγή</value>
+  </data>
+  <data name="Log_UnexErrAsyncOp" xml:space="preserve">
+    <value>Μη αναμενόμενο σφάλμα στη λειτουργία ασυγχρονισμού: {0}</value>
+  </data>
+  <data name="Log_Unknown" xml:space="preserve">
+    <value>Αγνωστος</value>
+  </data>
+  <data name="Log_CsvNotFound" xml:space="preserve">
+    <value>Το αρχείο CSV γλώσσας δεν βρέθηκε: {0}</value>
+  </data>
+  <data name="LogNumLangCsv" xml:space="preserve">
+    <value>Φορτώθηκαν {0} καταχωρίσεις γλώσσας από CSV</value>
+  </data>
+  <data name="LogFailedLoadLang" xml:space="preserve">
+    <value>Αποτυχία φόρτωσης δεδομένων γλώσσας: {0}</value>
+  </data>
+  <data name="Log_FilePath" xml:space="preserve">
+    <value>FilePath</value>
+  </data>
+  <data name="Log_TessDataDir" xml:space="preserve">
+    <value>Ο κατάλογος δεδομένων Tesseract δεν βρέθηκε: {0}</value>
+  </data>
+  <data name="Log_NumTessData" xml:space="preserve">
+    <value>Βρέθηκαν {0} αρχεία εκπαιδευμένων δεδομένων στο {1}</value>
+  </data>
+  <data name="Log_FailedTessData" xml:space="preserve">
+    <value>Αποτυχία απαρίθμησης αρχείων εκπαιδευμένων δεδομένων: {0}</value>
+  </data>
+  <data name="Log_Dir" xml:space="preserve">
+    <value>Τηλεφωνικός κατάλογος</value>
+  </data>
+  <data name="Log_LogDisabled" xml:space="preserve">
+    <value>Η καταγραφή είναι απενεργοποιημένη: Δεν υπάρχει έγκυρος κατάλογος καταγραφής διαθέσιμος.</value>
+  </data>
+  <data name="Log_LogErrInit" xml:space="preserve">
+    <value>Σφάλμα κατά την προετοιμασία του συστήματος καταγραφής: {0}</value>
+  </data>
+  <data name="Log_LogErrWrite" xml:space="preserve">
+    <value>Κρίσιμο: Απέτυχε η εγγραφή του αρχείου καταγραφής σφαλμάτων - {0}</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ConfigNotInit" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="FallbackLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="FallbackLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorCreateLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorCreateLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ErrorSettingsSave" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ConfigNotInit" xml:space="preserve">
+    <value>Η διαμόρφωση δεν έχει αρχικοποιηθεί. Καλέστε πρώτα την Initialize().</value>
+  </data>
+  <data name="FallbackLogDir" xml:space="preserve">
+    <value>Δεν είναι δυνατή η δημιουργία καταλόγου καταγραφής στο φάκελο της εφαρμογής.\nΤα αρχεία καταγραφής θα αποθηκευτούν σε:\n{0}</value>
+  </data>
+  <data name="FallbackLogDirTitle" xml:space="preserve">
+    <value>Ειδοποίηση καταλόγου καταγραφής</value>
+  </data>
+  <data name="ErrorCreateLogDir" xml:space="preserve">
+    <value>Δεν είναι δυνατή η δημιουργία καταλόγου καταγραφής λόγω ανεπαρκών δικαιωμάτων.\nΗ καταγραφή θα απενεργοποιηθεί.\n\nΤοποθεσίες που επιχειρήθηκαν:\n1. {0}\n2. {1}</value>
+  </data>
+  <data name="ErrorCreateLogDirTitle" xml:space="preserve">
+    <value>Σφάλμα καταγραφής</value>
+  </data>
+  <data name="ErrorSettingsSave" xml:space="preserve">
+    <value>Δεν υπάρχουν ρυθμίσεις για αποθήκευση.</value>
   </data>
 </root>

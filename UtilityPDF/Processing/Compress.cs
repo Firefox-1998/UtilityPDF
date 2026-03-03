@@ -6,6 +6,7 @@ using UtilityPDF.Controls;
 using UtilityPDF.Operations;
 using UtilityPDF.Resources;
 using UtilityPDF.Configuration;
+using UtilityPDF.UI;
 
 namespace UtilityPDF.Processing
 {
@@ -19,9 +20,22 @@ namespace UtilityPDF.Processing
         /// </summary>
         public async Task ExecuteAsync(string pdfPath, string levelCompress, string outputPath, Label lblProgress, LoadingSpinner spinner)
         {
+            DisplayError.LogOperation(Strings.Log_PdfCompress, Strings.Log_Started, new Dictionary<string, string>
+            {
+                { Strings.Log_PdfPath, pdfPath },
+                { Strings.Log_CompressionLevel, levelCompress },
+                { Strings.Log_OutputPath, outputPath }
+            });
+
             await ExecuteWithSpinnerAsync(lblProgress, spinner, () =>
             {
                 PerformGhostscriptCompression(pdfPath, levelCompress, outputPath);
+                DisplayError.LogOperation(Strings.Log_PdfCompress, Strings.Log_Completed, new Dictionary<string, string>
+                {
+                    { Strings.Log_PdfPath, pdfPath },
+                    { Strings.Log_CompressionLevel, levelCompress },
+                    { Strings.Log_OutputPath, outputPath }
+                });
                 ShowCompletionMessage(Strings.CompressCompleted);
 
             });

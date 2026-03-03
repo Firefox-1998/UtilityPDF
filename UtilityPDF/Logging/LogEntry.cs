@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace UtilityPDF.Logging
 {
@@ -10,21 +11,30 @@ namespace UtilityPDF.Logging
     {
         public string Timestamp { get; set; }
         public string Level { get; set; }
-        public string ExceptionType { get; set; }
         public string Message { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string ExceptionType { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string StackTrace { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, string> AdditionalData { get; set; }
 
+        /// <summary>
+        /// Default constructor for non-error entries (INFO, OPERATION)
+        /// </summary>
         public LogEntry()
         {
             Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Level = "ERROR";
-            ExceptionType = string.Empty;
+            Level = "INFO";
             Message = string.Empty;
-            StackTrace = string.Empty;
-            AdditionalData = new Dictionary<string, string>();
         }
 
+        /// <summary>
+        /// Constructor for error/warning entries with exception details
+        /// </summary>
         public LogEntry(Exception ex, string level = "ERROR")
         {
             Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
