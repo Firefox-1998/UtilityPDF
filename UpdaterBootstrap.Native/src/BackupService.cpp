@@ -1,5 +1,6 @@
 #include "BackupService.h"
 #include "Logger.h"
+#include "ArchiveManager.h"
 #include <chrono>
 #include <iomanip>
 #include <sstream>
@@ -196,22 +197,16 @@ bool BackupService::RestoreBackup(
 {
     try
     {
-        Logger::LogInfo(L"RESTORE_START", L"Inizio ripristino backup: " + backupPath);
+        Logger::LogInfo(L"RESTORE_START", L"Starting backup restore: " + backupPath);
 
-        if (!fs::exists(backupPath))
+        if (fs::is_directory(backupPath))
         {
-            Logger::LogError(L"RESTORE_NOT_FOUND", L"Backup non trovato: " + backupPath);
-            return false;
-        }
-
-        int fileCount = 0;
-
-        for (const auto& entry : fs::recursive_directory_iterator(backupPath))
-        {
-            if (!entry.is_regular_file()) continue;
-
-            try
+            // Directory-based backup (legacy or fallback)
+            int filesRestored = 0;
+            for (const auto& entry : fs::recursive_directory_iterator(backupPath))
             {
+                if (!entry.is_regular_file()) { continue; }
+
                 fs::path relativePath = fs::relative(entry.path(), backupPath);
                 fs::path destPath = fs::path(appDir) / relativePath;
                 fs::path destDir = destPath.parent_path();
@@ -222,27 +217,39 @@ bool BackupService::RestoreBackup(
                 }
 
                 fs::copy_file(entry.path(), destPath, fs::copy_options::overwrite_existing);
-                fileCount++;
-                
-                Logger::LogInfo(L"RESTORE_FILE_SUCCESS", L"Ripristinato: " + relativePath.wstring());
+                filesRestored++;
             }
-            catch (const std::exception& ex)
+
+            Logger::LogInfo(L"RESTORE_COMPLETE",
+                L"Directory backup restored: " + std::to_wstring(filesRestored) + L" files");
+            return filesRestored > 0;
+        }
+        else if (fs::is_regular_file(backupPath))
+        {
+            // Zip archive backup
+            ArchiveManager::ArchiveResult extractResult =
+                ArchiveManager::ExtractZip(backupPath, appDir);
+
+            if (extractResult.success)
             {
-                std::string errorMsg = ex.what();
-                Logger::LogWarning(L"RESTORE_FILE_ERROR", 
-                    L"Errore ripristino: " + std::wstring(errorMsg.begin(), errorMsg.end()));
+                Logger::LogInfo(L"RESTORE_ZIP_COMPLETE",
+                    L"Zip backup restored: " + std::to_wstring(extractResult.filesProcessed) + L" files");
             }
+            else
+            {
+                Logger::LogError(L"RESTORE_ZIP_FAILED", extractResult.message);
+            }
+            return extractResult.success;
         }
 
-        Logger::LogInfo(L"RESTORE_SUCCESS", 
-            L"Backup ripristinato: " + std::to_wstring(fileCount) + L" file");
-        return true;
+        Logger::LogError(L"RESTORE_NOT_FOUND", L"Backup path not found: " + backupPath);
+        return false;
     }
     catch (const std::exception& ex)
     {
         std::string errorMsg = ex.what();
-        Logger::LogError(L"RESTORE_ERROR", 
-            L"Errore ripristino backup: " + std::wstring(errorMsg.begin(), errorMsg.end()));
+        Logger::LogError(L"RESTORE_EXCEPTION",
+            L"Restore error: " + std::wstring(errorMsg.begin(), errorMsg.end()));
         return false;
     }
 }
@@ -369,5 +376,173 @@ BackupService::ExtractDateFromBackupName(const std::wstring& fileName)
     catch (...)
     {
         return std::nullopt;
+    }
+}
+
+// ============================================================================
+// ADD the following methods at the END of the existing BackupService.cpp file
+// (after CleanOldBackups)
+// ============================================================================
+
+BackupService::BackupResult BackupService::CreateVersionedBackup(
+    const std::wstring& appDir,
+    const std::wstring& backupDir,
+    const std::wstring& updateDir,
+    const std::wstring& currentVersion)
+{
+    BackupResult result = { false, L"", L"", 0 };
+
+    try
+    {
+        Logger::LogInfo(L"VERSIONED_BACKUP_START",
+            L"Creating versioned backup for v" + currentVersion);
+
+        // 1. Get list of files that will be overwritten
+        auto filesToUpdate = GetFilesToUpdate(updateDir);
+
+        if (filesToUpdate.empty())
+        {
+            result.success = false;
+            result.message = L"No files to update found";
+            Logger::LogWarning(L"BACKUP_NO_FILES", result.message);
+            return result;
+        }
+
+        Logger::LogInfo(L"BACKUP_FILES_COUNT",
+            L"Files to back up: " + std::to_wstring(filesToUpdate.size()));
+
+        // 2. Create backup directory
+        if (!fs::exists(backupDir))
+        {
+            fs::create_directories(backupDir);
+        }
+
+        // 3. Create staging directory: pre-update_v{version}
+        std::wstring sanitizedVersion = currentVersion;
+        for (wchar_t& ch : sanitizedVersion)
+        {
+            if (ch == L' ' || ch == L'\\' || ch == L'/' || ch == L':')
+            {
+                ch = L'_';
+            }
+        }
+
+        std::wstring backupName = L"pre-update_v" + sanitizedVersion;
+        fs::path stagingPath = fs::path(backupDir) / backupName;
+
+        // If a backup with same version exists, add timestamp
+        if (fs::exists(stagingPath) || fs::exists(fs::path(backupDir) / (backupName + L".zip")))
+        {
+            auto now = std::chrono::system_clock::now();
+            auto time_t_now = std::chrono::system_clock::to_time_t(now);
+            std::tm tm_now;
+            localtime_s(&tm_now, &time_t_now);
+
+            std::wostringstream oss;
+            oss << backupName << L"_" << std::put_time(&tm_now, L"%Y%m%d_%H%M%S");
+            backupName = oss.str();
+            stagingPath = fs::path(backupDir) / backupName;
+        }
+
+        fs::create_directories(stagingPath);
+        Logger::LogInfo(L"BACKUP_DIR_CREATED", L"Staging directory: " + stagingPath.wstring());
+
+        // 4. Copy files that will be overwritten to staging directory
+        uintmax_t totalSize = 0;
+        int backedUpCount = 0;
+        int skippedCount = 0;
+        int notFoundCount = 0;
+
+        for (const auto& relativeUpdatePath : filesToUpdate)
+        {
+            try
+            {
+                fs::path sourceFile = fs::path(appDir) / relativeUpdatePath;
+
+                if (!fs::exists(sourceFile))
+                {
+                    notFoundCount++;
+                    Logger::LogInfo(L"BACKUP_FILE_NEW",
+                        L"New file (not present in current version): " + relativeUpdatePath.wstring());
+                    continue;
+                }
+
+                fs::path destFile = stagingPath / relativeUpdatePath;
+                fs::path destDir = destFile.parent_path();
+
+                if (!fs::exists(destDir))
+                {
+                    fs::create_directories(destDir);
+                }
+
+                fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
+
+                uintmax_t fileSize = fs::file_size(destFile);
+                totalSize += fileSize;
+                backedUpCount++;
+
+                Logger::LogInfo(L"BACKUP_FILE_OK",
+                    L"Backed up: " + relativeUpdatePath.wstring() +
+                    L" (" + std::to_wstring(fileSize / 1024) + L" KB)");
+            }
+            catch (const std::exception& ex)
+            {
+                std::string errorMsg = ex.what();
+                Logger::LogWarning(L"BACKUP_FILE_ERROR",
+                    L"Backup error: " + relativeUpdatePath.wstring() +
+                    L" -> " + std::wstring(errorMsg.begin(), errorMsg.end()));
+                skippedCount++;
+            }
+        }
+
+        if (backedUpCount == 0 && notFoundCount == 0)
+        {
+            result.success = false;
+            result.message = L"No files were backed up (all skipped)";
+            Logger::LogError(L"BACKUP_FAILED", result.message);
+            return result;
+        }
+
+        // 5. Compress staging directory to zip
+        std::wstring zipPath = (fs::path(backupDir) / (backupName + L".zip")).wstring();
+
+        ArchiveManager::ArchiveResult zipResult =
+            ArchiveManager::CompressZip(stagingPath.wstring(), zipPath);
+
+        if (zipResult.success)
+        {
+            fs::remove_all(stagingPath);
+            result.backupPath = zipPath;
+            Logger::LogInfo(L"BACKUP_ZIPPED", L"Backup compressed: " + zipPath);
+        }
+        else
+        {
+            result.backupPath = stagingPath.wstring();
+            Logger::LogWarning(L"BACKUP_ZIP_FAILED",
+                L"Zip failed, keeping directory: " + stagingPath.wstring());
+        }
+
+        result.success = true;
+        result.message = L"Versioned backup completed";
+        result.backupSize = totalSize;
+
+        Logger::LogInfo(L"VERSIONED_BACKUP_SUCCESS",
+            L"Backup: " + std::to_wstring(backedUpCount) + L" files, " +
+            std::to_wstring(notFoundCount) + L" new, " +
+            std::to_wstring(totalSize / 1024) + L" KB");
+
+        // 6. Clean old backups
+        CleanOldBackups(backupDir);
+
+        return result;
+    }
+    catch (const std::exception& ex)
+    {
+        std::string errorMsg = ex.what();
+        result.success = false;
+        result.message = L"Versioned backup error: " +
+            std::wstring(errorMsg.begin(), errorMsg.end());
+        Logger::LogError(L"VERSIONED_BACKUP_ERROR", result.message);
+        return result;
     }
 }

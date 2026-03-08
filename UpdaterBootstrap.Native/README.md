@@ -6,21 +6,36 @@
 
 ## 🎯 What is it? | Cos'è?
 
-**EN:** A 100% native C++ updater - completely independent from .NET Runtime.  
-**IT:** Un updater 100% nativo in C++ - completamente indipendente dal .NET Runtime.
+**EN:** A 100% native C++ updater with cryptographic signing — completely independent from .NET Runtime.  
+**IT:** Un updater 100% nativo in C++ con firma crittografica — completamente indipendente dal .NET Runtime.
 
 ---
 
 ## ✨ Key Features | Caratteristiche Principali
 
 ✅ **Zero .NET dependencies** | Zero dipendenze .NET  
-✅ **Independent JSON reading** | Lettura JSON indipendente  
-✅ **Complete update logic in C++** | Logica aggiornamento completa in C++  
-✅ **Automatic backup/rollback** | Backup/rollback automatico  
-✅ **Security validations** | Validazioni di sicurezza  
-✅ **Network share support** | Supporto network share  
-✅ **Case-insensitive JSON** (PascalCase + camelCase)  
-✅ **Structured file logging** | Logging strutturato  
+✅ **Zero external DLLs** | Zero DLL esterne  
+✅ **Native .7z extraction** | Estrazione .7z nativa (LZMA SDK)  
+✅ **Native .zip backup** | Backup .zip nativo (minizip + zlib)  
+✅ **SHA-256 + RSA-4096 verification** | Verifica SHA-256 + RSA-4096 (BCrypt)  
+✅ **Selective backup** | Backup selettivo (solo file da aggiornare)  
+✅ **Automatic rollback** | Rollback automatico  
+✅ **HTTPS download** | Download HTTPS (urlmon)  
+✅ **Structured logging** | Logging strutturato  
+✅ **Native progress dialog** | Progress dialog Win32 nativa  
+
+---
+
+## 🔐 Security | Sicurezza
+
+Every release is protected by | Ogni release è protetta da:
+- **SHA-256** hash (integrity | integrità)
+- **RSA-4096** signature (authenticity | autenticità)
+
+Scripts:
+- `scripts/generate-signing-keys.ps1` — Key generation | Generazione chiavi (one-time | una tantum)
+- `scripts/sign-archive.ps1` — Sign .7z + .exe | Firma .7z + .exe
+- `.github/workflows/release.yml` — Automated CI/CD | CI/CD automatico
 
 ---
 
@@ -29,30 +44,35 @@
 - **Visual Studio 2022** (v17.8+)
 - **Windows SDK 10.0**
 - **C++20 Standard**
-- **vcpkg** (nlohmann-json)
+- **NuGet** (nlohmann-json)
+- **7-Zip LZMA SDK** + **zlib** + **minizip** (sources in `lib/`)
 
 ---
 
 ## 🔧 Quick Build | Build Rapida
 
 ```bash
-# Install dependencies | Installa dipendenze
-vcpkg install nlohmann-json:x64-windows
-vcpkg integrate install
+nuget restore
+msbuild UpdaterBootstrap.Native.vcxproj /p:Configuration=Release /p:Platform=x64
 
-# Build | Compila
-msbuild UpdaterBootstrap.Native.sln /p:Configuration=Release /p:Platform=x64
-
-# Output | Output
-bin\x64\Release\UpdaterBootstrap.exe (~200 KB)
+# Output
+bin\x64\Release\UpdaterBootstrap.exe (~250 KB)
 ```
 
 ---
 
-## 📚 Documentation | Documentazione
+## 🔄 Update Flow | Flusso Aggiornamento
 
-- **🇮🇹 Documentazione Italiana**: [README_IT.md](README_IT.md)
-- **🇬🇧 English Documentation**: [README_EN.md](README_EN.md)
+```
+Download .7z + .sha256 + .sig from GitHub Release
+  → Verify SHA-256 hash (integrity)
+  → Verify RSA-4096 signature (authenticity)
+  → Extract .7z (LZMA SDK native)
+  → Selective backup of overwritten files → .zip (minizip native)
+  → Apply update files
+  → On error: automatic rollback from .zip
+  → Restart application
+```
 
 ---
 
@@ -60,24 +80,31 @@ bin\x64\Release\UpdaterBootstrap.exe (~200 KB)
 
 | Aspect | Native C++ | .NET Only |
 |--------|-----------|-----------|
-| **Size | Dimensione** | ~200 KB | ~2 MB |
+| **Size | Dimensione** | ~250 KB | ~2 MB |
 | **Startup | Avvio** | Instant | ~500ms |
-| **Dependencies | Dipendenze** | Zero | .NET 9 Runtime |
-| **Complete Logic | Logica Completa** | ✅ Yes/Sì | ✅ Yes/Sì |
-| **Backup/Restore** | ✅ Yes/Sì | ✅ Yes/Sì |
+| **Dependencies | Dipendenze** | Zero | .NET Runtime |
+| **7z Extraction | Estrazione 7z** | ✅ LZMA SDK | ❌ |
+| **Zip Backup** | ✅ minizip | ✅ System.IO.Compression |
+| **RSA Verification | Verifica RSA** | ✅ BCrypt | ✅ RSACryptoServiceProvider |
+| **External DLLs | DLL esterne** | Zero | Many |
 
 ---
 
-## 🎉 Result | Risultato
+## 📚 Documentation | Documentazione
 
-**EN:** UpdaterBootstrap.Native is now 100% autonomous - no longer depends on .NET!  
-**IT:** UpdaterBootstrap.Native è ora 100% autonomo - non dipende più da .NET!
+- **🇮🇹 Documentazione completa (IT)**: [README_IT.md](README_IT.md)
+- **🇬🇧 Full documentation (EN)**: [README_EN.md](README_EN.md)
+
+Includes | Include:
+- Detailed signing guide | Guida dettagliata alla firma
+- Library setup | Setup librerie
+- Troubleshooting | Risoluzione problemi
 
 ---
 
 ## 📝 License | Licenza
 
-MIT License - See | Vedi [LICENSE](../LICENSE)
+MIT License — See | Vedi [LICENSE](../LICENSE)
 
 ---
 

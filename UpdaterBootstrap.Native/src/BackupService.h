@@ -8,7 +8,8 @@
 namespace fs = std::filesystem;
 
 /// <summary>
-/// Gestione backup selettivo per aggiornamenti
+/// Selective backup management for updates.
+/// Creates versioned zip backups of files that will be overwritten.
 /// </summary>
 class BackupService
 {
@@ -22,7 +23,18 @@ public:
     };
 
     /// <summary>
-    /// Backup selettivo solo dei file che verranno aggiornati
+    /// Creates a versioned backup of files that will be overwritten.
+    /// Backup is saved as: backups/pre-update_v{currentVersion}.zip
+    /// </summary>
+    static BackupResult CreateVersionedBackup(
+        const std::wstring& appDir,
+        const std::wstring& backupDir,
+        const std::wstring& updateDir,
+        const std::wstring& currentVersion
+    );
+
+    /// <summary>
+    /// Selective backup of only the files that will be updated (legacy)
     /// </summary>
     static BackupResult CreateSelectiveBackup(
         const std::wstring& appDir,
@@ -31,7 +43,7 @@ public:
     );
 
     /// <summary>
-    /// Ripristina backup
+    /// Restores a backup (supports both zip and directory backups)
     /// </summary>
     static bool RestoreBackup(
         const std::wstring& backupPath,
@@ -39,7 +51,7 @@ public:
     );
 
     /// <summary>
-    /// Pulizia backup vecchi
+    /// Cleans up old backups beyond retention period
     /// </summary>
     static void CleanOldBackups(
         const std::wstring& backupDir,
@@ -49,6 +61,11 @@ public:
 private:
     static std::vector<fs::path> GetFilesToUpdate(const std::wstring& updateDir);
     static bool ShouldExcludeFromBackup(const std::wstring& path);
-    static std::optional<std::chrono::system_clock::time_point> 
+    static std::optional<std::chrono::system_clock::time_point>
         ExtractDateFromBackupName(const std::wstring& fileName);
+
+    /// <summary>
+    /// Creates a zip archive from a directory using PowerShell Compress-Archive
+    /// </summary>
+    static bool CreateZipFromDirectory(const std::wstring& sourceDir, const std::wstring& zipPath);
 };

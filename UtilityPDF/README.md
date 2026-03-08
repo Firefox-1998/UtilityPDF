@@ -72,11 +72,44 @@ The application includes a robust configuration management system:
 - **Resource-based translations** - Uses .NET resource files for efficient multilingual support
 - **Dynamic language switching** - Changes take effect immediately without application restart
 
+## Auto-Update System 🔄
+
+The application includes a **secure automatic update system** powered by a native C++ updater:
+
+### How it works
+
+1. **UtilityPDF.exe** checks for new versions via the GitHub Releases API
+2. If an update is available, it creates an `update_in_progress.json` marker and launches `UpdaterBootstrap.exe`
+3. **UpdaterBootstrap.exe** (native C++, ~250 KB, zero .NET dependencies) handles the entire update process:
+
+```
+Download .7z + .sha256 + .sig from GitHub Release
+  → Verify SHA-256 hash (integrity)
+  → Verify RSA-4096 signature (authenticity)
+  → Extract .7z archive (7-Zip LZMA SDK, native)
+  → Selective backup of only files being overwritten → .zip (minizip, native)
+  → Apply update files to application directory
+  → On error: automatic rollback from .zip backup
+  → Restart UtilityPDF.exe
+```
+
+### Security
+
+Every release is cryptographically signed with **SHA-256 + RSA-4096**. The public key is embedded in both binaries. The private key is stored exclusively in GitHub Secrets and never leaves CI/CD.
+
+### Backup & Rollback
+
+- Before updating, a **selective backup** is created containing only the files that will be overwritten
+- Backups are saved as `backups\pre-update_v{version}.zip`
+- If the update fails, an **automatic rollback** restores the previous version
+
+> For detailed documentation see [UpdaterBootstrap.Native/README_EN.md](../UpdaterBootstrap.Native/README_EN.md)
+
 ## Technical Details
 
 **Target Framework:** .NET Framework 4.8
 
-**Used Libraries:**
+**Used Libraries (UtilityPDF — C#):**
 
 * FreeSpire.Doc v. 12.2.0 - ([Free Spire.Doc for .NET](https://www.e-iceblue.com/Introduce/free-doc-component.html))
   Free Spire.Doc for .NET is a Community Edition of the Spire.Doc for .NET, which is a totally free word API for commercial and personal use.
@@ -86,7 +119,16 @@ The application includes a robust configuration management system:
 * PDFsharp v. 6.2.4 - MIT License	
 * Tesseract v. 5.2.0 - Apache License
 
-All library dependencies, mentioned above, are **MIT LICENSED**/**AGPL LICENSED**/**APACHE LICENSED**
+**Used Libraries (UpdaterBootstrap — C++20):**
+
+| Library | Purpose | License |
+|---------|---------|---------|
+| nlohmann-json 3.12.0 | JSON parsing | MIT |
+| 7-Zip LZMA SDK 24.07 | .7z extraction | Public Domain |
+| zlib 1.3.1 | Deflate compression | zlib License |
+| minizip | .zip creation/extraction | zlib License |
+
+All library dependencies are **MIT** / **AGPL** / **Apache** / **zlib** / **Public Domain** licensed.
 
 ## Tesseract OCR Setup
 
@@ -100,13 +142,20 @@ The application automatically detects available language files and populates the
 
 The application follows modern software engineering practices:
 
-### Namespaces & Organization
+### Namespaces & Organization (UtilityPDF — C#)
 - **UtilityPDF.Configuration** - Configuration management and settings persistence
 - **UtilityPDF.Controls** - Custom modern UI controls (ModernCard, ModernButton, ModernProgressBar, LoadingSpinner)
 - **UtilityPDF.Localization** - Multilingual support and culture management
 - **UtilityPDF.Processing** - PDF processing operations (compression, merging, conversion, text extraction)
 - **UtilityPDF.Resources** - Localized string resources for all supported languages
+- **UtilityPDF.Security** - Binary integrity verification (SHA-256 + RSA-4096)
 - **UtilityPDF.UI** - UI helper classes (ProgressHelper, GraphicsHelper, ControlTextImgAssigner)
+
+### Modules (UpdaterBootstrap — C++20)
+- **ArchiveManager** - .7z extraction (LZMA SDK) + .zip compression (minizip + zlib)
+- **BackupService** - Selective pre-update backup + restore from .zip
+- **ConfigReader / ConfigMerger** - JSON configuration reading and merge
+- **UpdateValidator** - SHA-256 hash + RSA-4096 signature verification via BCrypt
 
 ### Design Patterns
 - **Separation of Concerns** - Clear separation between UI, business logic, and configuration

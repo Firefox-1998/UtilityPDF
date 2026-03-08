@@ -1,54 +1,42 @@
 # 🚀 UpdaterBootstrap.Native
 
-**100% Native C++ Updater** - Completely independent from .NET Runtime.
+**100% Native C++ Updater** — Completely independent from .NET Runtime.
 
 ## 🎯 Features
 
-✅ **Zero .NET dependencies** - Standalone native C++ executable  
-✅ **Independent JSON reading** - nlohmann-json (header-only)  
-✅ **Complete update logic** in C++  
-✅ **Automatic backup** before update  
-✅ **Automatic rollback** on error  
-✅ **Security validations** (system directories, path traversal)  
-✅ **Network share support** and cloud sync  
-✅ **Case-insensitive JSON** (PascalCase + camelCase)  
-✅ **Structured file logging**  
+✅ **Zero .NET dependencies** — Standalone native C++ executable  
+✅ **Zero external DLLs** — All libraries statically compiled into the binary  
+✅ **Native .7z extraction** — 7-Zip LZMA SDK (pure C) for GitHub release archives  
+✅ **Native .zip backup compression** — minizip + zlib (pure C) for pre-update backups  
+✅ **HTTPS download** — `URLDownloadToFile` (urlmon.lib)  
+✅ **Cryptographic verification** — SHA-256 + RSA-4096 via Windows BCrypt API  
+✅ **Selective backup** — Only files that will be overwritten (based on .7z contents)  
+✅ **Automatic rollback** — Restore from .zip backup on error  
+✅ **Independent JSON reading** — nlohmann-json (header-only)  
+✅ **Case-insensitive JSON** — Supports PascalCase + camelCase  
+✅ **Structured file logging** — Log files with event codes  
+✅ **Native progress dialog** — Win32 progress window  
+
+---
 
 ## 📦 Build Requirements
 
 - **Visual Studio 2022** (v17.8+)
 - **Windows SDK 10.0**
 - **C++20 Standard**
-- **vcpkg** (for nlohmann-json)
+- **NuGet** (nlohmann-json 3.12.0)
+- **OpenSSL** (for signing — available in Git for Windows)
 
-## 🔧 Build Instructions
+### Libraries included in the project (statically compiled sources)
 
-### Option 1: Visual Studio 2022
+| Library | Version | Purpose | License |
+|---------|---------|---------|---------|
+| **nlohmann-json** | 3.12.0 | JSON configuration parsing | MIT |
+| **7-Zip LZMA SDK** | 24.07 | .7z archive extraction | Public Domain |
+| **zlib** | 1.3.1 | Deflate compression | zlib License |
+| **minizip** | (from zlib) | .zip creation/extraction | zlib License |
 
-1. Open `UpdaterBootstrap.Native.sln`
-2. Select configuration: **Release | x64**
-3. Build → **Build Solution** (Ctrl+Shift+B)
-4. Output: `bin\x64\Release\UpdaterBootstrap.exe`
-
-### Option 2: MSBuild Command Line
-
-```bash
-msbuild UpdaterBootstrap.Native.sln /p:Configuration=Release /p:Platform=x64
-```
-
-### Option 3: vcpkg
-
-```bash
-# 1. Install vcpkg dependencies
-vcpkg install nlohmann-json:x64-windows
-vcpkg integrate install
-
-# 2. Build Release
-msbuild UpdaterBootstrap.Native.sln /p:Configuration=Release /p:Platform=x64
-
-# 3. Output
-bin\x64\Release\UpdaterBootstrap.exe (~200 KB)
-```
+---
 
 ## 📂 Project Structure
 
@@ -56,90 +44,506 @@ bin\x64\Release\UpdaterBootstrap.exe (~200 KB)
 UtilityPDF/
 ├── UpdaterBootstrap.Native/
 │   ├── src/
-│   │   ├── main.cpp                  # Entry point + orchestrator
+│   │   ├── main.cpp                  # Entry point + update orchestrator
+│   │   ├── ArchiveManager.h/cpp      # .7z extraction (LZMA SDK) + .zip compression (minizip)
+│   │   ├── BackupService.h/cpp       # Selective backup + restore from .zip
 │   │   ├── ConfigReader.h/cpp        # JSON configuration reading
-│   │   ├── Logger.h/cpp              # Native logging
-│   │   ├── ProcessManager.h/cpp      # Process management
-│   │   ├── FileOperations.h/cpp      # File operations + config merge
-│   │   ├── BackupService.h/cpp       # Automatic backup/restore
-│   │   └── UpdateValidator.h/cpp     # Security validations
-│   ├── vcpkg.json                    # Dependencies (nlohmann-json)
-│   ├── UpdaterBootstrap.Native.vcxproj
-│   └── README.md
-└── UpdaterBootstrap.Native.sln
+│   │   ├── ConfigMerger.h/cpp        # Intelligent configuration merge
+│   │   ├── FileOperations.h/cpp      # File operations + update copy
+│   │   ├── Logger.h/cpp              # Structured file logging
+│   │   ├── ProcessManager.h/cpp      # Process management (wait, launch)
+│   │   ├── ProgressDialog.h/cpp      # Native Win32 progress window
+│   │   └── UpdateValidator.h/cpp     # Security validations + SHA-256/RSA verification
+│   ├── lib/
+│   │   ├── 7zSDK/                    # 7-Zip LZMA SDK (decode only)
+│   │   ├── zlib/                     # zlib 1.3.1
+│   │   └── minizip/                  # minizip (from zlib/contrib/minizip)
+│   ├── resource.h
+│   ├── UpdaterBootstrap.Native.rc
+│   ├── updaterbootstrap.ico
+│   ├── packages.config
+│   └── UpdaterBootstrap.Native.vcxproj
+├── scripts/
+│   ├── generate-signing-keys.ps1     # RSA-4096 key pair generation (one-time)
+│   ├── sign-archive.ps1             # Sign .7z release archive (+ optional .exe)
+│   └── sign-release.ps1             # Sign single binary (legacy)
+├── .github/
+│   └── workflows/
+│       └── release.yml               # CI/CD: build + sign + publish release
+└── keys/                             # Keys directory (generated by script)
+    ├── update-signing-key.pem        # ⛔ SECRET — NEVER commit!
+    ├── update-signing-key.pub.pem    # ✅ Public key PEM
+    ├── update-signing-key.pub.der    # ✅ Public key DER (for C++ BCrypt)
+    ├── update-signing-key.pub.xml    # ✅ Public key XML (for C# RSA)
+    └── PublicKeyBytes.h              # ✅ C++ header with embedded DER bytes
 ```
 
-## 🔑 Key Features
+---
 
-### 1. **Independent JSON Reading**
+## 🔧 Build Instructions
+
+### Option 1: Visual Studio 2022
+
+1. Open the solution containing `UpdaterBootstrap.Native.vcxproj`
+2. Select configuration: **Release | x64**
+3. Build → **Build Solution** (Ctrl+Shift+B)
+4. Output: `bin\x64\Release\UpdaterBootstrap.exe`
+
+### Option 2: MSBuild Command Line
+
+```bash
+nuget restore
+msbuild UpdaterBootstrap.Native\UpdaterBootstrap.Native.vcxproj /p:Configuration=Release /p:Platform=x64
+```
+
+> **Note:** The 7z SDK, zlib, and minizip sources must be present in `lib\7zSDK\`, `lib\zlib\`, and `lib\minizip\`. See the [Library Setup](#-library-setup) section for details.
+
+---
+
+## 📥 Library Setup
+
+### 7-Zip LZMA SDK (.7z extraction)
+
+1. Download from: https://www.7-zip.org/sdk.html → `lzma2407.7z`
+2. Extract files from the `C/` folder of the SDK
+3. Copy to `UpdaterBootstrap.Native\lib\7zSDK\`:
+
+```
+lib\7zSDK\
+├── 7z.h / 7zAlloc.c/.h / 7zArcIn.c / 7zBuf.c/.h
+├── 7zCrc.c/.h / 7zCrcOpt.c / 7zDec.c
+├── 7zFile.c/.h / 7zStream.c / 7zTypes.h
+├── Bcj2.c/.h / Bra.c/.h / CpuArch.c/.h
+├── Compiler.h / Delta.c/.h / Precomp.h
+├── LzmaDec.c/.h / Lzma2Dec.c/.h
+└── Ppmd.h / Ppmd7.c/.h / Ppmd7Dec.c
+```
+
+### zlib (deflate compression)
+
+1. Download from: https://zlib.net/ → `zlib-1.3.1.tar.gz`
+2. Copy to `UpdaterBootstrap.Native\lib\zlib\`:
+
+```
+lib\zlib\
+├── adler32.c / compress.c / crc32.c/.h
+├── deflate.c/.h / infback.c / inffast.c/.h
+├── inflate.c/.h / inftrees.c/.h / trees.c/.h
+├── uncompr.c / zconf.h / zlib.h / zutil.c/.h
+```
+
+### minizip (.zip creation/extraction)
+
+1. From the same zlib distribution, folder `contrib/minizip/`
+2. Copy to `UpdaterBootstrap.Native\lib\minizip\`:
+
+```
+lib\minizip\
+├── ioapi.c/.h / iowin32.c/.h
+├── zip.c/.h / unzip.c/.h
+```
+
+> All `.c` files are compiled as C (`CompileAs: CompileAsC`) with `_7ZIP_ST` defined for single-thread mode. The configurations are already in the `.vcxproj`.
+
+---
+
+## 🔄 Update Flow
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    UtilityPDF.exe                        │
+│  1. Checks for updates via GitHub API                   │
+│  2. If available: creates update_in_progress.json       │
+│  3. Launches UpdaterBootstrap.exe                       │
+│  4. Closes itself                                       │
+└────────────────────────┬────────────────────────────────┘
+                         ▼
+┌─────────────────────────────────────────────────────────┐
+│                 UpdaterBootstrap.exe                     │
+│                                                         │
+│   SECURITY                                              │
+│   ├── 5. Verify marker file (update_in_progress.json)   │
+│   ├── 6. Verify parent process (UtilityPDF.exe)         │
+│   └── 7. Load and validate URLs from marker             │
+│                                                         │
+│   WAIT                                                  │
+│   └── 8. Wait for UtilityPDF.exe to close               │
+│                                                         │
+│   CONFIRMATION                                          │
+│   └── 9. Ask user confirmation (Yes/No)                 │
+│                                                         │
+│   DOWNLOAD (from GitHub Release)                        │
+│   ├── 10. Download .7z  → temp_update\update_archive.7z │
+│   ├── 11. Download .sha256 → temp_update\*.sha256       │
+│   └── 12. Download .sig → temp_update\*.sig             │
+│                                                         │
+│   CRYPTOGRAPHIC VERIFICATION                            │
+│   ├── 13. Compute SHA-256 of downloaded .7z             │
+│   ├── 14. Compare with expected hash (.sha256)          │
+│   └── 15. Verify RSA-4096 signature (.sig) via BCrypt   │
+│                                                         │
+│   EXTRACTION                                            │
+│   └── 16. Extract .7z → temp_update\extracted\          │
+│           (7-Zip LZMA SDK native, zero DLLs)            │
+│                                                         │
+│   SELECTIVE BACKUP                                      │
+│   ├── 17. Enumerate files from temp_update\extracted\   │
+│   ├── 18. For each file: if exists in appDir, copy it   │
+│   │       to staging directory                          │
+│   ├── 19. Compress staging → backups\pre-update_v{X}.zip│
+│   │       (minizip + zlib native, zero DLLs)            │
+│   └── 20. Delete staging directory                      │
+│                                                         │
+│   APPLY UPDATE                                          │
+│   ├── 21. Copy files from extracted\ → appDir\          │
+│   │       (skip service files: .log, .sig, etc.)        │
+│   └── 22. On error → ROLLBACK from .zip backup          │
+│                                                         │
+│   POST-UPDATE                                           │
+│   ├── 23. Verify post-update integrity                  │
+│   ├── 24. Cleanup temp_update\ and marker files         │
+│   └── 25. Restart UtilityPDF.exe                        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Backup: what gets saved?
+
+The backup is **selective**: only files present in the `.7z` archive downloaded from GitHub are backed up. If the `.7z` contains 5 files, only those 5 files from the current application directory are saved (if they exist). New files (present in the `.7z` but not in the current app) are logged as "new file" and not backed up — there's nothing to restore.
+
+The backup is saved as a `.zip` in the `backups\` subfolder:
+
+```
+C:\App\UtilityPDF\
+├── backups\
+│   ├── pre-update_v1.7.0.zip     ← backup before updating to v1.7.1
+│   └── pre-update_v1.7.5.zip     ← backup before updating to v1.8.0
+```
+
+Backups older than 30 days are automatically deleted.
+
+---
+
+## 🔐 Cryptographic Signing System
+
+### Overview
+
+Every UtilityPDF release is protected by **dual cryptographic verification**:
+
+1. **SHA-256 hash** — Integrity verification (file wasn't corrupted during download)
+2. **RSA-4096 signature** — Authenticity verification (file was created by us, not an attacker)
+
+The RSA-4096 private key is stored **exclusively** in GitHub Secrets (`SIGNING_PRIVATE_KEY`). The corresponding public key is embedded in the `UpdaterBootstrap.exe` binary (as DER byte array) and in `UtilityPDF.exe` (as XML).
+
+### Files generated per release
+
+For each GitHub release, **3 assets** are uploaded:
+
+| File | Content | Format |
+|------|---------|--------|
+| `UtilityPDF-v1.8.0.7z` | Archive with all application files | 7z LZMA |
+| `UtilityPDF-v1.8.0.7z.sha256` | SHA-256 hash of the archive | ASCII text, lowercase hex |
+| `UtilityPDF-v1.8.0.7z.sig` | RSA-4096 signature of the archive | Raw binary (512 bytes) |
+
+### How verification works (in UpdaterBootstrap.exe)
+
+```
+1. Download .7z, .sha256, .sig
+2. Compute SHA-256(.7z) using Windows BCrypt
+3. Compare with contents of .sha256 (constant-time comparison)
+4. If hash mismatch → BLOCK (file corrupted or tampered)
+5. Import embedded DER public key from binary
+6. Verify signature: BCryptVerifySignature(publicKey, SHA-256(.7z), .sig)
+7. If signature invalid → BLOCK (file not signed by us)
+8. Only if BOTH pass → proceed with extraction
+```
+
+---
+
+## 🔑 Signing Operations Guide — Step by Step
+
+### Prerequisites
+
+- **OpenSSL** installed (or available through **Git for Windows** — already included at `C:\Program Files\Git\usr\bin\openssl.exe`)
+- **PowerShell 5.1+** (included in Windows 10/11)
+
+### STEP 1 — Key Generation (one-time)
+
+This script runs **ONCE** when setting up the project for the first time, or if the private key is compromised and needs regeneration.
+
+```powershell
+cd "Z:\Visual Studio 2022\MyProjects\UtilityPDF"
+.\scripts\generate-signing-keys.ps1 -OutputDir keys
+```
+
+**Parameters:**
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `-OutputDir` | `keys` | Directory where keys are saved |
+| `-KeySize` | `4096` | RSA key size (do not change) |
+
+**Generated files:**
+
+```
+keys/
+├── update-signing-key.pem       ⛔ PRIVATE KEY — NEVER commit!
+├── update-signing-key.pub.pem   ✅ Public key PEM (manual verification with OpenSSL)
+├── update-signing-key.pub.der   ✅ Public key DER (for C++ BCrypt)
+├── update-signing-key.pub.xml   ✅ Public key XML (for C# RSACryptoServiceProvider)
+└── PublicKeyBytes.h             ✅ C++ header with DER bytes as array
+```
+
+**After generation, you must do 4 things:**
+
+#### 1a. Embed the public key in UpdaterBootstrap (C++)
+
+Open `keys\PublicKeyBytes.h` and copy the `kPublicKeyDer[]` array contents into `UpdaterBootstrap.Native\src\UpdateValidator.cpp`, replacing the placeholder:
 
 ```cpp
-ConfigReader reader(appDirectory);
-auto config = reader.LoadConfiguration();
-if (config.has_value()) {
-    std::wcout << L"UpdateDirectory: " << config->updateDirectory << std::endl;
-    std::wcout << L"LogDirectory: " << config->logDirectory << std::endl;
-}
+// In UpdateValidator.cpp — replace placeholder with actual bytes
+static const unsigned char kPublicKeyDer[] = {
+    0x30, 0x82, 0x02, 0x22, 0x30, 0x0D, ...  // bytes generated by script
+};
 ```
 
-### 2. **Case-Insensitive Configuration**
+#### 1b. Embed the public key in UtilityPDF (C#)
 
-Supports both `PascalCase` and `camelCase`:
+Open `keys\update-signing-key.pub.xml` and copy the XML content into `UtilityPDF\Security\BinaryIntegrityVerifier.cs`, replacing the placeholder:
 
-```json
-{
-  "application": {     // or "Application"
-    "updateDirectory"  // or "UpdateDirectory"
-  }
-}
+```csharp
+// In BinaryIntegrityVerifier.cs — replace placeholder with actual XML
+private const string PublicKeyXml =
+    "<RSAKeyValue>" +
+    "<Modulus>ABC123...actual_value...</Modulus>" +
+    "<Exponent>AQAB</Exponent>" +
+    "</RSAKeyValue>";
 ```
 
-### 3. **Structured Logging**
+#### 1c. Store the private key in GitHub Secrets
 
-```cpp
-Logger::Initialize(logDirectory);
-Logger::LogInfo(L"BOOTSTRAP_START", L"UpdaterBootstrap started");
-Logger::LogError(L"CONFIG_NOT_FOUND", L"File appsettings.json missing");
+1. Go to GitHub → Repository → **Settings** → **Secrets and variables** → **Actions**
+2. Click **New repository secret**
+3. Name: `SIGNING_PRIVATE_KEY`
+4. Value: paste the **entire contents** of `keys\update-signing-key.pem` (including `-----BEGIN RSA PRIVATE KEY-----` and `-----END RSA PRIVATE KEY-----` lines)
+5. Click **Add secret**
+
+#### 1d. Add to .gitignore
+
+Verify that `.gitignore` contains:
+
+```gitignore
+# Private signing keys — NEVER commit
+keys/update-signing-key.pem
+signing-key.pem
+*.pem
+!*.pub.pem
 ```
 
-### 4. **Complete Update Logic**
+---
 
-```cpp
-// Automatic backup
-auto backupResult = BackupService::CreateBackup(appDir, backupDir);
+### STEP 2 — Signing the .7z Archive (per release)
 
-// Apply update
-auto updateResult = FileOperations::ApplyCompleteUpdate(appDir, updateDir, updateInfo);
+There are **two modes**: automatic (CI/CD) and manual (local).
 
-// Rollback on error
-if (!updateResult.success) {
-    BackupService::RestoreBackup(backupResult.backupPath, appDir);
-}
+#### Mode A: Automatic via GitHub Actions (recommended)
 
-// Verify integrity
-UpdateValidator::VerifyUpdateIntegrity(appDir);
+The workflow `.github/workflows/release.yml` handles everything automatically.
+
+**How to use:**
+
+```bash
+# 1. Make sure everything is committed and pushed
+git add .
+git commit -m "Release v1.8.0"
+git push origin feature/autoupdate
+
+# 2. Create a version tag
+git tag v1.8.0
+
+# 3. Push the tag — this triggers the workflow automatically
+git push origin v1.8.0
 ```
 
-## 🚀 Deployment
+**What the `release.yml` workflow does:**
 
-### Final Structure
+| Step | Action |
+|------|--------|
+| 1 | Checkout code |
+| 2 | Extract version from tag (e.g., `v1.8.0` → `1.8.0`) |
+| 3 | Build UtilityPDF.csproj (Release) |
+| 4 | Build UpdaterBootstrap.Native.vcxproj (Release x64) |
+| 5 | Stage all files in `release-staging\` |
+| 6 | Create `UtilityPDF-v1.8.0.7z` with LZMA compression level 7 |
+| 7 | Write private key from `SIGNING_PRIVATE_KEY` secret to disk (temporarily) |
+| 8 | Generate `UtilityPDF-v1.8.0.7z.sha256` (SHA-256 hash) |
+| 9 | Generate `UtilityPDF-v1.8.0.7z.sig` (RSA-4096 signature, 512 raw bytes) |
+| 10 | Verify the just-generated signature (self-test) |
+| 11 | Also sign `UpdaterBootstrap.exe` (hash + sig) |
+| 12 | **Delete the private key from disk** (`always` step) |
+| 13 | Create GitHub Release with the 3 assets (.7z, .sha256, .sig) |
+
+**Result on GitHub Releases:**
 
 ```
-UtilityPDF/
-├── UpdaterBootstrap.exe           [Native C++ - 200 KB]
-├── UtilityPDF.exe             	   [Main application]
-├── config/
-│   └── appsettings.json          [Configuration]
-└── logs/
-    └── update_native_20260130.log [Native log]
+UtilityPDF v1.8.0
+├── UtilityPDF-v1.8.0.7z          (release archive)
+├── UtilityPDF-v1.8.0.7z.sha256   (hash for integrity verification)
+└── UtilityPDF-v1.8.0.7z.sig      (RSA signature for authenticity verification)
 ```
+
+#### Mode B: Manual (local)
+
+If not using GitHub Actions, or for testing signing locally:
+
+```powershell
+cd "Z:\ Visual Studio 2022 \ MyProjects \ UtilityPDF"
+
+# 1. Build the project (from Visual Studio or MSBuild)
+# ...
+
+# 2. Manually create the .7z with 7-Zip
+& "C: \ Program Files \ 7-Zip \ 7z.exe" a -t7z -mx=7 "UtilityPDF-v1.8.0.7z" ".\release-staging\*"
+
+# 3. Sign the archive (generates .sha256 and .sig)
+.\scripts\sign-archive.ps1 `
+    -ArchivePath "UtilityPDF-v1.8.0.7z" `
+    -PrivateKeyPath "keys\update-signing-key.pem"
+```
+
+**Parameters for `sign-archive.ps1`:**
+
+| Parameter | Required | Description |
+|-----------|:---:|-------------|
+| `-ArchivePath` | ✅ | Path to the `.7z` archive to sign |
+| `-PrivateKeyPath` | ✅ | Path to the RSA-4096 private key `.pem` |
+| `-UpdaterBinaryPath` | ❌ | If specified, also signs this binary |
+
+**Full example signing both archive + UpdaterBootstrap.exe:**
+
+```powershell
+.\scripts\sign-archive.ps1 `
+    -ArchivePath "UtilityPDF-v1.8.0.7z" `
+    -PrivateKeyPath "keys\update-signing-key.pem" `
+    -UpdaterBinaryPath "UpdaterBootstrap.Native\bin\x64\Release\UpdaterBootstrap.exe"
+```
+
+**Generated output:**
+
+```
+UtilityPDF-v1.8.0.7z.sha256      ← SHA-256 hash (ASCII text, lowercase hex)
+UtilityPDF-v1.8.0.7z.sig         ← RSA-4096 signature (512 raw binary bytes)
+UpdaterBootstrap.exe.sha256       ← SHA-256 hash of the binary
+UpdaterBootstrap.exe.sig          ← RSA-4096 signature of the binary
+```
+
+**What the script does internally:**
+
+1. Computes `SHA-256` of the file with `Get-FileHash`
+2. Writes the hash in lowercase hex format to `.sha256`
+3. Runs `openssl dgst -sha256 -sign {key} -out {file}.sig {file}` to generate the signature
+4. Verifies the signature is 512 bytes (expected size for RSA-4096)
+5. Extracts the public key from the private key and **auto-verifies** the signature
+6. Shows a summary of generated files
+
+---
+
+### STEP 3 — Signing a Single Binary (legacy)
+
+The `sign-release.ps1` script is the original version that signs **a single binary** and produces the signature in **Base64** (not raw bytes).
+
+> ⚠️ **Note:** For the auto-update flow, use `sign-archive.ps1` which produces signatures in raw byte format compatible with UpdaterBootstrap's BCrypt verification. `sign-release.ps1` is maintained for compatibility and for standalone signatures where Base64 format is needed.
+
+```powershell
+.\scripts\sign-release.ps1 `
+    -BinaryPath "UpdaterBootstrap.Native\bin\x64\Release\UpdaterBootstrap.exe" `
+    -PrivateKeyPath "keys\update-signing-key.pem"
+```
+
+**Parameters:**
+
+| Parameter | Required | Description |
+|-----------|:---:|-------------|
+| `-BinaryPath` | ✅ | Path to the binary to sign |
+| `-PrivateKeyPath` | ✅ | Path to the RSA-4096 private key `.pem` |
+
+**Differences between `sign-archive.ps1` and `sign-release.ps1`:**
+
+| Aspect | `sign-archive.ps1` | `sign-release.ps1` |
+|--------|:---:|:---:|
+| **Signature format (.sig)** | Raw bytes (512 B) | Base64 (text) |
+| **Auto-verification** | ✅ Yes | ❌ No |
+| **Multi-file support** | ✅ Archive + binary | ❌ Single file |
+| **Verbose output** | ✅ Detailed | Minimal |
+| **Recommended usage** | Auto-update releases | Standalone signatures |
+
+---
+
+### Manual Signature Verification
+
+To manually verify a signature (useful for debugging):
+
+```powershell
+# Verify archive signature
+openssl dgst -sha256 -verify keys\update-signing-key.pub.pem -signature "UtilityPDF-v1.8.0.7z.sig" "UtilityPDF-v1.8.0.7z"
+# Expected output: "Verified OK"
+
+# Verify hash
+$expectedHash = Get-Content "UtilityPDF-v1.8.0.7z.sha256"
+$actualHash = (Get-FileHash "UtilityPDF-v1.8.0.7z" -Algorithm SHA256).Hash.ToLower()
+if ($expectedHash -eq $actualHash) { Write-Host "Hash OK" } else { Write-Host "HASH MISMATCH!" }
+```
+
+---
+
+## 🗺️ Summary: Who Signs What and When
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    SIGNING LIFECYCLE                             │
+│                                                                 │
+│  ONE-TIME (project setup):                                      │
+│  ┌──────────────────────────────────────────┐                   │
+│  │  generate-signing-keys.ps1               │                   │
+│  │  → Generates RSA-4096 key pair           │                   │
+│  │  → Private key → GitHub Secrets          │                   │
+│  │  → Public key → source code              │                   │
+│  │    (UpdateValidator.cpp + BinaryIntegrity │                   │
+│  │     Verifier.cs)                         │                   │
+│  └──────────────────────────────────────────┘                   │
+│                                                                 │
+│  PER RELEASE:                                                   │
+│  ┌──────────────────────────────────────────┐                   │
+│  │  Automatic (CI/CD):                      │                   │
+│  │    git tag v1.8.0 && git push origin v1.8.0                  │
+│  │    → release.yml handles everything      │                   │
+│  │                                          │                   │
+│  │  Manual:                                 │                   │
+│  │    sign-archive.ps1                      │                   │
+│  │    → Signs .7z → generates .sha256 + .sig│                   │
+│  │    → Manual upload to GitHub Release     │                   │
+│  └──────────────────────────────────────────┘                   │
+│                                                                 │
+│  RUNTIME (automatic, in UpdaterBootstrap.exe):                  │
+│  ┌──────────────────────────────────────────┐                   │
+│  │  Downloads .7z + .sha256 + .sig          │                   │
+│  │  → Verifies SHA-256 (integrity)          │                   │
+│  │  → Verifies RSA-4096 (authenticity)      │                   │
+│  │  → Only if OK → extracts and updates     │                   │
+│  └──────────────────────────────────────────┘                   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
 
 ## ⚙️ Required Configuration
+
+### appsettings.json
 
 ```json
 {
   "application": {
-    "updateDirectory": "Z:\\Updates\\UtilityPDF.exe"
+    "updateDirectory": "Z:\\Updates\\UtilityPDF"
   },
   "logging": {
     "logDirectory": "Z:\\Logs"
@@ -147,70 +551,106 @@ UtilityPDF/
 }
 ```
 
-## 🔄 Update Flow
+### update_in_progress.json (created by UtilityPDF.exe)
 
-```
-1. Read appsettings.json (C++)
-2. Validate update directory
-3. Wait for GestioneEffetti.exe to close
-4. Check for available update
-5. Create automatic application backup
-6. Apply file updates
-7. Perform intelligent configuration merge
-8. Verify post-update integrity
-9. Automatic rollback if error occurs
-10. Restart application
+```json
+{
+  "currentVersion": "1.7.5",
+  "newVersion": "1.8.0",
+  "archiveUrl": "https://github.com/Firefox-1998/UtilityPDF/releases/download/v1.8.0/UtilityPDF-v1.8.0.7z",
+  "hashUrl": "https://github.com/Firefox-1998/UtilityPDF/releases/download/v1.8.0/UtilityPDF-v1.8.0.7z.sha256",
+  "signatureUrl": "https://github.com/Firefox-1998/UtilityPDF/releases/download/v1.8.0/UtilityPDF-v1.8.0.7z.sig"
+}
 ```
 
-## 📊 Comparison
+---
 
-| Aspect | Native C++ | .NET Only |
-|---------|-----------|-----------|
-| **Size** | ~200 KB | ~2 MB |
-| **Startup** | Instant | ~500ms |
-| **Dependencies** | Zero | .NET 9 Runtime |
-| **Complete Logic** | ✅ Yes | ✅ Yes |
-| **Backup/Restore** | ✅ Yes | ✅ Yes |
+## 🚀 Deployment — Final Structure
+
+```
+UtilityPDF/
+├── UpdaterBootstrap.exe           [Native C++ ~250 KB]
+├── UtilityPDF.exe                 [Main application]
+├── config/
+│   └── appsettings.json           [Configuration]
+├── backups/
+│   └── pre-update_v1.7.5.zip     [Selective pre-update backup]
+├── temp_update/                   [Temporary — deleted after update]
+│   ├── update_archive.7z
+│   ├── update_archive.sha256
+│   ├── update_archive.sig
+│   └── extracted/                 [Files extracted from .7z]
+└── logs/
+    └── update_native_20260130.log [Structured log]
+```
+
+---
+
+## 📊 Comparison with Alternative Approaches
+
+| Aspect | UpdaterBootstrap (Native C++) | .NET Approach | PowerShell |
+|--------|:---:|:---:|:---:|
+| **Size** | ~250 KB | ~2 MB | N/A |
+| **Startup** | Instant | ~500ms | ~1s |
+| **Runtime dependencies** | Zero | .NET Runtime | PS policy |
+| **7z extraction** | Native LZMA SDK | None | .zip only |
+| **Zip backup** | Native minizip | System.IO.Compression | Compress-Archive |
+| **RSA verification** | Native BCrypt API | RSACryptoServiceProvider | External OpenSSL |
+| **External DLLs** | Zero | Many | N/A |
+| **Cryptographic signing** | SHA-256 + RSA-4096 | SHA-256 + RSA-4096 | N/A |
+
+---
 
 ## 🐛 Troubleshooting
 
 ### nlohmann-json not found
 
-Install via vcpkg:
+The package is managed via NuGet:
 
 ```bash
-vcpkg install nlohmann-json:x64-windows
-vcpkg integrate install
+nuget restore
 ```
 
-### Linker Error LNK2019
+### Compilation errors on 7z SDK / zlib files
 
-Ensure vcpkg integration is enabled:
+Verify that:
+1. Sources are present in `lib\7zSDK\`, `lib\zlib\`, `lib\minizip\`
+2. `.c` files are configured with `CompileAs: CompileAsC` in the `.vcxproj`
+3. `_7ZIP_ST` is defined in preprocessor definitions for 7z SDK files
 
-```bash
-vcpkg integrate install
+### Invalid signature at runtime
+
+1. Verify the public key in source code matches the private key used for signing
+2. Verify the `.sig` file is in **raw bytes** format (512 bytes for RSA-4096), not Base64
+3. Verify the `.sha256` file contains the hash in **lowercase hex** without trailing spaces or newlines
+
+### "OpenSSL not found" error in scripts
+
+Install Git for Windows (includes OpenSSL) or add OpenSSL to PATH:
+
+```powershell
+# Check if OpenSSL is available
+openssl version
+
+# If not found, use the one from Git for Windows
+$env:PATH += ";C:\Program Files\Git\usr\bin"
+openssl version
 ```
 
-Then reopen Visual Studio.
-
-### Compilation Errors
-
-Verify that C++20 standard is enabled in project properties:
-- Configuration Properties → C/C++ → Language → C++ Language Standard: **ISO C++20 Standard (/std:c++20)**
-
-## 🎉 Result
-
-**UpdaterBootstrap.Native is now 100% autonomous** - no longer depends on `UpdaterBootstrap.Core.exe` (.NET 9)!
+---
 
 ## 📝 License
 
-MIT License - See main project [LICENSE](../LICENSE)
+MIT License — See main project [LICENSE](../LICENSE)
 
 ## 🙏 Credits
 
-- **nlohmann-json**: https://github.com/nlohmann/json
+- **nlohmann-json**: https://github.com/nlohmann/json — MIT License
+- **7-Zip LZMA SDK**: https://www.7-zip.org/sdk.html — Public Domain
+- **zlib**: https://zlib.net/ — zlib License
+- **minizip**: (from zlib/contrib) — zlib License
 - **Visual Studio 2022**: Microsoft
-- **vcpkg**: Microsoft Package Manager
+- **OpenSSL**: https://www.openssl.org/ — Apache License 2.0
 
 ---
 

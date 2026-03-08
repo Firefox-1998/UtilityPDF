@@ -73,10 +73,12 @@ namespace UtilityPDF.Configuration
 
             currentSettings ??= new ApplicationSettings();
 
-            // Set runtime values
-            if (currentSettings.Application != null)
+            // Validate critical URL field to prevent redirection to malicious servers
+            if (!string.IsNullOrWhiteSpace(currentSettings.Application.UpdateURL) &&
+                !currentSettings.Application.UpdateURL.StartsWith("https://github.com/", StringComparison.OrdinalIgnoreCase))
             {
-                currentSettings.Application.Version = GetApplicationVersion();
+                DisplayError.LogWarning($"Untrusted UpdateURL detected and cleared: {currentSettings.Application.UpdateURL}");
+                currentSettings.Application.UpdateURL = string.Empty;
             }
         }
 
@@ -87,7 +89,8 @@ namespace UtilityPDF.Configuration
         {
             currentSettings = new ApplicationSettings();
 
-            // Set runtime values that cannot be in defaults
+            // When creating defaults for the first time, use the assembly version
+            // as the initial value for the Version field in appsettings.json
             currentSettings.Application.Version = GetApplicationVersion();
         }
 

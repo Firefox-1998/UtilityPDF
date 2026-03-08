@@ -1,0 +1,177 @@
+# =============================================================================
+# UtilityPDF Release Pipeline
+# Builds, signs, and publishes a new release with .7z + .sha256 + .sig
+# =============================================================================
+
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags: v1.8.0, v2.0.0, etc.
+
+env:
+  SOLUTION_PATH: UtilityPDF.sln
+  ARCHIVE_NAME_PREFIX: UtilityPDF
+
+permissions:
+  contents: write  # Required for creating releases
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      # --- Checkout ---
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # --- Extract version from tag ---
+      - name: Extract version from tag
+        id: version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $version = $tag.TrimStart('v', 'V')
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "TAG=$tag" >> $env:GITHUB_OUTPUT
+          Write-Host "Version: $version"
+
+      # --- Setup build tools ---
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore ${{ env.SOLUTION_PATH }}
+
+      # --- Build C# (UtilityPDF) ---
+      - name: Build UtilityPDF (Release)
+        run: |
+          msbuild UtilityPDF\UtilityPDF.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Build
+
+      # --- Build C++ (UpdaterBootstrap) ---
+      - name: Build UpdaterBootstrap (Release x64)
+        run: |
+          msbuild UpdaterBootstrap.Native\UpdaterBootstrap.Native.vcxproj /p:Configuration=Release /p:Platform=x64 /t:Build
+
+      # --- Stage release files ---
+      - name: Stage release files
+        shell: pwsh
+        run: |
+          $stageDir = "release-staging"
+          New-Item -ItemType Directory -Path $stageDir -Force | Out-Null
+
+          # Copy UtilityPDF build output
+          Copy-Item "UtilityPDF\bin\Release\*" $stageDir -Recurse -Force
+
+          # Copy UpdaterBootstrap
+          $updaterSrc = "UpdaterBootstrap.Native\bin\x64\Release\UpdaterBootstrap.exe"
+          if (Test-Path $updaterSrc) {
+              Copy-Item $updaterSrc $stageDir -Force
+          }
+
+          # Copy config template
+          $configDir = Join-Path $stageDir "config"
+          New-Item -ItemType Directory -Path $configDir -Force | Out-Null
+          if (Test-Path "UtilityPDF\config\appsettings.json") {
+              Copy-Item "UtilityPDF\config\appsettings.json" $configDir -Force
+          }
+
+          Write-Host "Staged files:"
+          Get-ChildItem $stageDir -Recurse | ForEach-Object { Write-Host "  $($_.FullName)" }
+
+      # --- Create .7z archive ---
+      - name: Create .7z archive
+        shell: pwsh
+        run: |
+          $archiveName = "${{ env.ARCHIVE_NAME_PREFIX }}-${{ steps.version.outputs.TAG }}.7z"
+          7z a -t7z -mx=7 $archiveName .\release-staging\*
+          Write-Host "Archive created: $archiveName"
+          echo "ARCHIVE_NAME=$archiveName" >> $env:GITHUB_OUTPUT
+        id: archive
+
+      # --- Write private key from secret ---
+      - name: Write signing key
+        shell: pwsh
+        run: |
+          $keyContent = "${{ secrets.SIGNING_PRIVATE_KEY }}"
+          if ([string]::IsNullOrWhiteSpace($keyContent)) {
+              Write-Error "SIGNING_PRIVATE_KEY secret is not set!"
+              exit 1
+          }
+          $keyContent | Out-File -FilePath "signing-key.pem" -Encoding ASCII -NoNewline
+          Write-Host "Signing key written"
+
+      # --- Sign the archive ---
+      - name: Sign archive (.sha256 + .sig)
+        shell: pwsh
+        run: |
+          $archiveName = "${{ steps.archive.outputs.ARCHIVE_NAME }}"
+
+          # SHA-256 hash
+          $hash = (Get-FileHash -Path $archiveName -Algorithm SHA256).Hash.ToLower()
+          $hash | Out-File -FilePath "$archiveName.sha256" -Encoding ASCII -NoNewline
+          Write-Host "SHA-256: $hash"
+
+          # RSA-4096 signature (raw bytes)
+          openssl dgst -sha256 -sign signing-key.pem -out "$archiveName.sig" $archiveName
+
+          $sigSize = (Get-Item "$archiveName.sig").Length
+          Write-Host "Signature size: $sigSize bytes"
+
+          if ($sigSize -ne 512) {
+              Write-Warning "Expected 512 bytes for RSA-4096, got $sigSize"
+          }
+
+          # Verify
+          openssl rsa -in signing-key.pem -pubout -out verify-key.pub.pem 2>$null
+          $verifyResult = openssl dgst -sha256 -verify verify-key.pub.pem -signature "$archiveName.sig" $archiveName 2>&1
+          Write-Host "Verification: $verifyResult"
+
+          if ($verifyResult -notmatch "Verified OK") {
+              Write-Error "Signature verification failed!"
+              exit 1
+          }
+
+      # --- Sign UpdaterBootstrap binary ---
+      - name: Sign UpdaterBootstrap binary
+        shell: pwsh
+        run: |
+          $updaterPath = "release-staging\UpdaterBootstrap.exe"
+          if (Test-Path $updaterPath) {
+              $hash = (Get-FileHash -Path $updaterPath -Algorithm SHA256).Hash.ToLower()
+              $hash | Out-File -FilePath "$updaterPath.sha256" -Encoding ASCII -NoNewline
+
+              openssl dgst -sha256 -sign signing-key.pem -out "$updaterPath.sig" $updaterPath
+
+              Write-Host "UpdaterBootstrap signed: $hash"
+          } else {
+              Write-Warning "UpdaterBootstrap.exe not found in staging"
+          }
+
+      # --- Cleanup signing key ---
+      - name: Cleanup signing key
+        if: always()
+        shell: pwsh
+        run: |
+          if (Test-Path "signing-key.pem") { Remove-Item "signing-key.pem" -Force }
+          if (Test-Path "verify-key.pub.pem") { Remove-Item "verify-key.pub.pem" -Force }
+
+      # --- Create GitHub Release ---
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.TAG }}
+          name: "UtilityPDF ${{ steps.version.outputs.TAG }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ${{ steps.archive.outputs.ARCHIVE_NAME }}
+            ${{ steps.archive.outputs.ARCHIVE_NAME }}.sha256
+            ${{ steps.archive.outputs.ARCHIVE_NAME }}.sig

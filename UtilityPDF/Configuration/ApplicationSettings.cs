@@ -40,6 +40,9 @@ namespace UtilityPDF.Configuration
         [JsonProperty("UpdateCheckIntervalHours")]
         public int UpdateCheckIntervalHours { get; set; } = 24;
 
+        [JsonProperty("UpdateURL")]
+        public string UpdateURL { get; set; } = string.Empty;
+
         [JsonProperty("ApplicationName")]
         public string ApplicationName { get; set; } = "Utility PDF";
 
