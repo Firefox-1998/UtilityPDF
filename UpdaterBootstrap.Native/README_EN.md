@@ -643,6 +643,10 @@ openssl version
 
 MIT License — See main project [LICENSE](../LICENSE)
 
+## Version
+
+Current Version: **v2.0.0-preview.1**
+
 ## 🙏 Credits
 
 - **nlohmann-json**: https://github.com/nlohmann/json — MIT License
@@ -654,4 +658,4 @@ MIT License — See main project [LICENSE](../LICENSE)
 
 ---
 
-**Built with ❤️ for UtilityPDF**
+**UpdaterBootstrap - Seamless updates, zero effort.**

@@ -106,7 +106,11 @@ Includes | Include:
 
 MIT License — See | Vedi [LICENSE](../LICENSE)
 
+## Version
+
+Current Version: **v2.0.0-preview.1**
+
 ---
 
-**Built with ❤️ for UtilityPDF**
+**UpdaterBootstrap - Seamless updates, zero effort.**
 

@@ -221,7 +221,7 @@ Copyright © [2026] [G.L. Develop aka Firefox_1998]
 
 ## Version
 
-Current Version: **1.7.5.2**
+Current Version: **v2.0.0-preview.1**
 
 ---
 
