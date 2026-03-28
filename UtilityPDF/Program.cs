@@ -17,6 +17,9 @@ namespace UtilityPDF
         [STAThread]
         static void Main()
         {
+            // Force English (US) culture for resource strings
+            Localization.LocalizationManager.SetCulture("en-US");
+
             try
             {
                 ConfigurationManager.Initialize();

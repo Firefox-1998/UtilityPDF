@@ -304,7 +304,7 @@ Attendere prego...</value>
     <value>Errore durante l'inizializzazione della configurazione:\n{0}</value>
   </data>
   <data name="Log_ConfigErrorTitle" xml:space="preserve">
-    <value>Errore di Configurazione</value>
+    <value>Errore di Configurazione\n{0}</value>
   </data>
   <data name="Log_Started" xml:space="preserve">
     <value>Iniziato</value>
@@ -410,25 +410,6 @@ Attendere prego...</value>
   </data>
   <data name="Log_LogErrWrite" xml:space="preserve">
     <value>Critico: impossibile scrivere il log degli errori - {0}</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ConfigNotInit" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="FallbackLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="FallbackLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ErrorCreateLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ErrorCreateLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ErrorSettingsSave" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="ConfigNotInit" xml:space="preserve">
     <value>Configurazione non inizializzata. Chiama prima Inizializzazione().</value>

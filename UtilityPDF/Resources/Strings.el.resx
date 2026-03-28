@@ -295,7 +295,7 @@
     <value>CloseReason</value>
   </data>
   <data name="Log_ConfigError" xml:space="preserve">
-    <value>Σφάλμα διαμόρφωσης</value>
+    <value>Σφάλμα διαμόρφωσης\n{0}</value>
   </data>
   <data name="Log_ConfigErrorTitle" xml:space="preserve">
     <value>Σφάλμα κατά την προετοιμασία της διαμόρφωσης:\n{0}</value>
@@ -404,25 +404,6 @@
   </data>
   <data name="Log_LogErrWrite" xml:space="preserve">
     <value>Κρίσιμο: Απέτυχε η εγγραφή του αρχείου καταγραφής σφαλμάτων - {0}</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ConfigNotInit" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="FallbackLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="FallbackLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ErrorCreateLogDir" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ErrorCreateLogDirTitle" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ErrorSettingsSave" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
   </data>
   <data name="ConfigNotInit" xml:space="preserve">
     <value>Η διαμόρφωση δεν έχει αρχικοποιηθεί. Καλέστε πρώτα την Initialize().</value>

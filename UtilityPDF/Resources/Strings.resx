@@ -301,7 +301,7 @@ Please wait...</value>
     <value>CloseReason</value>
   </data>
   <data name="Log_ConfigError" xml:space="preserve">
-    <value>Configuration Error</value>
+    <value>Configuration Error\n{0}</value>
   </data>
   <data name="Log_ConfigErrorTitle" xml:space="preserve">
     <value>Error during configuration initialization:\n{0}</value>

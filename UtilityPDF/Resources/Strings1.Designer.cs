@@ -418,7 +418,7 @@ namespace UtilityPDF.Resources {
         }
         
         /// <summary>
-        ///   Cerca una stringa localizzata simile a Configuration Error.
+        ///   Cerca una stringa localizzata simile a Configuration Error\n{0}.
         /// </summary>
         internal static string Log_ConfigError {
             get {
